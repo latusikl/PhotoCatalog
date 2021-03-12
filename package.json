@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently \"ng serve\" \"npm run electron\"",
+    "start": "concurrently -n \"Angular,Electron\" \"ng serve\" \"npm run electron\"",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
