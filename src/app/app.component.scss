@@ -1,0 +1,43 @@
+.button{
+  background: inherit;
+  border: none;
+  color: inherit;
+  outline: inherit;
+}
+
+.button:active{
+  filter: brightness(80%);
+}
+
+.spacer{
+  min-width: 1%;
+}
+
+.app-container {
+  height: 100%;
+  align-items: center;
+}
+
+.sidenav {
+  user-select: none;
+}
+
+.full-size-nav{
+  width: 15%;
+}
+
+.min-size-nav{
+  width: 5%;
+}
+
+.nav-span{
+  margin-left: 5px;
+  width: 100%;
+}
+
+.main-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
