@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { DirectoryService } from "./service/directory.service";
 
 @Component({
   selector: "app-root",
@@ -6,25 +7,17 @@ import { Component } from "@angular/core";
   styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
-  isExpanded: boolean = false;
-  isShowing: boolean = false;
+  constructor(private directoryService: DirectoryService) {
+    this.isExpanded = true;
+  }
+
+  isExpanded: boolean;
 
   toggleMenu() {
     this.isExpanded = !this.isExpanded;
   }
 
-  onMouseEnter() {
-    if (!this.isExpanded) {
-      this.isShowing = true;
-    }
-  }
-  onMouseExit() {
-    if (!this.isExpanded) {
-      this.isShowing = false;
-    }
-  }
-
-  isSideNavFullWidth(): boolean {
-    return this.isExpanded || this.isShowing;
+  chooseFolder() {
+    this.directoryService.callForDirectoryChoice();
   }
 }

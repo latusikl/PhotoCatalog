@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently -n \"Angular,Electron\" \"ng serve\" \"npm run electron\"",
+    "start": "concurrently -n \"Angular,Electron\" \"ng serve\" \"npm run electron-dev\"",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "electron ./src/electron.dev"
+    "electron-dev": "electron ./src/electron.dev"
   },
   "private": true,
   "dependencies": {
@@ -22,6 +22,7 @@
     "@angular/platform-browser": "~11.2.4",
     "@angular/platform-browser-dynamic": "~11.2.4",
     "@angular/router": "~11.2.4",
+    "ngx-electron": "^2.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
@@ -34,7 +35,7 @@
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
     "concurrently": "^6.0.0",
-    "electron": "^12.0.0",
+    "electron": "9.0.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.1.0",

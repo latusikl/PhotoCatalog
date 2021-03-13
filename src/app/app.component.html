@@ -7,31 +7,31 @@
 </mat-toolbar>
 <mat-sidenav-container class="app-container" autosize>
 
-    <mat-sidenav class="sidenav" mode="side" opened="true" (mouseenter)="onMouseEnter()"
-                 (mouseleave)="onMouseExit()"
-                 [ngClass]="isSideNavFullWidth() ? 'full-size-nav' : 'min-size-nav'"
+    <mat-sidenav class="sidenav" mode="side" [opened]="isExpanded"
     >
         <mat-nav-list>
-            <mat-list-item>
-                <mat-icon class="nav-icon">info</mat-icon>
-                <span class="nav-span" *ngIf="isSideNavFullWidth()">About</span>
-            </mat-list-item>
-            <mat-list-item>
+            <mat-list-item (click)="chooseFolder()">
                 <mat-icon class="nav-icon">perm_media</mat-icon>
-                <span class="nav-span" *ngIf="isSideNavFullWidth()">Choose directory</span>
+                <span class="nav-span">Choose directory</span>
             </mat-list-item>
             <mat-list-item>
                 <mat-icon>collections</mat-icon>
-                <span class="nav-span" *ngIf="isSideNavFullWidth()">Gallery</span>
+                <span class="nav-span">Gallery</span>
             </mat-list-item>
             <mat-list-item>
                 <mat-icon>place</mat-icon>
-                <span class="nav-span" *ngIf="isSideNavFullWidth()">Location viewer</span>
+                <span class="nav-span">Location viewer</span>
             </mat-list-item>
         </mat-nav-list>
+        <mat-divider></mat-divider>
+        <span>
+           Component with open directory tree to browse through
+       </span>
+
     </mat-sidenav>
 
     <div class="main-content">
+        <span>Gallery view with filtering options and map</span>
         <router-outlet></router-outlet>
     </div>
 </mat-sidenav-container>
