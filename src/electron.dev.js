@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const url = require("url");
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -14,6 +14,10 @@ const createWindow = () => {
       width: 1200,
       height: 800,
       icon: "./src/favicon.ico",
+      webPreferences: { 
+        nodeIntegration: true, 
+        contextIsolation: false 
+      }
     });
 
     // and load the app.
@@ -59,9 +63,9 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.on("select-dir", async (event, arg) => {
-  const result = await win.showOpenDialog(win, {
+ipcMain.on("select-dir", async () => {
+  const result = await dialog.showOpenDialog(win, {
     properties: ["openDirectory"],
   });
-  console.log("directories selected", result.filePaths);
+  win.webContents.send("dir-selected", result.filePaths);
 });
