@@ -1,6 +1,13 @@
 import { BrowserWindow, dialog, ipcMain } from 'electron';
+import { IpcRegister } from './ipc-register';
 
-export function addSelectDirHandler(window: BrowserWindow | null): void {
+class IpcCommunication implements IpcRegister {
+    registerIpcHandlers(window: Electron.BrowserWindow): void {
+        addSelectDirHandler(window);
+    }
+}
+
+function addSelectDirHandler(window: BrowserWindow | null): void {
     if (window == null) {
         console.error('Window was null!');
     } else {
@@ -12,3 +19,5 @@ export function addSelectDirHandler(window: BrowserWindow | null): void {
         });
     }
 }
+
+export default new IpcCommunication();

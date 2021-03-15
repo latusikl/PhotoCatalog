@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import ElectronConstatns from './constants';
-import { addSelectDirHandler } from './ipc-communication';
+import ipcCommunication from './ipc-communication';
 
 let window: BrowserWindow | null;
 
@@ -26,7 +26,7 @@ function createWindow(): void {
 }
 
 function loadIpcListeners(window: Electron.BrowserWindow) {
-    addSelectDirHandler(window);
+    ipcCommunication.registerIpcHandlers(window);
 }
 
 app.on('ready', createWindow);
