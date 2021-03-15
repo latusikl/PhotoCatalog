@@ -19,6 +19,7 @@ function runInDevMode() {
             shell: true,
         });
         connectElectronStreams(electronChildProcess);
+        electronChildProcess.on('exit', () => process.exit(0));
         eventEmitter.removeAllListeners();
     });
 }
