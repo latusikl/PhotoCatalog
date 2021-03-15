@@ -3,12 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently -n \"Angular,Electron\" \"ng serve\" \"npm run electron-dev\"",
+    "start": "ts-node -P ./electron/runner/tsconfig.json electron/runner/dev-runner.ts",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron-dev": "electron ./src/electron.dev"
+    "ng-dev": "ng serve",
+    "electron-dev": "tsc -p ./electron/src/tsconfig.json && electron ./electron/dist/out/electron.dev.js"
   },
   "private": true,
   "dependencies": {
@@ -32,11 +33,9 @@
     "@angular/cli": "~11.2.3",
     "@angular/compiler-cli": "~11.2.4",
     "@types/jasmine": "~3.6.0",
-    "@types/node": "^14.14.34",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
     "codelyzer": "^6.0.0",
-    "concurrently": "^6.0.0",
     "electron": "^12.0.1",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
@@ -50,7 +49,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "prettier": "^2.2.1",
     "protractor": "~7.0.0",
-    "ts-node": "~8.3.0",
+    "ts-node": "^8.3.0",
     "typescript": "~4.1.5"
   }
 }
