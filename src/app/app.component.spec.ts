@@ -1,10 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ElectronService } from 'ngx-electron';
 import { AppComponent } from './app.component';
+import { DirectoryService } from './service/directory.service';
 
 describe('AppComponent', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
+            providers: [DirectoryService, ElectronService],
             imports: [RouterTestingModule],
             declarations: [AppComponent],
         }).compileComponents();
@@ -20,12 +23,5 @@ describe('AppComponent', () => {
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.componentInstance;
         expect(app.title).toEqual('photo-catalog');
-    });
-
-    it('should render title', () => {
-        const fixture = TestBed.createComponent(AppComponent);
-        fixture.detectChanges();
-        const compiled = fixture.nativeElement;
-        expect(compiled.querySelector('.content span').textContent).toContain('photo-catalog app is running!');
     });
 });

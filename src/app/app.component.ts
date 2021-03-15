@@ -7,11 +7,10 @@ import { DirectoryService } from './service/directory.service';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-    constructor(private directoryService: DirectoryService) {
-        this.isExpanded = true;
-    }
+    title = 'photo-catalog';
+    isExpanded = true;
 
-    isExpanded: boolean;
+    constructor(private directoryService: DirectoryService) {}
 
     toggleMenu(): void {
         this.isExpanded = !this.isExpanded;

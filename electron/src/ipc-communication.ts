@@ -8,7 +8,7 @@ class IpcCommunication implements IpcRegister {
 }
 
 function addSelectDirHandler(window: BrowserWindow | null): void {
-    if (window == null) {
+    if (!window) {
         console.error('Window was null!');
     } else {
         ipcMain.on('select-dir', async () => {
