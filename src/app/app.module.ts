@@ -11,7 +11,6 @@ import { MatListModule } from '@angular/material/list';
 import { NgxElectronModule } from 'ngx-electron';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ViewModule } from './view/view.module';
-import { MapModule } from './component/map/map.module';
 
 @NgModule({
     declarations: [AppComponent],
@@ -26,7 +25,6 @@ import { MapModule } from './component/map/map.module';
         NgxElectronModule,
         MatTooltipModule,
         ViewModule,
-        MapModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
