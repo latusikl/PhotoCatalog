@@ -11,7 +11,7 @@ export class MapComponent {
     apiLoaded: Observable<boolean>;
 
     constructor(httpClient: HttpClient) {
-        this.apiLoaded = httpClient.jsonp('https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE', 'callback').pipe(
+        this.apiLoaded = httpClient.jsonp('https://maps.googleapis.com/maps/api/js', 'callback').pipe(
             map(() => true),
             catchError(() => of(false)),
         );
