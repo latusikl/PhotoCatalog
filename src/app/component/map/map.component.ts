@@ -4,8 +4,8 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Component({
-    selector: 'google-maps-demo',
-    templateUrl: './google-maps-demo.component.html',
+    selector: 'map',
+    templateUrl: './map.component.html',
 })
 export class MapComponent {
     apiLoaded: Observable<boolean>;
