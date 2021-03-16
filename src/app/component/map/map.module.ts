@@ -9,4 +9,4 @@ import { MapComponent } from './map.component';
     imports: [CommonModule, GoogleMapsModule, HttpClientModule, HttpClientJsonpModule],
     exports: [MapComponent],
 })
-export class GoogleMapsDemoModule {}
+export class MapModule {}
