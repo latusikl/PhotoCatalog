@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { NgxElectronModule } from 'ngx-electron';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [AppComponent],
@@ -21,6 +22,7 @@ import { NgxElectronModule } from 'ngx-electron';
         MatSidenavModule,
         MatListModule,
         NgxElectronModule,
+        MatTooltipModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

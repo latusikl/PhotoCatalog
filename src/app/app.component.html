@@ -2,17 +2,16 @@
     <button class="button" (click)="toggleMenu()">
         <mat-icon>menu</mat-icon>
     </button>
-    <span class="spacer"></span>
     <span>Photo Catalog</span>
+    <span class="spacer"></span>
+    <button class="button" (click)="chooseFolder()" matTooltip="Choose working directory">
+        <mat-icon class="dir-select-icon">folder_open</mat-icon>
+    </button>
 </mat-toolbar>
 <mat-sidenav-container class="app-container" autosize>
 
     <mat-sidenav class="sidenav" mode="side" [opened]="isExpanded">
         <mat-nav-list>
-            <mat-list-item (click)="chooseFolder()">
-                <mat-icon class="nav-icon">perm_media</mat-icon>
-                <span class="nav-span">Choose directory</span>
-            </mat-list-item>
             <mat-list-item>
                 <mat-icon>collections</mat-icon>
                 <span class="nav-span">Gallery</span>

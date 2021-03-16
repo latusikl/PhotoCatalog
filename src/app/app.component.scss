@@ -1,16 +1,20 @@
-.button{
+.button {
   background: inherit;
   border: none;
   color: inherit;
   outline: inherit;
 }
 
-.button:active{
+.button:active {
   filter: brightness(80%);
 }
 
-.spacer{
-  min-width: 1%;
+.dir-select-icon {
+  font-size: 30px;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }
 
 .app-container {
@@ -23,7 +27,7 @@
   width: 30%;
 }
 
-.nav-span{
+.nav-span {
   margin-left: 5px;
   width: 100%;
 }
