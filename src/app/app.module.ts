@@ -10,6 +10,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { NgxElectronModule } from 'ngx-electron';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ViewModule } from './view/view.module';
+import { MapModule } from './component/map/map.module';
 
 @NgModule({
     declarations: [AppComponent],
@@ -23,6 +25,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatListModule,
         NgxElectronModule,
         MatTooltipModule,
+        ViewModule,
+        MapModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
