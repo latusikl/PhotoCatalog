@@ -19,7 +19,10 @@ function runInDevMode() {
             shell: true,
         });
         connectElectronStreams(electronChildProcess);
-        electronChildProcess.on('exit', () => process.exit(0));
+        electronChildProcess.on('exit', () => {
+            angularChildProcess.kill('SIGTERM');
+            process.exit(0);
+        });
         eventEmitter.removeAllListeners();
     });
 }
