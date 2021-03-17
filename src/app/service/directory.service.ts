@@ -6,17 +6,15 @@ import { BehaviorSubject } from 'rxjs';
     providedIn: 'root',
 })
 export class DirectoryService {
-    constructor(private electronService: ElectronService) {}
-
     currentDirectory = new BehaviorSubject<string>('');
 
-    callForDirectoryChoice(): void {
-        console.log(this.electronService.isElectronApp);
-        console.log(this.electronService.ipcRenderer);
-        this.electronService.ipcRenderer.send('select-dir');
-
+    constructor(private electronService: ElectronService) {
         this.electronService.ipcRenderer.on('dir-selected', (ev, dir) => {
             this.currentDirectory.next(dir);
         });
+    }
+
+    callForDirectoryChoice(): void {
+        this.electronService.ipcRenderer.send('select-dir');
     }
 }
