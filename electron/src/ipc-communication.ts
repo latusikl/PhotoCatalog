@@ -7,36 +7,34 @@ import * as path from 'path';
 
 class IpcCommunication implements IpcRegister {
     registerIpcHandlers(window: Electron.BrowserWindow): void {
-        addSelectDirHandler(window);
-        getImagePathsFromDir(window);
-    }
-}
-
-function addSelectDirHandler(window: BrowserWindow | null): void {
-    if (!window) {
-        console.error('Window was null!');
-        return;
+        this.addSelectDirHandler(window);
+        this.getImagePathsFromDir(window);
     }
 
-    ipcMain.on('select-dir', async () => {
-        const result = await dialog.showOpenDialog(window, {
-            properties: ['openDirectory'],
+    private addSelectDirHandler(window: BrowserWindow | null): void {
+        if (!window) {
+            throw new Error('Window was null!');
+        }
+
+        ipcMain.on('select-dir', async () => {
+            const result = await dialog.showOpenDialog(window, {
+                properties: ['openDirectory'],
+            });
+            window.webContents.send('dir-selected', result.filePaths);
         });
-        window.webContents.send('dir-selected', result.filePaths);
-    });
-}
-
-function getImagePathsFromDir(window: BrowserWindow | null): void {
-    if (!window) {
-        console.error('Window was null!');
-        return;
     }
 
-    ipcMain.on('get-images', (ev, par: string[]) => {
-        const dir = par[0];
-        if (!dir) {
-            window.webContents.send('images-found', []);
-        } else {
+    private getImagePathsFromDir(window: BrowserWindow | null): void {
+        if (!window) {
+            throw new Error('Window was null!');
+        }
+
+        ipcMain.on('get-images', (ev, par: string[]) => {
+            const dir = par[0];
+            if (!dir) {
+                window.webContents.send('images-found', []);
+                return;
+            }
             fs.readdir(dir, (err, files) => {
                 if (!!err) {
                     console.error(err);
@@ -49,8 +47,8 @@ function getImagePathsFromDir(window: BrowserWindow | null): void {
                     });
                 window.webContents.send('images-found', files);
             });
-        }
-    });
+        });
+    }
 }
 
 export default new IpcCommunication();
