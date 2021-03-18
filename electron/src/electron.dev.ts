@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, protocol } from 'electron';
 import ElectronConstatns from './constants';
 import ipcCommunication from './ipc-communication';
 
@@ -12,6 +12,7 @@ function createWindow(): void {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            webSecurity: false,
         },
     });
 
@@ -29,7 +30,13 @@ function loadIpcListeners(window: Electron.BrowserWindow) {
     ipcCommunication.registerIpcHandlers(window);
 }
 
-app.on('ready', createWindow);
+app.whenReady().then(() => {
+    createWindow();
+    protocol.registerFileProtocol('file', (request, callback) => {
+        const pathname = decodeURIComponent(request.url.replace('file:///', ''));
+        callback(pathname);
+    });
+});
 
 app.on('activate', () => {
     if (window === null) {

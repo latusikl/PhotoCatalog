@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "ng-dev": "ng serve",
-    "electron-dev": "tsc && electron ./electron/dist/out/electron.dev.js"
+    "electron-dev": "tsc -p ./electron/src/tsconfig.json  && electron ./electron/dist/out/electron.dev.js"
   },
   "private": true,
   "dependencies": {
@@ -24,7 +24,9 @@
     "@angular/platform-browser": "^11.2.5",
     "@angular/platform-browser-dynamic": "^11.2.5",
     "@angular/router": "^11.2.5",
+    "image-type": "^4.1.0",
     "ngx-electron": "^2.2.0",
+    "read-chunk": "^3.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
