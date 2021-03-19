@@ -9,7 +9,7 @@ export class DirectoryService {
     currentDirectory = new BehaviorSubject<string>('');
 
     constructor(private electronService: ElectronService) {
-        this.electronService.ipcRenderer.on('dir-selected', (ev, dir) => {
+        this.electronService.ipcRenderer.on('dir-selected', (ev, dir: string) => {
             this.currentDirectory.next(dir);
         });
     }
