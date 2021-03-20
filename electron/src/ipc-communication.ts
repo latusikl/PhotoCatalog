@@ -9,18 +9,17 @@ import { IpcRegister } from './ipc-register';
 import { ImageData } from '../../src/app/model/ImageData';
 
 class IpcCommunication implements IpcRegister {
-    registerIpcHandlers(window: Electron.BrowserWindow): void {
+    registerIpcHandlers(window: BrowserWindow): void {
+        if (!window) {
+            throw new Error('Window object was null. Unable to register events for window.');
+        }
         this.addSelectDirHandler(window);
         this.getImagePathsFromDir(window);
         this.getImagesNumber(window);
         this.getImagesPage(window);
     }
 
-    private addSelectDirHandler(window: BrowserWindow | null): void {
-        if (!window) {
-            throw new Error('Window was null!');
-        }
-
+    private addSelectDirHandler(window: BrowserWindow): void {
         ipcMain.on('select-dir', async () => {
             const result = await dialog.showOpenDialog(window, {
                 properties: ['openDirectory'],
@@ -29,11 +28,7 @@ class IpcCommunication implements IpcRegister {
         });
     }
 
-    private getImagePathsFromDir(window: BrowserWindow | null): void {
-        if (!window) {
-            throw new Error('Window was null!');
-        }
-
+    private getImagePathsFromDir(window: BrowserWindow): void {
         ipcMain.on('get-images', (ev, dir: string) => {
             if (!dir) {
                 window.webContents.send('images-found', []);
@@ -52,11 +47,7 @@ class IpcCommunication implements IpcRegister {
         });
     }
 
-    private getImagesNumber(window: BrowserWindow | null): void {
-        if (!window) {
-            throw new Error('Window was null!');
-        }
-
+    private getImagesNumber(window: BrowserWindow): void {
         ipcMain.on('get-images-number', (ev, dir: string) => {
             if (!dir) {
                 window.webContents.send('images-number', 0);
@@ -74,11 +65,7 @@ class IpcCommunication implements IpcRegister {
         });
     }
 
-    private getImagesPage(window: BrowserWindow | null): void {
-        if (!window) {
-            throw new Error('Window was null!');
-        }
-
+    private getImagesPage(window: BrowserWindow): void {
         ipcMain.on('get-images-page', (_ev, dir: string, currentPage: number, pageSize: number) => {
             if (!dir) {
                 window.webContents.send('images-page-found', []);
