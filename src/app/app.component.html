@@ -9,7 +9,7 @@
     </button>
 </mat-toolbar>
 <mat-sidenav-container class="app-container" autosize>
-    <mat-sidenav class="sidenav" mode="side" opened="true" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseExit()">
+    <mat-sidenav class="sidenav" mode="side" opened (mouseenter)="onMouseEnter()" (mouseleave)="onMouseExit()">
         <mat-nav-list>
             <mat-list-item routerLink="/gallery">
                 <mat-icon>collections</mat-icon>

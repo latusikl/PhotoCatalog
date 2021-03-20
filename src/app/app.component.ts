@@ -20,12 +20,14 @@ export class AppComponent {
     chooseFolder(): void {
         this.directoryService.callForDirectoryChoice();
     }
-    onMouseEnter() {
+
+    onMouseEnter(): void {
         if (!this.isExpanded) {
             this.isShowing = true;
         }
     }
-    onMouseExit() {
+
+    onMouseExit(): void {
         if (!this.isExpanded) {
             this.isShowing = false;
         }
