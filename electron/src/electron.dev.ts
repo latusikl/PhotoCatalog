@@ -9,6 +9,7 @@ function createWindow(): void {
         width: ElectronConstatns.WINDOW_WIDTH,
         height: ElectronConstatns.WINDOW_HEIGHT,
         icon: ElectronConstatns.ICON_SOURCE,
+        useContentSize: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,

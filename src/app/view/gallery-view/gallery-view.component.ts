@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DirectoryService } from 'src/app/service/directory.service';
 import { ImageService } from 'src/app/service/image.service';
@@ -20,6 +20,9 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     currentPage = 0;
     pageSize = 10;
     pageSizeOptions = [5, 10, 25, 100];
+
+    @HostBinding('class')
+    class = 'view';
 
     constructor(
         private directoryService: DirectoryService,
