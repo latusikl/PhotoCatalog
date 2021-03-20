@@ -1,3 +1,15 @@
-<div *ngFor="let img of images">
-    <img [src]="img | safeHtml">
+<div class="content">
+    <div class="gallery-container">
+        <div class="img-container" *ngFor="let imgData of imagesData">
+            <img [src]="'data:image/jpeg;base64,' + imgData.base64" />
+        </div>
+    </div>
+    <div class="paginator-footer">
+        <mat-paginator
+            [length]="imagesNumber"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="pageChange($event)"
+        ></mat-paginator>
+    </div>
 </div>

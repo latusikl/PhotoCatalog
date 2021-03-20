@@ -1,18 +1,18 @@
-import { app, BrowserWindow, protocol } from 'electron';
-import ElectronConstatns from './constants';
+import { app, BrowserWindow } from 'electron';
+import ElectronConstants from './constants';
 import ipcCommunication from './ipc-communication';
 
 let window: BrowserWindow | null;
 
 function createWindow(): void {
     window = new BrowserWindow({
-        width: ElectronConstatns.WINDOW_WIDTH,
-        height: ElectronConstatns.WINDOW_HEIGHT,
-        icon: ElectronConstatns.ICON_SOURCE,
+        width: ElectronConstants.WINDOW_WIDTH,
+        height: ElectronConstants.WINDOW_HEIGHT,
+        icon: ElectronConstants.ICON_SOURCE,
+        useContentSize: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            webSecurity: false,
         },
     });
 
@@ -32,10 +32,6 @@ function loadIpcListeners(window: Electron.BrowserWindow) {
 
 app.whenReady().then(() => {
     createWindow();
-    protocol.registerFileProtocol('file', (request, callback) => {
-        const pathname = decodeURIComponent(request.url.replace('file:///', ''));
-        callback(pathname);
-    });
 });
 
 app.on('activate', () => {

@@ -1,15 +1,14 @@
 <mat-toolbar color="primary">
-    <button class="button" (click)="toggleMenu()">
+    <button mat-icon-button id="hamburger" (click)="toggleMenu()" matTooltip="Click to expand side menu">
         <mat-icon>menu</mat-icon>
     </button>
     <span>Photo Catalog</span>
     <span class="spacer"></span>
-    <button class="button" (click)="chooseFolder()" matTooltip="Choose working directory">
-        <mat-icon class="dir-select-icon">folder_open</mat-icon>
+    <button mat-icon-button (click)="chooseFolder()" matTooltip="Choose working directory">
+        <mat-icon id="dir-select-icon">folder_open</mat-icon>
     </button>
 </mat-toolbar>
 <mat-sidenav-container class="app-container" autosize>
-
     <mat-sidenav class="sidenav" mode="side" [opened]="isExpanded">
         <mat-nav-list>
             <mat-list-item routerLink="/gallery">
@@ -22,16 +21,9 @@
             </mat-list-item>
         </mat-nav-list>
         <mat-divider></mat-divider>
-        <span>
-           Component with open directory tree to browse through
-       </span>
-
     </mat-sidenav>
 
     <div class="main-content">
         <router-outlet></router-outlet>
     </div>
 </mat-sidenav-container>
-
-
-
