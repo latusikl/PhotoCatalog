@@ -1,14 +1,14 @@
 import { app, BrowserWindow } from 'electron';
-import ElectronConstatns from './constants';
+import ElectronConstants from './constants';
 import ipcCommunication from './ipc-communication';
 
 let window: BrowserWindow | null;
 
 function createWindow(): void {
     window = new BrowserWindow({
-        width: ElectronConstatns.WINDOW_WIDTH,
-        height: ElectronConstatns.WINDOW_HEIGHT,
-        icon: ElectronConstatns.ICON_SOURCE,
+        width: ElectronConstants.WINDOW_WIDTH,
+        height: ElectronConstants.WINDOW_HEIGHT,
+        icon: ElectronConstants.ICON_SOURCE,
         useContentSize: true,
         webPreferences: {
             nodeIntegration: true,

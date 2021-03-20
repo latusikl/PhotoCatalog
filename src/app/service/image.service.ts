@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { BehaviorSubject } from 'rxjs';
 import { ImageData } from 'src/app/model/ImageData';
+import IpcEvents from '../../../electron/src/ipc-events';
 
 @Injectable({
     providedIn: 'root',
@@ -11,28 +12,28 @@ export class ImageService {
     imagesData = new BehaviorSubject<ImageData[]>([]);
 
     constructor(private electronService: ElectronService) {
-        this.electronService.ipcRenderer.on('images-found', (ev, data: ImageData[]) => {
+        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_FOUND, (ev, data: ImageData[]) => {
             this.imagesData.next(data);
         });
 
-        this.electronService.ipcRenderer.on('images-page-found', (ev, data: ImageData[]) => {
+        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_PAGE_FOUND, (ev, data: ImageData[]) => {
             this.imagesData.next(data);
         });
 
-        this.electronService.ipcRenderer.on('images-number', (ev, data: number) => {
+        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_NUM, (ev, data: number) => {
             this.imagesNumber.next(data);
         });
     }
 
     getImagesNumber(dir: string): void {
-        this.electronService.ipcRenderer.send('get-images-number', dir);
+        this.electronService.ipcRenderer.send(IpcEvents.ToMain.GET_IMG_NUM, dir);
     }
 
     getImagesPage(dir: string, currentPage: number, pageSize: number): void {
-        this.electronService.ipcRenderer.send('get-images-page', dir, currentPage, pageSize);
+        this.electronService.ipcRenderer.send(IpcEvents.ToMain.GET_IMG_PAGE, dir, currentPage, pageSize);
     }
 
     getImages(dir: string): void {
-        this.electronService.ipcRenderer.send('get-images', dir);
+        this.electronService.ipcRenderer.send(IpcEvents.ToMain.GET_IMG, dir);
     }
 }

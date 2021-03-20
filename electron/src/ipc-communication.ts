@@ -7,6 +7,7 @@ import btoa from 'btoa';
 import { BrowserWindow, dialog, ipcMain } from 'electron';
 import { IpcRegister } from './ipc-register';
 import { ImageData } from '../../src/app/model/ImageData';
+import IpcEvents from './ipc-events';
 
 class IpcCommunication implements IpcRegister {
     registerIpcHandlers(window: BrowserWindow): void {
@@ -20,18 +21,18 @@ class IpcCommunication implements IpcRegister {
     }
 
     private addSelectDirHandler(window: BrowserWindow): void {
-        ipcMain.on('select-dir', async () => {
+        ipcMain.on(IpcEvents.ToMain.SELECT_DIR, async () => {
             const result = await dialog.showOpenDialog(window, {
                 properties: ['openDirectory'],
             });
-            window.webContents.send('dir-selected', result.filePaths[0]);
+            window.webContents.send(IpcEvents.ToRendered.DIR_SELECTED, result.filePaths[0]);
         });
     }
 
     private getImagePathsFromDir(window: BrowserWindow): void {
-        ipcMain.on('get-images', (ev, dir: string) => {
+        ipcMain.on(IpcEvents.ToMain.GET_IMG, (ev, dir: string) => {
             if (!dir) {
-                window.webContents.send('images-found', []);
+                window.webContents.send(IpcEvents.ToRendered.IMG_FOUND, []);
                 return;
             }
             fs.readdir(dir, (err, fileNames) => {
@@ -42,15 +43,15 @@ class IpcCommunication implements IpcRegister {
                     .map((name) => path.join(dir, name))
                     .filter((name) => this.filterFilesForImages(name))
                     .map((name) => this.mapToImageData(name));
-                window.webContents.send('images-found', imgsData);
+                window.webContents.send(IpcEvents.ToRendered.IMG_FOUND, imgsData);
             });
         });
     }
 
     private getImagesNumber(window: BrowserWindow): void {
-        ipcMain.on('get-images-number', (ev, dir: string) => {
+        ipcMain.on(IpcEvents.ToMain.GET_IMG_NUM, (ev, dir: string) => {
             if (!dir) {
-                window.webContents.send('images-number', 0);
+                window.webContents.send(IpcEvents.ToRendered.IMG_NUM, 0);
                 return;
             }
             fs.readdir(dir, (err, fileNames) => {
@@ -60,15 +61,15 @@ class IpcCommunication implements IpcRegister {
                 const num = fileNames
                     .map((name) => path.join(dir, name))
                     .filter((name) => this.filterFilesForImages(name)).length;
-                window.webContents.send('images-number', num);
+                window.webContents.send(IpcEvents.ToRendered.IMG_NUM, num);
             });
         });
     }
 
     private getImagesPage(window: BrowserWindow): void {
-        ipcMain.on('get-images-page', (_ev, dir: string, currentPage: number, pageSize: number) => {
+        ipcMain.on(IpcEvents.ToMain.GET_IMG_PAGE, (_ev, dir: string, currentPage: number, pageSize: number) => {
             if (!dir) {
-                window.webContents.send('images-page-found', []);
+                window.webContents.send(IpcEvents.ToRendered.IMG_PAGE_FOUND, []);
                 return;
             }
             fs.readdir(dir, (err, fileNames) => {
@@ -81,7 +82,7 @@ class IpcCommunication implements IpcRegister {
                     .filter((name) => this.filterFilesForImages(name))
                     .slice(start, start + pageSize)
                     .map((name) => this.mapToImageData(name));
-                window.webContents.send('images-page-found', imgsData);
+                window.webContents.send(IpcEvents.ToRendered.IMG_PAGE_FOUND, imgsData);
             });
         });
     }
