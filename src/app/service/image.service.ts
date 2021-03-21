@@ -12,15 +12,15 @@ export class ImageService {
     imagesData = new BehaviorSubject<ImageData[]>([]);
 
     constructor(private electronService: ElectronService) {
-        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_FOUND, (ev, data: ImageData[]) => {
+        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_FOUND, (_ev, data: ImageData[]) => {
             this.imagesData.next(data);
         });
 
-        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_PAGE_FOUND, (ev, data: ImageData[]) => {
+        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_PAGE_FOUND, (_ev, data: ImageData[]) => {
             this.imagesData.next(data);
         });
 
-        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_NUM, (ev, data: number) => {
+        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_NUM, (_ev, data: number) => {
             this.imagesNumber.next(data);
         });
     }
