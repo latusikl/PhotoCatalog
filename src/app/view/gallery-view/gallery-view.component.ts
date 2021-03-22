@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostBinding, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DirectoryService } from 'src/app/service/directory.service';
 import { ImageService } from 'src/app/service/image.service';
 import { ImageData } from 'src/app/model/ImageData';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-gallery-view',
@@ -28,6 +29,8 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
         private directoryService: DirectoryService,
         private imageService: ImageService,
         private cdr: ChangeDetectorRef,
+        private router: Router,
+        private ngZone: NgZone,
     ) {}
 
     ngOnInit(): void {
@@ -67,5 +70,9 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     getImagesPage(): void {
         const dir = this.directoryService.currentDirectory.value;
         this.imageService.getImagesPage(dir, this.currentPage, this.pageSize);
+    }
+
+    navigateToSinglePictureView(imgData: ImageData): void {
+        this.ngZone.run(() => this.router.navigate(['/exif'], { state: imgData }));
     }
 }
