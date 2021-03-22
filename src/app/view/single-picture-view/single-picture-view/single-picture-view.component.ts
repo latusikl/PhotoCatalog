@@ -9,8 +9,17 @@ import { Location } from '@angular/common';
 export class SinglePictureViewComponent implements OnInit {
     constructor(private location: Location) {}
 
+    shouldDisplayImgView = false;
+
     ngOnInit(): void {
         const obj = this.location.getState();
-        console.log(obj);
+        if (obj) {
+            this.shouldDisplayImgView = true;
+        }
+    }
+
+    chooseSinglePicture() {
+        //TODO Add Implementation in next steps of feature development
+        console.error('NOT IMPLEMENTED');
     }
 }
