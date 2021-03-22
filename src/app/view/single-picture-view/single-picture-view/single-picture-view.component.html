@@ -1,7 +1,18 @@
-<app-issue-display type="oops">
-    <h3>You forgot to choose picture. Use button bellow to do that.</h3>
-    <button mat-raised-button color="primary" (click)="chooseSinglePicture()">
-        <mat-icon>folder_open</mat-icon>
-    </button>
-</app-issue-display>
+<div class="content">
+    <app-issue-display type="oops" *ngIf="!shouldDisplayImgView">
+        <h3>You forgot to choose picture. Use button bellow to do that.</h3>
+        <button mat-raised-button color="primary" (click)="chooseSinglePicture()">
+            <mat-icon>folder_open</mat-icon>
+        </button>
+    </app-issue-display>
+    <div *ngIf="shouldDisplayImgView" class="view-container">
+        <div class="img-container">
+<!--            <img [src]="'data:image/jpeg;base64,' + getImgBase64()"/>-->
+            <img src="assets/wide-jpg.jpg"/>
+        </div>
+        <div class="exif-container">
+            <span> Small content</span>
+        </div>
+    </div>
+</div>
 

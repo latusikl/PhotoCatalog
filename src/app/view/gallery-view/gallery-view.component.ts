@@ -73,6 +73,6 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     }
 
     navigateToSinglePictureView(imgData: ImageData): void {
-        this.ngZone.run(() => this.router.navigate(['/exif'], { state: imgData }));
+        this.ngZone.run(() => this.router.navigate(['/exif'], { state: { imgData: imgData } }));
     }
 }

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { ImageData } from 'src/app/model/ImageData';
 
 @Component({
     selector: 'app-single-picture-view',
@@ -7,13 +8,20 @@ import { Location } from '@angular/common';
     styleUrls: ['./single-picture-view.component.scss'],
 })
 export class SinglePictureViewComponent implements OnInit {
+    @HostBinding('class')
+    class = 'view';
+
+    shouldDisplayImgView = true;
+    imgData: ImageData | undefined;
+
     constructor(private location: Location) {}
 
-    shouldDisplayImgView = false;
-
     ngOnInit(): void {
-        const obj = this.location.getState();
-        if (obj) {
+        // @ts-ignore
+        const passedData: ImageData = this.location.getState().imgData;
+        console.log(passedData);
+        if (passedData) {
+            this.imgData = passedData;
             this.shouldDisplayImgView = true;
         }
     }
@@ -21,5 +29,9 @@ export class SinglePictureViewComponent implements OnInit {
     chooseSinglePicture() {
         //TODO Add Implementation in next steps of feature development
         console.error('NOT IMPLEMENTED');
+    }
+
+    getImgBase64(): string {
+        return this.imgData ? this.imgData.base64 : '';
     }
 }
