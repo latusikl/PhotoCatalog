@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ImageData } from 'src/app/model/ImageData';
 
@@ -16,7 +16,6 @@ export class SinglePictureViewComponent implements OnInit {
     ngOnInit(): void {
         // @ts-ignore
         const passedData: ImageData = this.location.getState().imgData;
-        console.log(passedData);
         if (passedData) {
             this.imgData = passedData;
             this.shouldDisplayImgView = true;

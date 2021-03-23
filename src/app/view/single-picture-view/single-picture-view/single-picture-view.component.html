@@ -1,6 +1,6 @@
 <div class="content">
     <app-issue-display type="oops" *ngIf="!shouldDisplayImgView">
-        <h3>You forgot to choose picture. Use button bellow to do that.</h3>
+        <h3>You forgot to choose picture. Choose one from gallery or use button below to choose another one.</h3>
         <button mat-raised-button color="primary" (click)="chooseSinglePicture()">
             <mat-icon>folder_open</mat-icon>
         </button>
@@ -13,7 +13,6 @@
             </mat-card>
         </div>
         <div class="exif-container">
-            <!--            <app-exif-display [exifData]="imgData.exifData"></app-exif-display>-->
             <app-exif-display></app-exif-display>
         </div>
     </div>
