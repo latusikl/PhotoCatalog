@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button id="hamburger" (click)="toggleMenu()" matTooltip="Click to expand side menu">
+    <button mat-icon-button id="hamburger" (click)="drawer.toggle()" matTooltip="Click to expand side menu">
         <mat-icon>menu</mat-icon>
     </button>
     <span>Photo Catalog</span>
@@ -8,22 +8,22 @@
         <mat-icon id="dir-select-icon">folder_open</mat-icon>
     </button>
 </mat-toolbar>
-<mat-sidenav-container class="app-container" autosize>
-    <mat-sidenav class="sidenav" mode="side" opened (mouseenter)="onMouseEnter()" (mouseleave)="onMouseExit()">
-        <mat-nav-list>
+<mat-drawer-container class="app-container" autosize>
+    <mat-drawer #drawer class="sidenav" mode="over">
+        <mat-nav-list (click)="drawer.toggle()">
             <mat-list-item routerLink="/gallery">
                 <mat-icon>collections</mat-icon>
-                <span class="nav-span" *ngIf="isSideNavFullWidth()">Gallery</span>
+                <span class="nav-span">Gallery</span>
             </mat-list-item>
             <mat-list-item routerLink="/location">
                 <mat-icon>place</mat-icon>
-                <span class="nav-span" *ngIf="isSideNavFullWidth()">Location viewer</span>
+                <span class="nav-span">Location viewer</span>
             </mat-list-item>
         </mat-nav-list>
         <mat-divider></mat-divider>
-    </mat-sidenav>
+    </mat-drawer>
 
     <div class="main-content">
         <router-outlet></router-outlet>
     </div>
-</mat-sidenav-container>
+</mat-drawer-container>

@@ -1,8 +1,10 @@
-<div *ngIf="apiLoaded | async">
+<div *ngIf="apiLoaded">
     <google-map [options]="options" height="80vh" width="60vw">
-        <map-marker *ngFor="let markerPosition of markerPositions" 
+        <map-marker
+            *ngFor="let markerPosition of markerPositions"
             [position]="markerPosition"
-            [options]="markerOptions">
+            [options]="markerOptions"
+        >
         </map-marker>
     </google-map>
 </div>

@@ -8,32 +8,10 @@ import { DirectoryService } from './service/directory.service';
 })
 export class AppComponent {
     title = 'photo-catalog';
-    isExpanded = false;
-    isShowing = false;
 
     constructor(private directoryService: DirectoryService) {}
 
-    toggleMenu(): void {
-        this.isExpanded = !this.isExpanded;
-    }
-
     chooseFolder(): void {
         this.directoryService.callForDirectoryChoice();
-    }
-
-    onMouseEnter(): void {
-        if (!this.isExpanded) {
-            this.isShowing = true;
-        }
-    }
-
-    onMouseExit(): void {
-        if (!this.isExpanded) {
-            this.isShowing = false;
-        }
-    }
-
-    isSideNavFullWidth(): boolean {
-        return this.isExpanded || this.isShowing;
     }
 }

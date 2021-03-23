@@ -1,10 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, Subscription } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { ImageService } from 'src/app/service/image.service';
 import { IExifElement } from 'piexif-ts';
 import { ImageData } from 'src/app/model/ImageData';
+import { MapService } from 'src/app/service/map.service';
 
 @Component({
     selector: 'map',
@@ -12,22 +11,17 @@ import { ImageData } from 'src/app/model/ImageData';
 })
 export class MapComponent implements OnInit, OnDestroy {
     private imagesSub = Subscription.EMPTY;
+    private mapSub = Subscription.EMPTY;
 
-    apiLoaded: Observable<boolean>;
+    apiLoaded = false;
 
     @Input()
-    options: google.maps.MapOptions;
+    options: google.maps.MapOptions = {};
 
     markerOptions: google.maps.MarkerOptions = { draggable: false };
     markerPositions: google.maps.LatLngLiteral[] = [];
 
-    constructor(httpClient: HttpClient, private imageService: ImageService) {
-        this.apiLoaded = httpClient.jsonp('https://maps.googleapis.com/maps/api/js', 'callback').pipe(
-            map(() => true),
-            catchError(() => of(false)),
-        );
-        this.options = {};
-    }
+    constructor(private imageService: ImageService, private mapService: MapService) {}
 
     ngOnInit(): void {
         this.imagesSub = this.imageService.imagesData.subscribe({
@@ -35,10 +29,16 @@ export class MapComponent implements OnInit, OnDestroy {
                 this.addMarkers(data);
             },
         });
+        this.mapSub = this.mapService.apiLoaded.subscribe({
+            next: (data) => {
+                this.apiLoaded = data;
+            },
+        });
     }
 
     ngOnDestroy(): void {
         this.imagesSub.unsubscribe();
+        this.mapSub.unsubscribe();
     }
 
     addMarkers(imagesData: ImageData[]): void {
