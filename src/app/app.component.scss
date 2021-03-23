@@ -1,4 +1,5 @@
 $navbar_size: 64px;
+$dir_select_icon_size: 30px;
 
 .button {
     background: inherit;
@@ -39,10 +40,10 @@ $navbar_size: 64px;
 }
 
 #dir-select-icon {
-    font-size: 30px;
-    line-height: 30px;
-    height: 30px;
-    width: 30px;
+    font-size: $dir_select_icon_size;
+    line-height: $dir_select_icon_size;
+    height: $dir_select_icon_size;
+    width: $dir_select_icon_size;
 }
 
 #hamburger {

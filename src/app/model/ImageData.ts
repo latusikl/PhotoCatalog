@@ -1,6 +1,7 @@
 import { IExif } from 'piexif-ts';
 
 export interface ImageData {
-    base64: string;
+    name: string;
+    path: string;
     exifData?: IExif;
 }

@@ -5,6 +5,7 @@ import { ImageService } from 'src/app/service/image.service';
 import { ImageData } from 'src/app/model/ImageData';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
+import { GallerySearchCriteria } from 'src/app/model/GallerySearchCriteria';
 
 @Component({
     selector: 'app-gallery-view',
@@ -16,6 +17,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     private currDirSub = Subscription.EMPTY;
     private imgNumberSub = Subscription.EMPTY;
 
+    searchCriteria = <GallerySearchCriteria>{};
     imagesData: ImageData[] = [];
     imagesNumber = 0;
     currentPage = 0;
@@ -36,21 +38,15 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.imagesSub = this.imageService.imagesData.subscribe({
             next: (data) => {
-                this.imagesData = data;
+                this.imagesNumber = data.length;
+                this.getImagesPage(data);
                 this.cdr.detectChanges();
             },
         });
 
         this.currDirSub = this.directoryService.currentDirectory.subscribe({
             next: (dir) => {
-                this.imageService.getImagesNumber(dir);
-            },
-        });
-
-        this.imgNumberSub = this.imageService.imagesNumber.subscribe({
-            next: (value) => {
-                this.imagesNumber = value;
-                this.getImagesPage();
+                this.imageService.getImages(dir);
             },
         });
     }
@@ -64,12 +60,26 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     pageChange(ev: PageEvent): void {
         this.currentPage = ev.pageIndex;
         this.pageSize = ev.pageSize;
-        this.getImagesPage();
+        const allImgs = this.imageService.imagesData.value;
+        this.getImagesPage(allImgs);
     }
 
-    getImagesPage(): void {
-        const dir = this.directoryService.currentDirectory.value;
-        this.imageService.getImagesPage(dir, this.currentPage, this.pageSize);
+    getImagesPage(allImgs: ImageData[]): void {
+        const start = this.currentPage * this.pageSize;
+        this.imagesData = allImgs.slice(start, start + this.pageSize);
+    }
+
+    filterImages(): void {
+        this.currentPage = 0;
+        const allImgs = this.imageService.imagesData.value;
+        this.getImagesPage(allImgs);
+        this.imagesData = this.imagesData.filter((img) => {
+            if (!!this.searchCriteria.name) {
+                return img.name.toLocaleLowerCase().includes(this.searchCriteria.name?.toLocaleLowerCase());
+            }
+            return true;
+        });
+        this.imagesNumber = this.imagesData.length;
     }
 
     navigateToSinglePictureView(imgData: ImageData): void {

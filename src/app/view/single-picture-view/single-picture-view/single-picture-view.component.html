@@ -8,7 +8,7 @@
     <div *ngIf="shouldDisplayImgView" class="view-container">
         <div class="img-container">
             <mat-card align="center">
-                            <img [src]="'data:image/jpeg;base64,'+ getImgBase64()"/>
+                            <img [src]="getImgPath() | safeHtml"/>
 <!--                <img src="assets/wide.jpeg"/>-->
             </mat-card>
         </div>

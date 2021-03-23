@@ -16,8 +16,8 @@ class IpcCommunication implements IpcRegister {
         }
         this.addSelectDirHandler(window);
         this.getImagePathsFromDir(window);
-        this.getImagesNumber(window);
-        this.getImagesPage(window);
+        // this.getImagesNumber(window);
+        // this.getImagesPage(window);
     }
 
     private addSelectDirHandler(window: BrowserWindow): void {
@@ -48,45 +48,6 @@ class IpcCommunication implements IpcRegister {
         });
     }
 
-    private getImagesNumber(window: BrowserWindow): void {
-        ipcMain.on(IpcEvents.ToMain.GET_IMG_NUM, (ev, dir: string) => {
-            if (!dir) {
-                window.webContents.send(IpcEvents.ToRendered.IMG_NUM, 0);
-                return;
-            }
-            fs.readdir(dir, (err, fileNames) => {
-                if (!!err) {
-                    console.error(err);
-                }
-                const num = fileNames
-                    .map((name) => path.join(dir, name))
-                    .filter((name) => this.filterFilesForImages(name)).length;
-                window.webContents.send(IpcEvents.ToRendered.IMG_NUM, num);
-            });
-        });
-    }
-
-    private getImagesPage(window: BrowserWindow): void {
-        ipcMain.on(IpcEvents.ToMain.GET_IMG_PAGE, (_ev, dir: string, currentPage: number, pageSize: number) => {
-            if (!dir) {
-                window.webContents.send(IpcEvents.ToRendered.IMG_PAGE_FOUND, []);
-                return;
-            }
-            fs.readdir(dir, (err, fileNames) => {
-                if (!!err) {
-                    console.error(err);
-                }
-                const start = currentPage * pageSize;
-                const imgsData = fileNames
-                    .map((name) => path.join(dir, name))
-                    .filter((name) => this.filterFilesForImages(name))
-                    .slice(start, start + pageSize)
-                    .map((name) => this.mapToImageData(name));
-                window.webContents.send(IpcEvents.ToRendered.IMG_PAGE_FOUND, imgsData);
-            });
-        });
-    }
-
     private filterFilesForImages(name: string): boolean {
         if (fs.lstatSync(name).isDirectory()) {
             return false;
@@ -96,11 +57,12 @@ class IpcCommunication implements IpcRegister {
         return !!mime ? mime.includes('image/jpeg') : false;
     }
 
-    private mapToImageData(name: string): ImageData {
-        const binary = fs.readFileSync(name).toString('binary');
+    private mapToImageData(imgPath: string): ImageData {
+        const binary = fs.readFileSync(imgPath).toString('binary');
         const exif = piexif.load(binary);
         return <ImageData>{
-            base64: btoa(binary),
+            name: imgPath.slice(imgPath.lastIndexOf(path.sep) + 1, imgPath.indexOf('.')),
+            path: imgPath,
             exifData: exif,
         };
     }
