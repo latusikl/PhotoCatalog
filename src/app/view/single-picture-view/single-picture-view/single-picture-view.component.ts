@@ -8,10 +8,7 @@ import { ImageData } from 'src/app/model/ImageData';
     styleUrls: ['./single-picture-view.component.scss'],
 })
 export class SinglePictureViewComponent implements OnInit {
-    @HostBinding('class')
-    class = 'view';
-
-    shouldDisplayImgView = true;
+    shouldDisplayImgView = false;
     imgData: ImageData | undefined;
 
     constructor(private location: Location) {}
