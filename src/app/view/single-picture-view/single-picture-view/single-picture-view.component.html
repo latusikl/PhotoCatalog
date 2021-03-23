@@ -7,11 +7,14 @@
     </app-issue-display>
     <div *ngIf="shouldDisplayImgView" class="view-container">
         <div class="img-container">
-<!--            <img [src]="'data:image/jpeg;base64,' + getImgBase64()"/>-->
-            <img src="assets/wide-jpg.jpg"/>
+            <mat-card align="center">
+                <!--            <img [src]="'data:image/jpeg;base64,' + getImgBase64()"/>-->
+                <img src="assets/wide.jpeg"/>
+            </mat-card>
         </div>
         <div class="exif-container">
-            <span> Small content</span>
+            <!--            <app-exif-display [exifData]="imgData.exifData"></app-exif-display>-->
+            <app-exif-display></app-exif-display>
         </div>
     </div>
 </div>

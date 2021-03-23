@@ -10,17 +10,15 @@
   flex-flow: column nowrap;
   align-items: center;
   justify-content: flex-start;
-  //background: green;
 }
 
 .img-container{
-  padding: 0.5em;
+  margin: 0.5em;
   max-width: 100%;
   height: 55%;
   display: flex;
   align-items: center;
   justify-content: center;
-  //background: red;
 }
 
 img{
@@ -29,7 +27,6 @@ img{
 }
 
 .exif-container{
-  //background: blue;
   width: 100%;
   height: 45%;
 }

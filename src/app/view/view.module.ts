@@ -10,6 +10,8 @@ import { SinglePictureModule } from '../component/single-picutre/single-picture.
 import { SinglePictureViewComponent } from './single-picture-view/single-picture-view/single-picture-view.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
     declarations: [LocationViewComponent, GalleryViewComponent, SafeHtmlPipe, SinglePictureViewComponent],
@@ -21,6 +23,8 @@ import { MatButtonModule } from '@angular/material/button';
         SinglePictureModule,
         MatIconModule,
         MatButtonModule,
+        MatCardModule,
+        MatTableModule,
     ],
 })
 export class ViewModule {}
