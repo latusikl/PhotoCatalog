@@ -3,11 +3,10 @@ import * as piexif from 'piexif-ts';
 import * as fs from 'fs';
 import imageType from 'image-type';
 import readChunk from 'read-chunk';
-import btoa from 'btoa';
+import IpcEvents from './ipc-events';
 import { BrowserWindow, dialog, ipcMain } from 'electron';
 import { IpcRegister } from './ipc-register';
 import { ImageData } from '../../src/app/model/ImageData';
-import IpcEvents from './ipc-events';
 
 class IpcCommunication implements IpcRegister {
     registerIpcHandlers(window: BrowserWindow): void {
@@ -60,11 +59,8 @@ class IpcCommunication implements IpcRegister {
     private mapToImageData(imgPath: string): ImageData {
         const binary = fs.readFileSync(imgPath).toString('binary');
         const exif = piexif.load(binary);
-        return <ImageData>{
-            name: imgPath.slice(imgPath.lastIndexOf(path.sep) + 1, imgPath.indexOf('.')),
-            path: imgPath,
-            exifData: exif,
-        };
+        const name = imgPath.slice(imgPath.lastIndexOf(path.sep) + 1, imgPath.indexOf('.'));
+        return new ImageData(name, imgPath, exif);
     }
 }
 

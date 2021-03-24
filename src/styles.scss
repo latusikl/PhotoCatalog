@@ -1,9 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+    min-width: 400px;
+    min-height: 600px;
+}
 
 .view {
     height: 100%;
     width: 100%;
 }
+
+// https://github.com/angular/components/issues/4803
+
+.mat-slider-thumb-label {
+    transform: rotate(45deg) !important;
+    border-radius: 50% 50% 0 !important;
+}
+
+.mat-slider-thumb {
+    transform: scale(0) !important;
+}
+
+.mat-slider-thumb-label-text {
+    opacity: 1 !important;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-stretch {
+    display: flex;
+    flex: 1;
+}
+
