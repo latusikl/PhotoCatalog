@@ -2,18 +2,17 @@ import { ChildProcess, spawn } from 'child_process';
 import { EventEmitter } from 'events';
 import { Transform, TransformCallback } from 'stream';
 import * as builder from 'electron-builder';
-import * as fs from 'fs';
 
 const ANGULAR_READY = 'angular-ready';
 const DEPLOYMENT_DIR = 'deployment';
 const eventEmitter = new EventEmitter();
 
 function buildForProduction() {
-    if (fs.existsSync(DEPLOYMENT_DIR)) {
-        console.log('Removed old deployment directory.');
-        fs.rmdirSync(DEPLOYMENT_DIR, { recursive: true });
-    }
-    fs.mkdirSync(DEPLOYMENT_DIR);
+    // if (fs.existsSync(DEPLOYMENT_DIR)) {
+    //     console.log('Removed old deployment directory.');
+    //     fs.rmdirSync(DEPLOYMENT_DIR, { recursive: true });
+    // }
+    // fs.mkdirSync(DEPLOYMENT_DIR);
     console.log('Starting Angular project build');
     const angularChildProcess: ChildProcess = spawn(npmCommand(), ['run', 'build-angular-prod'], {
         cwd: process.cwd(),
