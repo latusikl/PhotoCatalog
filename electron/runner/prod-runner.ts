@@ -1,40 +1,46 @@
 import { ChildProcess, spawn } from 'child_process';
 import { EventEmitter } from 'events';
 import { Transform, TransformCallback } from 'stream';
-import * as path from 'path';
 import * as builder from 'electron-builder';
+import * as fs from 'fs';
 
 const ANGULAR_READY = 'angular-ready';
-const DIRECTORY = path.join('..', 'deployment', 'build');
-const DIRECTORY_ANGULAR = path.join(DIRECTORY, 'angular');
+const DEPLOYMENT_DIR = 'deployment';
 const eventEmitter = new EventEmitter();
 
 function buildForProduction() {
-    const angularChildProcess: ChildProcess = spawn(
-        'ng',
-        ['build', '--prod', '--output-path', DIRECTORY_ANGULAR, '--base-href', './'],
-        {
-            cwd: process.cwd(),
-            shell: true,
-        },
-    );
-    process.env.DEBUG = 'electron-builder';
+    if (fs.existsSync(DEPLOYMENT_DIR)) {
+        console.log('Removed old deployment directory.');
+        fs.rmdirSync(DEPLOYMENT_DIR, { recursive: true });
+    }
+    fs.mkdirSync(DEPLOYMENT_DIR);
+    console.log('Starting Angular project build');
+    const angularChildProcess: ChildProcess = spawn(npmCommand(), ['run', 'build-angular-prod'], {
+        cwd: process.cwd(),
+        shell: true,
+    });
+
     connectAngularStdStreams(angularChildProcess);
     eventEmitter.on(ANGULAR_READY, () => {
         console.log('Angular ready');
-        const electronBuildProces: ChildProcess = spawn(
-            'tsc',
-            ['-p', './electron/src/tsconfig.prod.json', '--outDir', DIRECTORY],
-            {
-                cwd: process.cwd(),
-                shell: true,
-            },
-        );
+        console.log('Starting electron files build');
+        const electronBuildProces: ChildProcess = spawn(npmCommand(), ['run', 'build-electron-prod'], {
+            cwd: process.cwd(),
+            shell: true,
+        });
         electronBuildProces.on('exit', () => {
             console.log('Electron ready');
             runElectronBuilder();
         });
     });
+}
+
+function npmCommand(): string {
+    if (process.platform == 'win32') {
+        return 'npm.cmd';
+    } else {
+        return 'npm';
+    }
 }
 
 function connectAngularStdStreams(angularChildProcess: ChildProcess): void {
@@ -56,6 +62,8 @@ function angularOutTransform(): Transform {
 }
 
 function runElectronBuilder() {
+    console.log('Starting application packing');
+    process.env.DEBUG = 'electron-builder';
     builder
         .build({
             targets: builder.Platform.MAC.createTarget(),
@@ -63,20 +71,6 @@ function runElectronBuilder() {
                 appId: 'pl.photo.catalog',
                 productName: 'Photo Catalog',
                 copyright: 'Apache-2.0 License',
-                dmg: {
-                    contents: [
-                        {
-                            x: 110,
-                            y: 150,
-                        },
-                        {
-                            x: 240,
-                            y: 150,
-                            type: 'link',
-                            path: '/Applications',
-                        },
-                    ],
-                },
                 linux: {
                     target: ['AppImage', 'deb'],
                 },
