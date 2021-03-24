@@ -7,7 +7,7 @@ const ANGULAR_READY = 'angular-ready';
 const eventEmitter = new EventEmitter();
 
 function runInDevMode() {
-    const angularChildProcess: ChildProcess = spawn('ng', ['serve'], {
+    const angularChildProcess: ChildProcess = spawn(npmCommand(), ['run', 'ng-dev'], {
         cwd: process.cwd(),
         shell: true,
     });

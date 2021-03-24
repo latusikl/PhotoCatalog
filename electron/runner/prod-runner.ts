@@ -66,11 +66,13 @@ function runElectronBuilder() {
     process.env.DEBUG = 'electron-builder';
     builder
         .build({
-            targets: builder.Platform.MAC.createTarget(),
             config: {
                 appId: 'pl.photo.catalog',
                 productName: 'Photo Catalog',
                 copyright: 'Apache-2.0 License',
+                mac: {
+                    target: 'dmg',
+                },
                 linux: {
                     target: ['AppImage', 'deb'],
                 },
@@ -83,7 +85,7 @@ function runElectronBuilder() {
                 },
             },
         })
-        .then(() => console.log('Build successfull'))
+        .then(() => console.log('Build successful'))
         .catch((e) => console.error(e));
 }
 
