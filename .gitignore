@@ -4,7 +4,7 @@
 /dist
 /tmp
 /out-tsc
-/deployment/build
+/deployment/**
 # Only exists if Bazel was run
 /bazel-out
 /electron/dist

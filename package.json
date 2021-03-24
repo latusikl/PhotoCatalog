@@ -1,6 +1,37 @@
 {
-  "name": "photo-catalog",
-  "version": "0.0.0",
+  "name": "PhotoCatalog",
+  "description": "Application dedicated to view pictures and modify their exif metadata.",
+  "keywords": [
+    "pictures",
+    "exif",
+    "gallery",
+    "geotag"
+  ],
+  "license": "Apache-2.0 License",
+  "version": "0.0.1",
+  "author": "The Photo Catalog team.",
+  "contributors": [
+    {
+      "name": "Krzysztof Bol",
+      "email": "",
+      "url": "https://github.com/syphzur"
+    },
+    {
+      "name": "Lukasz Latusik",
+      "email": "",
+      "url": "https://github.com/latusikl"
+    },
+    {
+      "name": "Dawid Suchy",
+      "email": "",
+      "url": "https://github.com/Suchar230"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/latusikl/PhotoCatalog"
+  },
+  "homepage": "https://github.com/latusikl/PhotoCatalog",
   "scripts": {
     "ng": "ng",
     "start": "ts-node electron/runner/dev-runner.ts",
@@ -12,6 +43,7 @@
     "install-wsl": "npm install && npm uninstall electron && export npm_config_platform=win32 && npm install electron && unset npm_config_platform",
     "electron-dev": "tsc -p electron/src/tsconfig.dev.json  && electron ./electron/dist/out/electron/src/electron.dev.js"
   },
+  "main": "./deployment/build/electron/src/electron.prod.js",
   "private": true,
   "dependencies": {
     "@angular/animations": "^11.2.5",
@@ -26,7 +58,6 @@
     "@angular/platform-browser-dynamic": "^11.2.5",
     "@angular/router": "^11.2.5",
     "btoa": "^1.2.1",
-    "electron": "^12.0.1",
     "image-type": "^4.1.0",
     "ngx-electron": "^2.2.0",
     "piexif-ts": "^2.0.16",
@@ -44,6 +75,8 @@
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "codelyzer": "^6.0.0",
+    "electron-builder": "^22.10.5",
+    "electron": "^12.0.1",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
