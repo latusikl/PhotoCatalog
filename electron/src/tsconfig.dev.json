@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./electron.dev.ts",
+    "outDir": "../dist/out",
+    "moduleResolution": "node",
+    "target": "es2015",
+    "module": "commonjs",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "esModuleInterop": true
+  },
+  "exclude": [
+    "./electron.prod.ts"
+  ]
+}

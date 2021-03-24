@@ -8,7 +8,7 @@ function createWindow(): void {
     window = new BrowserWindow({
         width: ElectronConstants.WINDOW_WIDTH,
         height: ElectronConstants.WINDOW_HEIGHT,
-        icon: ElectronConstants.ICON_SOURCE_DEV,
+        icon: ElectronConstants.ICON_SOURCE_PROD,
         useContentSize: true,
         webPreferences: {
             nodeIntegration: true,
@@ -16,8 +16,8 @@ function createWindow(): void {
         },
     });
 
-    window.loadURL('http://localhost:4200');
-
+    const appUrl = new URL(`file://${ElectronConstants.APP_PATH_PROD}`);
+    window.loadURL(appUrl.toString());
     window.webContents.openDevTools();
 
     window.on('closed', () => {
@@ -35,7 +35,9 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
-    app.quit();
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
 });
 
 app.on('activate', () => {
