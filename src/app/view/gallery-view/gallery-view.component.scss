@@ -1,30 +1,59 @@
-$paginator_footer_height: 50px;
+$paginator_footer_height: 56px;
 
 img {
     width: auto;
     height: 100px;
     border-radius: 0.25em;
-    box-shadow: 0px 0px 40px -10px rgba(0, 0, 0, 0.75);     
+    box-shadow: 0px 0px 40px -10px rgba(0, 0, 0, 0.75);
+    margin-bottom: 0.5em;
+}
+
+#search-criteria {
+    margin: 1em;
+}
+
+#button-container {
+    margin-left: 1em;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#integer-time-radio-button {
+    margin: 0 1em;
+}
+
+#min-focal-length-label {
+    min-width: 10em;
+}
+
+#min-f-number-label {
+    min-width: 6.5em;
+}
+
+.row-wrap {
+    flex-wrap: wrap;
+    margin-bottom: 0.75em;
 }
 
 .content {
-    width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .gallery-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: center;
-    min-height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-rows: min-content;
+    grid-gap: 1em;
 }
 
 .img-container {
+    align-items: center;
+    align-content: space-between;
     padding: 0.5em;
-    height: 100px;
 
-    :hover {
+    > img:hover {
         filter: brightness(110%);
         transform: scale(1.05);
         transition: all 0.3s ease-in-out;
@@ -33,5 +62,16 @@ img {
 
 .paginator-footer {
     height: $paginator_footer_height;
-    margin-top: -$paginator_footer_height;
+}
+
+.form-field {
+    display: flex;
+    align-items: center;
+    margin: 0 1em;
+}
+
+.img-name {
+    text-overflow: ellipsis;
+    max-width: 100%;
+    overflow: hidden;
 }

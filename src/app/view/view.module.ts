@@ -10,9 +10,16 @@ import { SinglePictureViewComponent } from './single-picture-view/single-picture
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IssueDisplayComponent } from '../component/single-picutre/issue-display/issue-display.component';
 import { ExifDisplayComponent } from '../component/single-picutre/exif-display/exif-display.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
     declarations: [
@@ -31,7 +38,17 @@ import { ExifDisplayComponent } from '../component/single-picutre/exif-display/e
         MatIconModule,
         MatButtonModule,
         MatCardModule,
-        MatTableModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        ReactiveFormsModule,
+        MatCheckboxModule,
+        MatSliderModule,
+        MatRadioModule,
     ],
 })
 export class ViewModule {}

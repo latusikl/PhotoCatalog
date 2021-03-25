@@ -1,15 +1,97 @@
 <div class="content">
-    <div class="gallery-container">
-        <div class="img-container" *ngFor="let imgData of imagesData" (click)="navigateToSinglePictureView(imgData)">
-            <img [src]="'data:image/jpeg;base64,' + imgData.base64"/>
-        </div>
+    <mat-card id="search-criteria">
+        <mat-card-subtitle>Filter images</mat-card-subtitle>
+        <mat-card-content>
+            <form [formGroup]="criteriaForm" class="flex-container">
+                <div class="flex-row row-wrap">
+                    <mat-form-field class="form-field" appearance="fill">
+                        <mat-label>Name</mat-label>
+                        <input matInput formControlName="name" />
+                    </mat-form-field>
+                    <mat-form-field class="form-field" appearance="fill">
+                        <mat-label>Date range</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                            <input matStartDate placeholder="Start date" formControlName="startDate" />
+                            <input matEndDate placeholder="End date" formControlName="endDate" />
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+                    <div class="form-field flex-stretch">
+                        <mat-checkbox formControlName="allowEmptyData"> Include images with empty data </mat-checkbox>
+                        <div id="button-container" class="flex-stretch">
+                            <button mat-raised-button color="primary" (click)="filterImages()">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row-wrap">
+                    <div class="form-field flex-stretch" appearance="fill">
+                        <mat-label id="min-focal-length-label">Min. focal length [mm]</mat-label>
+                        <mat-slider
+                            class="flex-stretch"
+                            thumbLabel
+                            tickInterval="5"
+                            min="0"
+                            max="500"
+                            formControlName="minFocalLength"
+                        >
+                        </mat-slider>
+                    </div>
+                    <div class="form-field flex-stretch" appearance="fill">
+                        <mat-label id="min-f-number-label">Min. F number</mat-label>
+                        <mat-slider
+                            class="flex-stretch"
+                            thumbLabel
+                            tickInterval="0.1"
+                            min="0"
+                            max="10"
+                            formControlName="minFNumber"
+                        >
+                        </mat-slider>
+                    </div>
+                    <div class="form-field">
+                        <mat-form-field>
+                            <mat-label>Min. exposure time (0 - 8000)</mat-label>
+                            <input matInput min="0" max="8000" type="number" formControlName="minExposureTime" />
+                        </mat-form-field>
+                        <mat-radio-group class="form-field flex-wrap" formControlName="isExposureTimeInteger">
+                            <mat-radio-button id="integer-time-radio-button" [value]="false">
+                                Fracture [1 / s]</mat-radio-button
+                            >
+                            <mat-radio-button [value]="true">Integer [s]</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div *ngIf="criteriaForm.status === 'INVALID'">
+                        <mat-error> Please correct or delete invalid criteria.</mat-error>
+                    </div>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+    <div class="flex-container flex-stretch" *ngIf="noImages; else gallery">
+        <app-issue-display type="need-action">
+            <h3>Please select non-empty directory with images</h3>
+        </app-issue-display>
     </div>
+    <ng-template #gallery>
+        <div class="gallery-container flex-stretch">
+            <div
+                class="flex-container img-container"
+                *ngFor="let imgData of imagesData"
+                (click)="navigateToSinglePictureView(imgData)"
+            >
+                <img [src]="imgData.path | safeHtml" />
+                <label>{{ imgData.name }}</label>
+            </div>
+        </div>
+    </ng-template>
     <div class="paginator-footer">
         <mat-paginator
-                [length]="imagesNumber"
-                [pageSize]="pageSize"
-                [pageSizeOptions]="pageSizeOptions"
-                (page)="pageChange($event)"
+            class="flex-stretch"
+            [length]="imagesNumber"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="pageChange($event)"
         ></mat-paginator>
     </div>
 </div>
