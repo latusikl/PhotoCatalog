@@ -17,11 +17,11 @@
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-date-range-picker #picker></mat-date-range-picker>
                     </mat-form-field>
-                    <div class="form-field">
+                    <div class="form-field flex-stretch">
                         <mat-checkbox formControlName="allowEmptyData"> Include images with empty data </mat-checkbox>
-                    </div>
-                    <div id="button-container">
-                        <button mat-raised-button color="primary" (click)="filterImages()">Search</button>
+                        <div id="button-container" class="flex-stretch">
+                            <button mat-raised-button color="primary" (click)="filterImages()">Search</button>
+                        </div>
                     </div>
                 </div>
                 <div class="flex-row row-wrap">
@@ -49,35 +49,45 @@
                         >
                         </mat-slider>
                     </div>
-                    <mat-form-field class="form-field">
-                        <mat-label>Min. exposure time (0 - 8000)</mat-label>
-                        <input matInput min="0" max="8000" type="number" formControlName="minExposureTime" />
-                    </mat-form-field>
-                    <mat-radio-group class="form-field flex-stretch" formControlName="isExposureTimeInteger">
-                        <mat-radio-button id="integer-time-radio-button" [value]="false"
-                            >Fracture [1 / s]</mat-radio-button
-                        >
-                        <mat-radio-button [value]="true">Integer [s]</mat-radio-button>
-                    </mat-radio-group>
-                </div>
-                <div *ngIf="criteriaForm.status === 'INVALID'">
-                    <mat-error> Please correct or delete invalid criteria.</mat-error>
+                    <div class="form-field">
+                        <mat-form-field>
+                            <mat-label>Min. exposure time (0 - 8000)</mat-label>
+                            <input matInput min="0" max="8000" type="number" formControlName="minExposureTime" />
+                        </mat-form-field>
+                        <mat-radio-group class="form-field flex-wrap" formControlName="isExposureTimeInteger">
+                            <mat-radio-button id="integer-time-radio-button" [value]="false"
+                                >Fracture [1 / s]</mat-radio-button
+                            >
+                            <mat-radio-button [value]="true">Integer [s]</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div *ngIf="criteriaForm.status === 'INVALID'">
+                        <mat-error> Please correct or delete invalid criteria.</mat-error>
+                    </div>
                 </div>
             </form>
         </mat-card-content>
     </mat-card>
-    <div class="flex-container gallery-container flex-stretch">
-        <div
-            class="flex-container img-container"
-            *ngFor="let imgData of imagesData"
-            (click)="navigateToSinglePictureView(imgData)"
-        >
-            <img [src]="imgData.path | safeHtml" />
-            <label>{{ imgData.name }}</label>
-        </div>
+    <div class="flex-container flex-stretch" *ngIf="noImages; else gallery">
+        <app-issue-display type="need-action">
+            <h3>Please select non-empty directory with images</h3>
+        </app-issue-display>
     </div>
+    <ng-template #gallery>
+        <div class="gallery-container flex-stretch">
+            <div
+                class="flex-container img-container"
+                *ngFor="let imgData of imagesData"
+                (click)="navigateToSinglePictureView(imgData)"
+            >
+                <img [src]="imgData.path | safeHtml" />
+                <label>{{ imgData.name }}</label>
+            </div>
+        </div>
+    </ng-template>
     <div class="paginator-footer">
         <mat-paginator
+            class="flex-stretch"
             [length]="imagesNumber"
             [pageSize]="pageSize"
             [pageSizeOptions]="pageSizeOptions"

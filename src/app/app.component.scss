@@ -1,4 +1,5 @@
 $navbar_size: 64px;
+$mobile_navbar_size: 56px;
 $dir_select_icon_size: 30px;
 
 .button {
@@ -19,6 +20,9 @@ $dir_select_icon_size: 30px;
 .app-container {
     height: calc(100% - #{$navbar_size});
     align-items: center;
+    @media only screen and (max-width: 600px) {
+        height: calc(100% - #{$mobile_navbar_size});
+    }
 }
 
 .sidenav {

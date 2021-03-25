@@ -7,13 +7,14 @@ body {
 body {
     margin: 0;
     font-family: Roboto, 'Helvetica Neue', sans-serif;
-    min-width: 400px;
+    min-width: 495px; // workaround for unnecessary y-axis scroll on minmimal electron width (should be 500)
     min-height: 600px;
 }
 
 .view {
     height: 100%;
     width: 100%;
+    overflow: auto;
 }
 
 // https://github.com/angular/components/issues/4803

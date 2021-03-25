@@ -8,6 +8,8 @@ function createWindow(): void {
     window = new BrowserWindow({
         width: ElectronConstants.WINDOW_WIDTH,
         height: ElectronConstants.WINDOW_HEIGHT,
+        minWidth: ElectronConstants.MIN_WINDOW_WIDTH,
+        minHeight: ElectronConstants.MIN_WINDOW_HEIGHT,
         icon: ElectronConstants.ICON_SOURCE,
         useContentSize: true,
         webPreferences: {

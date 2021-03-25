@@ -32,6 +32,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     pageSize = 10;
     pageSizeOptions = [5, 10, 25, 100];
     maxExposureTime = 8000;
+    noImages = true;
 
     @HostBinding('class')
     class = 'view';
@@ -60,6 +61,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
         this.imagesSub = this.imageService.imagesData.subscribe({
             next: (data) => {
                 this.imagesNumber = data.length;
+                this.noImages = !data.length;
                 this.getImagesPage(data);
                 this.cdr.detectChanges();
             },

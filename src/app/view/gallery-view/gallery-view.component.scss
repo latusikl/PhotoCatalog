@@ -1,4 +1,4 @@
-$paginator_footer_height: 50px;
+$paginator_footer_height: 56px;
 
 img {
     width: auto;
@@ -13,14 +13,13 @@ img {
 }
 
 #button-container {
-    display: flex;
-    flex: 1;
+    margin-left: 1em;
     justify-content: flex-end;
     align-items: center;
 }
 
 #integer-time-radio-button {
-    margin-right: 1em;
+    margin: 0 1em;
 }
 
 #min-focal-length-label {
@@ -43,10 +42,10 @@ img {
 }
 
 .gallery-container {
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: center;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-rows: min-content;
+    grid-gap: 1em;
 }
 
 .img-container {
@@ -63,7 +62,6 @@ img {
 
 .paginator-footer {
     height: $paginator_footer_height;
-    margin-top: -$paginator_footer_height;
 }
 
 .form-field {
