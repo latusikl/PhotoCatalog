@@ -69,3 +69,9 @@ img {
     align-items: center;
     margin: 0 1em;
 }
+
+.img-name {
+    text-overflow: ellipsis;
+    max-width: 100%;
+    overflow: hidden;
+}
