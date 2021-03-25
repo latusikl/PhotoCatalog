@@ -18,6 +18,7 @@ function createWindow(): void {
 
     const appUrl = new URL(`file://${ElectronConstants.APP_PATH_PROD}`);
     window.loadURL(appUrl.toString());
+    window.removeMenu();
 
     window.on('closed', () => {
         window = null;
