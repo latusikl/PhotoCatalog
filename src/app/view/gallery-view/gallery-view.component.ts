@@ -116,55 +116,72 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
         const { name, startDate, endDate, allowEmptyData, minFocalLength, minFNumber, isExposureTimeInteger } = this
             .criteriaForm.value as GallerySearchCriteria;
         let { minExposureTime } = this.criteriaForm.value as GallerySearchCriteria;
-        let passed = true;
-        if (!!name) {
-            // filter by name
-            passed = img.name.toLocaleLowerCase().includes(name?.toLocaleLowerCase());
+
+        if (!!name && img.name.toLocaleLowerCase().includes(name?.toLocaleLowerCase())) {
+            return false;
         }
-        if (passed && !!startDate) {
-            // filter by start date
-            if (!!img.dateTimeOriginal) {
-                passed = dayjs(img.dateTimeOriginal).isSameOrAfter(startDate);
-            } else if (!allowEmptyData) {
-                passed = false;
+
+        if (
+            !!startDate &&
+            !this.checkIfPassed(
+                img.dateTimeOriginal,
+                img.dateTimeOriginal ? dayjs(img.dateTimeOriginal).isSameOrAfter(startDate) : false,
+                allowEmptyData,
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !!endDate &&
+            !this.checkIfPassed(
+                img.dateTimeOriginal,
+                img.dateTimeOriginal ? dayjs(img.dateTimeOriginal).isSameOrBefore(endDate) : false,
+                allowEmptyData,
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !!minFocalLength &&
+            !this.checkIfPassed(
+                img.focalLength,
+                img.focalLength ? img.focalLength >= minFocalLength : false,
+                allowEmptyData,
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !!minFNumber &&
+            this.checkIfPassed(img.fNumber, img.fNumber ? img.fNumber >= minFNumber : false, allowEmptyData)
+        ) {
+            return false;
+        }
+
+        if (!!minExposureTime) {
+            if (!isExposureTimeInteger) {
+                minExposureTime = 1 / minExposureTime;
+            }
+
+            if (
+                !this.checkIfPassed(
+                    img.exposureTime,
+                    img.exposureTime ? img.exposureTime >= minExposureTime : false,
+                    allowEmptyData,
+                )
+            ) {
+                return false;
             }
         }
-        if (passed && !!endDate) {
-            // filter by end date
-            if (!!img.dateTimeOriginal) {
-                passed = dayjs(img.dateTimeOriginal).isSameOrBefore(endDate);
-            } else if (!allowEmptyData) {
-                passed = false;
-            }
-        }
-        if (passed && !!minFocalLength) {
-            // filter by min focal length
-            if (!!img.focalLength) {
-                passed = img.focalLength >= minFocalLength;
-            } else if (!allowEmptyData) {
-                passed = false;
-            }
-        }
-        if (passed && !!minFNumber) {
-            // filter by min fnumber
-            if (!!img.fNumber) {
-                passed = img.fNumber >= minFNumber;
-            } else if (!allowEmptyData) {
-                passed = false;
-            }
-        }
-        if (passed && !!minExposureTime) {
-            // filter by min fnumber
-            if (!!img.exposureTime) {
-                if (!isExposureTimeInteger) {
-                    minExposureTime = 1 / minExposureTime;
-                }
-                passed = img.exposureTime >= minExposureTime;
-            } else if (!allowEmptyData) {
-                passed = false;
-            }
-        }
-        return passed;
+        return true;
+    }
+
+    checkIfPassed(property: string | number | Date | null, check?: boolean, allowEmptyData?: boolean): boolean {
+        if (!property) return !!allowEmptyData;
+        return !!property && !!check;
     }
 
     navigateToSinglePictureView(imgData: ImageData): void {
