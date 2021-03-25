@@ -15,8 +15,6 @@ class IpcCommunication implements IpcRegister {
         }
         this.addSelectDirHandler(window);
         this.getImagePathsFromDir(window);
-        // this.getImagesNumber(window);
-        // this.getImagesPage(window);
     }
 
     private addSelectDirHandler(window: BrowserWindow): void {
