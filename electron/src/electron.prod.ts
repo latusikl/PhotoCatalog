@@ -18,7 +18,6 @@ function createWindow(): void {
 
     const appUrl = new URL(`file://${ElectronConstants.APP_PATH_PROD}`);
     window.loadURL(appUrl.toString());
-    window.webContents.openDevTools();
 
     window.on('closed', () => {
         window = null;

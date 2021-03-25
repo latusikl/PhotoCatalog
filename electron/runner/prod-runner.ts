@@ -2,44 +2,61 @@ import { ChildProcess, spawn } from 'child_process';
 import { EventEmitter } from 'events';
 import { Transform, TransformCallback } from 'stream';
 import * as builder from 'electron-builder';
+import * as fs from 'fs';
 
 const ANGULAR_READY = 'angular-ready';
 const DEPLOYMENT_DIR = 'deployment';
 const eventEmitter = new EventEmitter();
 
 function buildForProduction() {
-    // if (fs.existsSync(DEPLOYMENT_DIR)) {
-    //     console.log('Removed old deployment directory.');
-    //     fs.rmdirSync(DEPLOYMENT_DIR, { recursive: true });
-    // }
-    // fs.mkdirSync(DEPLOYMENT_DIR);
+    if (fs.existsSync(DEPLOYMENT_DIR)) {
+        console.log('Removed old deployment directory.');
+        fs.rmdirSync(DEPLOYMENT_DIR, { recursive: true });
+    }
+    fs.mkdirSync(DEPLOYMENT_DIR);
     console.log('Starting Angular project build');
     const angularChildProcess: ChildProcess = spawn(npmCommand(), ['run', 'build-angular-prod'], {
         cwd: process.cwd(),
         shell: true,
     });
 
-    connectAngularStdStreams(angularChildProcess);
-    eventEmitter.on(ANGULAR_READY, () => {
-        console.log('Angular ready');
-        console.log('Starting electron files build');
-        const electronBuildProces: ChildProcess = spawn(npmCommand(), ['run', 'build-electron-prod'], {
-            cwd: process.cwd(),
-            shell: true,
+    //Bypass issue with piping streams in Windows
+    if (isWindows()) {
+        angularChildProcess.on('exit', () => {
+            console.log('Angular ready');
+            executeElectronBuildAndPackage();
         });
-        electronBuildProces.on('exit', () => {
-            console.log('Electron ready');
-            runElectronBuilder();
+    } else {
+        connectAngularStdStreams(angularChildProcess);
+        eventEmitter.on(ANGULAR_READY, () => {
+            console.log('Angular ready');
+            executeElectronBuildAndPackage();
         });
-    });
+    }
 }
 
 function npmCommand(): string {
-    if (process.platform == 'win32') {
+    if (isWindows()) {
         return 'npm.cmd';
     } else {
         return 'npm';
     }
+}
+
+function isWindows(): boolean {
+    return process.platform == 'win32';
+}
+
+function executeElectronBuildAndPackage(): void {
+    console.log('Starting electron files build');
+    const electronBuildProces: ChildProcess = spawn(npmCommand(), ['run', 'build-electron-prod'], {
+        cwd: process.cwd(),
+        shell: true,
+    });
+    electronBuildProces.on('exit', () => {
+        console.log('Electron ready');
+        runElectronBuilder();
+    });
 }
 
 function connectAngularStdStreams(angularChildProcess: ChildProcess): void {
@@ -76,7 +93,7 @@ function runElectronBuilder() {
                     target: ['AppImage', 'deb'],
                 },
                 win: {
-                    target: 'squirrel',
+                    target: 'portable',
                 },
                 files: ['./deployment/build/**/*', 'package.json'],
                 directories: {
