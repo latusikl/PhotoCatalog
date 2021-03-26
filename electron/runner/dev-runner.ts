@@ -6,29 +6,48 @@ import * as os from 'os';
 const ANGULAR_READY = 'angular-ready';
 const eventEmitter = new EventEmitter();
 
-function runInDevMode() {
-    const angularChildProcess: ChildProcess = spawn(npmCommand(), ['run', 'ng-dev'], {
+function runInDevMode(): void {
+    const angularChildProcess: ChildProcess = spawnAngularProcess();
+    if (!isWindows()) {
+        connectAngularStdStreams(angularChildProcess);
+        eventEmitter.on(ANGULAR_READY, () => {
+            const electronChildProcess = spawnElectronProcess();
+            addListenerToElectronProcess(angularChildProcess, electronChildProcess);
+            connectElectronStreams(electronChildProcess);
+            eventEmitter.removeAllListeners();
+        });
+    } else {
+        addListenerToElectronProcess(angularChildProcess, spawnElectronProcess());
+    }
+}
+
+function spawnAngularProcess(): ChildProcess {
+    return spawn(npmCommand(), ['run', 'ng-dev'], {
         cwd: process.cwd(),
         shell: true,
     });
+}
 
-    connectAngularStdStreams(angularChildProcess);
-    eventEmitter.on(ANGULAR_READY, () => {
-        const electronChildProcess: ChildProcess = spawn(npmCommand(), ['run', 'electron-dev'], {
-            cwd: process.cwd(),
-            shell: true,
-        });
-        connectElectronStreams(electronChildProcess);
-        electronChildProcess.on('exit', () => {
-            angularChildProcess.kill('SIGTERM');
-            process.exit(0);
-        });
-        eventEmitter.removeAllListeners();
+function spawnElectronProcess(): ChildProcess {
+    return spawn(npmCommand(), ['run', 'electron-dev'], {
+        cwd: process.cwd(),
+        shell: true,
     });
 }
 
+function addListenerToElectronProcess(angularChildProcess: ChildProcess, electronChildProcess: ChildProcess): void {
+    electronChildProcess.on('exit', () => {
+        angularChildProcess.kill('SIGTERM');
+        process.exit(0);
+    });
+}
+
+function isWindows(): boolean {
+    return process.platform === 'win32';
+}
+
 function npmCommand(): string {
-    if (process.platform == 'win32') {
+    if (isWindows()) {
         return 'npm.cmd';
     } else {
         return 'npm';
