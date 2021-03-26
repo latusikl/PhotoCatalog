@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-type IssueType = 'oops' | 'smth-wrong' | 'huston';
+type IssueType = 'oops' | 'smth-wrong' | 'huston' | 'need-action';
 
 @Component({
     selector: 'app-issue-display',
@@ -16,6 +16,9 @@ export class IssueDisplayComponent implements OnInit {
         switch (this.type) {
             case 'oops':
                 this.issueTitle = 'Oooops...';
+                break;
+            case 'need-action':
+                this.issueTitle = 'Action needed';
                 break;
             case 'smth-wrong':
                 this.issueTitle = 'Something went wrong...';

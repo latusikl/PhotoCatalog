@@ -5,6 +5,14 @@ import { ImageService } from 'src/app/service/image.service';
 import { ImageData } from 'src/app/model/ImageData';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GallerySearchCriteria } from 'src/app/model/GallerySearchCriteria';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 
 @Component({
     selector: 'app-gallery-view',
@@ -15,12 +23,16 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     private imagesSub = Subscription.EMPTY;
     private currDirSub = Subscription.EMPTY;
     private imgNumberSub = Subscription.EMPTY;
+    private exposureTimeSub = Subscription.EMPTY;
 
+    criteriaForm: FormGroup;
     imagesData: ImageData[] = [];
     imagesNumber = 0;
     currentPage = 0;
     pageSize = 10;
     pageSizeOptions = [5, 10, 25, 100];
+    maxExposureTime = 8000;
+    noImages = true;
 
     @HostBinding('class')
     class = 'view';
@@ -31,27 +43,38 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
         private cdr: ChangeDetectorRef,
         private router: Router,
         private ngZone: NgZone,
-    ) {}
+        fb: FormBuilder,
+    ) {
+        this.criteriaForm = fb.group({
+            name: '',
+            startDate: null,
+            endDate: null,
+            allowEmptyData: false,
+            minFocalLength: 0,
+            minFNumber: 0,
+            minExposureTime: [0, [Validators.min(0), Validators.max(8000)]],
+            isExposureTimeInteger: false,
+        });
+    }
 
     ngOnInit(): void {
         this.imagesSub = this.imageService.imagesData.subscribe({
             next: (data) => {
-                this.imagesData = data;
+                this.imagesNumber = data.length;
+                this.noImages = !data.length;
+                this.getImagesPage(data);
                 this.cdr.detectChanges();
             },
         });
 
         this.currDirSub = this.directoryService.currentDirectory.subscribe({
             next: (dir) => {
-                this.imageService.getImagesNumber(dir);
+                this.imageService.getImages(dir);
             },
         });
 
-        this.imgNumberSub = this.imageService.imagesNumber.subscribe({
-            next: (value) => {
-                this.imagesNumber = value;
-                this.getImagesPage();
-            },
+        this.exposureTimeSub = this.criteriaForm.controls.isExposureTimeInteger.valueChanges.subscribe({
+            next: (value) => this.onIsExposureTimeIntegerChange(value),
         });
     }
 
@@ -59,17 +82,106 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
         this.imagesSub.unsubscribe();
         this.currDirSub.unsubscribe();
         this.imgNumberSub.unsubscribe();
+        this.exposureTimeSub.unsubscribe();
     }
 
     pageChange(ev: PageEvent): void {
         this.currentPage = ev.pageIndex;
         this.pageSize = ev.pageSize;
-        this.getImagesPage();
+        const allImgs = this.imageService.imagesData.value;
+        this.getImagesPage(allImgs);
     }
 
-    getImagesPage(): void {
-        const dir = this.directoryService.currentDirectory.value;
-        this.imageService.getImagesPage(dir, this.currentPage, this.pageSize);
+    onIsExposureTimeIntegerChange(value: boolean): void {
+        this.maxExposureTime = value ? 40 : 8000;
+        if (this.criteriaForm.controls.minExposureTime.value > this.maxExposureTime) {
+            this.criteriaForm.controls.minExposureTime.setValue(this.maxExposureTime);
+        }
+    }
+
+    getImagesPage(allImgs: ImageData[]): void {
+        const start = this.currentPage * this.pageSize;
+        this.imagesData = allImgs.slice(start, start + this.pageSize);
+    }
+
+    filterImages(): void {
+        this.currentPage = 0;
+        const allImgs = this.imageService.imagesData.value;
+        this.getImagesPage(allImgs);
+        this.imagesData = this.imagesData.filter((img) => this.imageFilterFunc(img));
+        this.imagesNumber = this.imagesData.length;
+    }
+
+    imageFilterFunc(img: ImageData): boolean {
+        const { name, startDate, endDate, allowEmptyData, minFocalLength, minFNumber, isExposureTimeInteger } = this
+            .criteriaForm.value as GallerySearchCriteria;
+        let { minExposureTime } = this.criteriaForm.value as GallerySearchCriteria;
+
+        if (!!name && img.name.toLocaleLowerCase().includes(name?.toLocaleLowerCase())) {
+            return false;
+        }
+
+        if (
+            !!startDate &&
+            !this.checkIfPassed(
+                img.dateTimeOriginal,
+                img.dateTimeOriginal ? dayjs(img.dateTimeOriginal).isSameOrAfter(startDate) : false,
+                allowEmptyData,
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !!endDate &&
+            !this.checkIfPassed(
+                img.dateTimeOriginal,
+                img.dateTimeOriginal ? dayjs(img.dateTimeOriginal).isSameOrBefore(endDate) : false,
+                allowEmptyData,
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !!minFocalLength &&
+            !this.checkIfPassed(
+                img.focalLength,
+                img.focalLength ? img.focalLength >= minFocalLength : false,
+                allowEmptyData,
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            !!minFNumber &&
+            this.checkIfPassed(img.fNumber, img.fNumber ? img.fNumber >= minFNumber : false, allowEmptyData)
+        ) {
+            return false;
+        }
+
+        if (!!minExposureTime) {
+            if (!isExposureTimeInteger) {
+                minExposureTime = 1 / minExposureTime;
+            }
+
+            if (
+                !this.checkIfPassed(
+                    img.exposureTime,
+                    img.exposureTime ? img.exposureTime >= minExposureTime : false,
+                    allowEmptyData,
+                )
+            ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    checkIfPassed(property: string | number | Date | null, check?: boolean, allowEmptyData?: boolean): boolean {
+        if (!property) return !!allowEmptyData;
+        return !!property && !!check;
     }
 
     navigateToSinglePictureView(imgData: ImageData): void {

@@ -27,7 +27,7 @@ export class SinglePictureViewComponent implements OnInit {
         console.error('NOT IMPLEMENTED');
     }
 
-    getImgBase64(): string {
-        return this.imgData ? this.imgData.base64 : '';
+    getImgPath(): string {
+        return this.imgData ? this.imgData.path : '';
     }
 }
