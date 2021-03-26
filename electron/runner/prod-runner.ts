@@ -8,7 +8,7 @@ const ANGULAR_READY = 'angular-ready';
 const DEPLOYMENT_DIR = 'deployment';
 const eventEmitter = new EventEmitter();
 
-function buildForProduction() {
+function buildForProduction(): void {
     if (fs.existsSync(DEPLOYMENT_DIR)) {
         console.log('Removed old deployment directory.');
         fs.rmdirSync(DEPLOYMENT_DIR, { recursive: true });
@@ -44,7 +44,7 @@ function npmCommand(): string {
 }
 
 function isWindows(): boolean {
-    return process.platform == 'win32';
+    return process.platform === 'win32';
 }
 
 function executeElectronBuildAndPackage(): void {
@@ -77,7 +77,7 @@ function angularOutTransform(): Transform {
     });
 }
 
-function runElectronBuilder() {
+function runElectronBuilder(): void {
     console.log('Starting application packing');
     process.env.DEBUG = 'electron-builder';
     builder

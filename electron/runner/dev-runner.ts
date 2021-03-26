@@ -6,7 +6,7 @@ import * as os from 'os';
 const ANGULAR_READY = 'angular-ready';
 const eventEmitter = new EventEmitter();
 
-function runInDevMode() {
+function runInDevMode(): void {
     const angularChildProcess: ChildProcess = spawnAngularProcess();
     if (!isWindows()) {
         connectAngularStdStreams(angularChildProcess);
@@ -35,7 +35,7 @@ function spawnElectronProcess(): ChildProcess {
     });
 }
 
-function addListenerToElectronProcess(angularChildProcess: ChildProcess, electronChildProcess: ChildProcess) {
+function addListenerToElectronProcess(angularChildProcess: ChildProcess, electronChildProcess: ChildProcess): void {
     electronChildProcess.on('exit', () => {
         angularChildProcess.kill('SIGTERM');
         process.exit(0);
@@ -43,7 +43,7 @@ function addListenerToElectronProcess(angularChildProcess: ChildProcess, electro
 }
 
 function isWindows(): boolean {
-    return process.platform == 'win32';
+    return process.platform === 'win32';
 }
 
 function npmCommand(): string {
