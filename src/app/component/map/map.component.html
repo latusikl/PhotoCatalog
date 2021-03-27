@@ -5,7 +5,7 @@
             *ngFor="let markerData of markersData"
             [position]="markerData.position"
             [options]="markerOptions"
-            (mapClick)="openInfoWindow(marker, markerData)"
+            (mapClick)="openInfoWindow(marker, markerData.imagePath)"
         >
         </map-marker>
         <map-info-window> <img [src]="imagePath" /></map-info-window>

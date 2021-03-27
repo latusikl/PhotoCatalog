@@ -5,7 +5,7 @@ import { IExifElement } from 'piexif-ts';
 import { ImageData } from 'src/app/model/ImageData';
 import { MapService } from 'src/app/service/map.service';
 import { MapInfoWindow, MapMarker } from '@angular/google-maps';
-import { MarkersData } from 'src/app/model/MarkersData';
+import { MarkerData } from 'src/app/model/MarkersData';
 
 @Component({
     selector: 'map',
@@ -21,7 +21,7 @@ export class MapComponent implements OnInit, OnDestroy {
     options: google.maps.MapOptions = {};
 
     markerOptions: google.maps.MarkerOptions = { draggable: false };
-    markersData: MarkersData[] = [];
+    markersData: MarkerData[] = [];
 
     imagePath = '';
 
@@ -48,9 +48,9 @@ export class MapComponent implements OnInit, OnDestroy {
         this.mapSub.unsubscribe();
     }
 
-    openInfoWindow(marker: MapMarker, markerData: MarkersData): void {
+    openInfoWindow(marker: MapMarker, imagePath: string): void {
         this.infoWindow.open(marker);
-        this.imagePath = markerData.imagePath;
+        this.imagePath = imagePath;
     }
 
     addMarkers(imagesData: ImageData[]): void {
