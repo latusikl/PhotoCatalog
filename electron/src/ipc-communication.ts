@@ -58,7 +58,7 @@ class IpcCommunication implements IpcRegister {
         const binary = fs.readFileSync(imgPath).toString('binary');
         const exif = piexif.load(binary);
         const name = imgPath.slice(imgPath.lastIndexOf(path.sep) + 1, imgPath.indexOf('.'));
-        return new ImageData(name, imgPath, exif);
+        return new ImageData(name, `file:///${imgPath}`, exif);
     }
 }
 

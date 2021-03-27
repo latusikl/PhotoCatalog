@@ -1,4 +1,4 @@
-import {app, BrowserWindow, protocol} from 'electron';
+import { app, BrowserWindow, protocol } from 'electron';
 import ElectronConstants from './constants';
 import ipcCommunication from './ipc-communication';
 
