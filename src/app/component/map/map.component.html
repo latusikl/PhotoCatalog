@@ -1,10 +1,13 @@
 <div *ngIf="apiLoaded">
     <google-map [options]="options" height="80vh" width="60vw">
         <map-marker
-            *ngFor="let markerPosition of markerPositions"
-            [position]="markerPosition"
+            #marker="mapMarker"
+            *ngFor="let markerData of markersData"
+            [position]="markerData.position"
             [options]="markerOptions"
+            (mapClick)="openInfoWindow(marker, markerData)"
         >
         </map-marker>
+        <map-info-window> <img [src]="imagePath" /></map-info-window>
     </google-map>
 </div>

@@ -1,9 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ImageService } from 'src/app/service/image.service';
 import { IExifElement } from 'piexif-ts';
 import { ImageData } from 'src/app/model/ImageData';
 import { MapService } from 'src/app/service/map.service';
+import { MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { MarkersData } from 'src/app/model/MarkersData';
 
 @Component({
     selector: 'map',
@@ -19,7 +21,12 @@ export class MapComponent implements OnInit, OnDestroy {
     options: google.maps.MapOptions = {};
 
     markerOptions: google.maps.MarkerOptions = { draggable: false };
-    markerPositions: google.maps.LatLngLiteral[] = [];
+    markersData: MarkersData[] = [];
+
+    imagePath = '';
+
+    @ViewChild(MapInfoWindow)
+    infoWindow!: MapInfoWindow;
 
     constructor(private imageService: ImageService, private mapService: MapService) {}
 
@@ -41,11 +48,16 @@ export class MapComponent implements OnInit, OnDestroy {
         this.mapSub.unsubscribe();
     }
 
+    openInfoWindow(marker: MapMarker, markerData: MarkersData): void {
+        this.infoWindow.open(marker);
+        this.imagePath = markerData.imagePath;
+    }
+
     addMarkers(imagesData: ImageData[]): void {
         imagesData.forEach((imageData) => {
             const gps = imageData.exifData?.GPS;
             if (!!gps) {
-                this.markerPositions.push(this.calculateCoordinates(gps));
+                this.markersData.push({ position: this.calculateCoordinates(gps), imagePath: imageData.path });
             }
         });
     }
