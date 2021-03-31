@@ -4,50 +4,50 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(customParseFormat);
 
+type ExifTag = keyof typeof TagValues.ExifIFD;
+
 export class ImageData {
     constructor(public name: string, public path: string, public exifData?: IExif) {}
 
-    get dateTimeOriginal(): Date | null {
+    // eslint-disable-next-line
+    private getExifAttribute(exifTag: ExifTag): any {
         const exif = this.exifData?.Exif;
-        if (!exif) {
-            return null;
+        return exif ? exif[TagValues.ExifIFD[exifTag]] : null;
+    }
+
+    // eslint-disable-next-line
+    private setExifAttribute(exifTag: ExifTag, value: any) {
+        const exif = this.exifData?.Exif;
+        if (!exif || !value) {
+            return;
         }
-        const str = String(exif[TagValues.ExifIFD.DateTimeOriginal]);
+        exif[TagValues.ExifIFD[exifTag]] = value;
+    }
+
+    get dateTimeOriginal(): Date | null {
+        const str = String(this.getExifAttribute('DateTimeOriginal'));
         return dayjs(str, 'YYYY:MM:DD HH:mm:ss').toDate();
     }
 
     set dateTimeOriginal(date: Date | null) {
-        const exif = this.exifData?.Exif;
-        if (!exif || !date) {
-            return;
+        if (date) {
+            const value = dayjs(date).format('YYYY:MM:DD HH:mm:ss');
+            this.setExifAttribute('DateTimeOriginal', value);
         }
-        exif[TagValues.ExifIFD.DateTimeOriginal] = dayjs(date).format('YYYY:MM:DD HH:mm:ss');
     }
 
     get focalLength(): number | null {
-        const exif = this.exifData?.Exif;
-        if (!exif) {
-            return null;
-        }
-        const spec = exif[TagValues.ExifIFD.FocalLength];
+        const spec = this.getExifAttribute('FocalLength');
         return spec ? spec[0] / spec[1] : null;
     }
 
     get fNumber(): number | null {
-        const exif = this.exifData?.Exif;
-        if (!exif) {
-            return null;
-        }
-        const spec = exif[TagValues.ExifIFD.FNumber];
+        const spec = this.getExifAttribute('FNumber');
         return spec ? spec[0] / spec[1] : null;
     }
 
     get exposureTime(): number | null {
-        const exif = this.exifData?.Exif;
-        if (!exif) {
-            return null;
-        }
-        const spec = exif[TagValues.ExifIFD.ExposureTime];
+        const spec = this.getExifAttribute('ExposureTime');
         return spec ? spec[0] / spec[1] : null;
     }
 }
