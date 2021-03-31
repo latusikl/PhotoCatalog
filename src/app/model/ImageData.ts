@@ -30,7 +30,7 @@ export class ImageData {
             return null;
         }
         const spec = exif[TagValues.ExifIFD.FocalLength];
-        return spec[0] / spec[1];
+        return spec ? spec[0] / spec[1] : null;
     }
 
     get fNumber(): number | null {
@@ -39,7 +39,7 @@ export class ImageData {
             return null;
         }
         const spec = exif[TagValues.ExifIFD.FNumber];
-        return spec[0] / spec[1];
+        return spec ? spec[0] / spec[1] : null;
     }
 
     get exposureTime(): number | null {
@@ -48,6 +48,6 @@ export class ImageData {
             return null;
         }
         const spec = exif[TagValues.ExifIFD.ExposureTime];
-        return spec[0] / spec[1];
+        return spec ? spec[0] / spec[1] : null;
     }
 }

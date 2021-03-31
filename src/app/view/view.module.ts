@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [
@@ -38,7 +39,6 @@ import { MatRadioModule } from '@angular/material/radio';
         MatIconModule,
         MatButtonModule,
         MatCardModule,
-        MatCardModule,
         MatFormFieldModule,
         MatInputModule,
         FormsModule,
@@ -49,6 +49,7 @@ import { MatRadioModule } from '@angular/material/radio';
         MatCheckboxModule,
         MatSliderModule,
         MatRadioModule,
+        MatSelectModule,
     ],
 })
 export class ViewModule {}
