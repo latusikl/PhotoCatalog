@@ -85,7 +85,7 @@
                 mat-icon-button
                 color="accent"
                 [class.sort-button-animation-asc]="sortAsc"
-                [class.sort-button-animation-desc]="sortAsc === false"
+                [class.sort-button-animation-desc]="!sortAsc"
                 (click)="sortIconClick()"
             >
                 <mat-icon>arrow_downward</mat-icon>
