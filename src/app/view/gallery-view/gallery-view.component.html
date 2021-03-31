@@ -20,7 +20,7 @@
                     <div class="form-field flex-stretch">
                         <mat-checkbox formControlName="allowEmptyData"> Include images with empty data </mat-checkbox>
                         <div id="button-container" class="flex-stretch">
-                            <button mat-raised-button color="primary" (click)="filterImages()">Search</button>
+                            <button mat-raised-button color="primary" (click)="search(true)">Search</button>
                         </div>
                     </div>
                 </div>
@@ -61,9 +61,9 @@
                             <mat-radio-button [value]="true">Integer [s]</mat-radio-button>
                         </mat-radio-group>
                     </div>
-                    <div *ngIf="criteriaForm.status === 'INVALID'">
-                        <mat-error> Please correct or delete invalid criteria.</mat-error>
-                    </div>
+                </div>
+                <div class="flex-row" *ngIf="criteriaForm.status === 'INVALID'">
+                    <mat-error> Please correct or delete invalid criteria.</mat-error>
                 </div>
             </form>
         </mat-card-content>
@@ -74,6 +74,23 @@
         </app-issue-display>
     </div>
     <ng-template #gallery>
+        <div id="sort-container" class="flex-container">
+            <mat-form-field>
+                <mat-label>Sort by</mat-label>
+                <mat-select (selectionChange)="sortFieldChange($event)" #matSelect>
+                    <mat-option *ngFor="let field of sortFields" [value]="field.name">{{ field.name }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button
+                mat-icon-button
+                color="accent"
+                [class.sort-button-animation-asc]="sortAsc"
+                [class.sort-button-animation-desc]="!sortAsc"
+                (click)="sortIconClick()"
+            >
+                <mat-icon>arrow_downward</mat-icon>
+            </button>
+        </div>
         <div class="gallery-container flex-stretch">
             <div
                 class="flex-container img-container"

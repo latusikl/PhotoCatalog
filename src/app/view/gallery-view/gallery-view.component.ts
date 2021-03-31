@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostBinding, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DirectoryService } from 'src/app/service/directory.service';
 import { ImageService } from 'src/app/service/image.service';
@@ -7,12 +7,10 @@ import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GallerySearchCriteria } from 'src/app/model/GallerySearchCriteria';
-import dayjs from 'dayjs';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import { MatSelectChange } from '@angular/material/select';
+import { SortField } from 'src/app/model/SortField';
 
-dayjs.extend(isSameOrBefore);
-dayjs.extend(isSameOrAfter);
+type ImageDataProp = string | number | Date;
 
 @Component({
     selector: 'app-gallery-view',
@@ -33,6 +31,16 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     pageSizeOptions = [5, 10, 25, 100];
     maxExposureTime = 8000;
     noImages = true;
+    sortFields: SortField[] = [
+        { name: '-' },
+        { name: 'Date', field: 'dateTimeOriginal' },
+        { name: 'Name', field: 'name' },
+        { name: 'Exposure time', field: 'exposureTime' },
+        { name: 'F number', field: 'fNumber' },
+        { name: 'Focal length', field: 'focalLength' },
+    ];
+    sortField?: SortField;
+    sortAsc = true;
 
     @HostBinding('class')
     class = 'view';
@@ -40,7 +48,6 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     constructor(
         private directoryService: DirectoryService,
         private imageService: ImageService,
-        private cdr: ChangeDetectorRef,
         private router: Router,
         private ngZone: NgZone,
         fb: FormBuilder,
@@ -59,17 +66,18 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.imagesSub = this.imageService.imagesData.subscribe({
-            next: (data) => {
-                this.imagesNumber = data.length;
-                this.noImages = !data.length;
-                this.getImagesPage(data);
-                this.cdr.detectChanges();
-            },
+            next: (data) =>
+                this.ngZone.run(() => {
+                    this.noImages = !data.length;
+                    this.search();
+                }),
         });
 
         this.currDirSub = this.directoryService.currentDirectory.subscribe({
             next: (dir) => {
-                this.imageService.getImages(dir);
+                this.ngZone.run(() => {
+                    this.imageService.getImages(dir);
+                });
             },
         });
 
@@ -88,8 +96,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     pageChange(ev: PageEvent): void {
         this.currentPage = ev.pageIndex;
         this.pageSize = ev.pageSize;
-        const allImgs = this.imageService.imagesData.value;
-        this.getImagesPage(allImgs);
+        this.search();
     }
 
     onIsExposureTimeIntegerChange(value: boolean): void {
@@ -104,12 +111,8 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
         this.imagesData = allImgs.slice(start, start + this.pageSize);
     }
 
-    filterImages(): void {
-        this.currentPage = 0;
-        const allImgs = this.imageService.imagesData.value;
-        this.getImagesPage(allImgs);
-        this.imagesData = this.imagesData.filter((img) => this.imageFilterFunc(img));
-        this.imagesNumber = this.imagesData.length;
+    filterImages(allImgs: ImageData[]): ImageData[] {
+        return allImgs.filter((img) => this.imageFilterFunc(img));
     }
 
     imageFilterFunc(img: ImageData): boolean {
@@ -117,7 +120,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
             .criteriaForm.value as GallerySearchCriteria;
         let { minExposureTime } = this.criteriaForm.value as GallerySearchCriteria;
 
-        if (!!name && img.name.toLocaleLowerCase().includes(name?.toLocaleLowerCase())) {
+        if (!!name && !img.name.toLocaleLowerCase().includes(name?.toLocaleLowerCase())) {
             return false;
         }
 
@@ -125,7 +128,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
             !!startDate &&
             !this.checkIfPassed(
                 img.dateTimeOriginal,
-                img.dateTimeOriginal ? dayjs(img.dateTimeOriginal).isSameOrAfter(startDate) : false,
+                img.dateTimeOriginal ? img.dateTimeOriginal >= startDate : false,
                 allowEmptyData,
             )
         ) {
@@ -136,7 +139,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
             !!endDate &&
             !this.checkIfPassed(
                 img.dateTimeOriginal,
-                img.dateTimeOriginal ? dayjs(img.dateTimeOriginal).isSameOrBefore(endDate) : false,
+                img.dateTimeOriginal ? img.dateTimeOriginal <= endDate : false,
                 allowEmptyData,
             )
         ) {
@@ -179,12 +182,49 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
         return true;
     }
 
-    checkIfPassed(property: string | number | Date | null, check?: boolean, allowEmptyData?: boolean): boolean {
+    checkIfPassed(property: ImageDataProp | null, check?: boolean, allowEmptyData?: boolean): boolean {
         if (!property) return !!allowEmptyData;
         return !!property && !!check;
     }
 
     navigateToSinglePictureView(imgData: ImageData): void {
-        this.ngZone.run(() => this.router.navigate(['/exif'], { state: { imgData: imgData } }));
+        this.router.navigate(['/exif'], { state: { imgData: imgData } });
+    }
+
+    sortIconClick(): void {
+        this.sortAsc = !this.sortAsc;
+        this.search();
+    }
+
+    sortFieldChange(change?: MatSelectChange): void {
+        if (!!change) {
+            this.sortField = this.sortFields.find((it) => it.name === change.value);
+        }
+        this.search();
+    }
+
+    sortImages(images: ImageData[]): ImageData[] {
+        return !!this.sortField?.field
+            ? images.sort((a, b) => {
+                  const fieldName = this.sortField?.field as keyof ImageData;
+                  const firstProp = a[fieldName] as ImageDataProp;
+                  const secProp = b[fieldName] as ImageDataProp;
+                  if (!firstProp || !secProp) return this.sortAsc ? -1 : 1;
+                  if (firstProp > secProp) return this.sortAsc ? 1 : -1;
+                  if (firstProp === secProp) return 0;
+                  else return this.sortAsc ? -1 : 1;
+              })
+            : images;
+    }
+
+    search(changeToFirstPage = false): void {
+        let images = this.imageService.imagesData.value;
+        images = this.filterImages(images);
+        images = this.sortImages(images);
+        this.imagesNumber = images.length;
+        if (changeToFirstPage) {
+            this.currentPage = 0;
+        }
+        this.getImagesPage(images);
     }
 }
