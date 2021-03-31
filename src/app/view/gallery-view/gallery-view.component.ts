@@ -112,7 +112,6 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     }
 
     filterImages(allImgs: ImageData[]): ImageData[] {
-        console.log(allImgs.filter((img) => this.imageFilterFunc(img)));
         return allImgs.filter((img) => this.imageFilterFunc(img));
     }
 
