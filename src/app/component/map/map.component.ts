@@ -5,7 +5,7 @@ import { IExifElement } from 'piexif-ts';
 import { ImageData } from 'src/app/model/ImageData';
 import { MapService } from 'src/app/service/map.service';
 import { MapInfoWindow, MapMarker } from '@angular/google-maps';
-import { MarkerData } from 'src/app/model/MarkersData';
+import { MarkerData } from 'src/app/model/MarkerData';
 
 @Component({
     selector: 'map',
@@ -20,7 +20,7 @@ export class MapComponent implements OnInit, OnDestroy {
     @Input()
     options: google.maps.MapOptions = {};
 
-    markerOptions: google.maps.MarkerOptions = { draggable: false };
+    markerOptions: google.maps.MarkerOptions = { draggable: true };
     markersData: MarkerData[] = [];
 
     imagePath = '';
@@ -51,6 +51,51 @@ export class MapComponent implements OnInit, OnDestroy {
     openInfoWindow(marker: MapMarker, imagePath: string): void {
         this.infoWindow.open(marker);
         this.imagePath = imagePath;
+    }
+
+    editExif(marker: MapMarker, markerData: MarkerData): void {
+        const image = this.imageService.imagesData.value.find((image) => {
+            return image.path === markerData.imagePath;
+        });
+        const pozision = marker.getPosition();
+
+        if (!image?.exifData?.GPS || !pozision?.toJSON()) return;
+        this.calculateExifGPSLatitude(image.exifData.GPS, pozision.toJSON());
+        this.calculateExifGPSLongitude(image.exifData.GPS, pozision.toJSON());
+    }
+
+    toDegreesMinutesAndSeconds(coordinate: number): [number, number, number] {
+        const absolute = Math.abs(coordinate);
+        const degrees = Math.floor(absolute);
+        const minutesNotTruncated = (absolute - degrees) * 60;
+        const minutes = Math.floor(minutesNotTruncated);
+        const seconds = Math.floor((minutesNotTruncated - minutes) * 60);
+
+        return [degrees, minutes, seconds];
+    }
+
+    calculateExifGPSLatitude(gps: IExifElement, coordinates: google.maps.LatLngLiteral): void {
+        const latitudeTable = gps[2];
+
+        const [degrees, minutes, seconds] = this.toDegreesMinutesAndSeconds(coordinates.lat);
+
+        latitudeTable[0][0] = degrees;
+        latitudeTable[1][0] = minutes;
+        latitudeTable[2][0] = seconds;
+        latitudeTable[0][1] = latitudeTable[1][1] = latitudeTable[2][1] = 1;
+        gps[1] = coordinates.lat >= 0 ? 'N' : 'S';
+    }
+
+    calculateExifGPSLongitude(gps: IExifElement, coordinates: google.maps.LatLngLiteral): void {
+        const latitudeTable = gps[4];
+
+        const [degrees, minutes, seconds] = this.toDegreesMinutesAndSeconds(coordinates.lng);
+
+        latitudeTable[0][0] = degrees;
+        latitudeTable[1][0] = minutes;
+        latitudeTable[2][0] = seconds;
+        latitudeTable[0][1] = latitudeTable[1][1] = latitudeTable[2][1] = 1;
+        gps[3] = coordinates.lng >= 0 ? 'E' : 'W';
     }
 
     addMarkers(imagesData: ImageData[]): void {

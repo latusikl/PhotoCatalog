@@ -6,6 +6,7 @@
             [position]="markerData.position"
             [options]="markerOptions"
             (mapClick)="openInfoWindow(marker, markerData.imagePath)"
+            (mapDragend)="editExif(marker, markerData)"
         >
         </map-marker>
         <map-info-window> <img [src]="imagePath" /></map-info-window>
