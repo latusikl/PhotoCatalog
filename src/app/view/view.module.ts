@@ -21,6 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
     declarations: [
@@ -50,6 +51,7 @@ import { MatSelectModule } from '@angular/material/select';
         MatSliderModule,
         MatRadioModule,
         MatSelectModule,
+        MatTableModule,
     ],
 })
 export class ViewModule {}
