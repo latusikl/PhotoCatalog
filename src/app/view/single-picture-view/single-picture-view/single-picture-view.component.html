@@ -1,17 +1,16 @@
-<div class="content">
-    <app-issue-display type="oops" *ngIf="!shouldDisplayImgView">
-        <h3>You forgot to choose picture. Choose one from gallery or use button below to choose another one.</h3>
-        <button mat-raised-button color="primary" (click)="chooseSinglePicture()">
-            <mat-icon>folder_open</mat-icon>
-        </button>
-    </app-issue-display>
-    <div *ngIf="shouldDisplayImgView" class="img-container">
+<div class="content" *ngIf="shouldDisplayImgView">
+    <div  class="img-container">
         <img [src]="getImgPath() | safeHtml"/>
     </div>
-    <div *ngIf="shouldDisplayImgView" class="exif-table">
+    <div class="exif-table">
         <mat-card>
             <app-exif-display [imageDataFacade]="imageDataFacade"></app-exif-display>
         </mat-card>
     </div>
-
 </div>
+<app-issue-display type="oops" *ngIf="!shouldDisplayImgView">
+    <h3>You forgot to choose picture. Choose one from gallery or use button below to choose another one.</h3>
+    <button mat-raised-button color="primary" (click)="chooseSinglePicture()">
+        <mat-icon>folder_open</mat-icon>
+    </button>
+</app-issue-display>

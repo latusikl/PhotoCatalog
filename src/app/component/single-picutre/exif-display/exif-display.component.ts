@@ -12,6 +12,7 @@ export class ExifDisplayComponent implements OnInit {
     imageDataFacade: ImageDataFacade | undefined;
 
     displayedColumns: string[] = ['name', 'value', 'unit'];
+    isEditable = false;
 
     ngOnInit(): void {
         console.log(this.imageDataFacade);
@@ -23,5 +24,13 @@ export class ExifDisplayComponent implements OnInit {
 
     getDataSource(): EditableImageDataProperty<string | number | Date | null>[] {
         return !!this.imageDataFacade?.imageDataValues ? this.imageDataFacade?.imageDataValues : [];
+    }
+
+    editMode(): void {
+        this.isEditable = !this.isEditable;
+    }
+
+    saveChanges(): void {
+        this.isEditable = false;
     }
 }

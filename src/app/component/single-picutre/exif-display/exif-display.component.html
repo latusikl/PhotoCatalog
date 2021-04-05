@@ -1,9 +1,20 @@
-<div class="content">
-    <table *ngIf="isExifData()" mat-table [dataSource]="getDataSource()">
-
+<div class="content" *ngIf="isExifData()">
+    <div class="edition-header">
+        <h2 id="edition-title">Informations</h2>
+        <button *ngIf="isEditable" mat-raised-button color="primary" (click)="saveChanges()">
+            Save
+        </button>
+        <button mat-raised-button color="primary" (click)="editMode()">
+            <mat-icon>edit</mat-icon>
+        </button>
+    </div>
+    <div>
+        <mat-divider></mat-divider>
+    </div>
+    <table mat-table [dataSource]="getDataSource()">
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Name</th>
-            <td mat-cell *matCellDef="let element"> {{element.propertyName ? element.propertyName : 'Unknown'}} </td>
+            <td mat-cell *matCellDef="let element"><b>{{element.propertyName ? element.propertyName : 'Unknown'}} </b></td>
         </ng-container>
 
         <ng-container matColumnDef="value">
@@ -19,5 +30,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-
 </div>
+<app-issue-display type="huston" *ngIf="!isExifData()">
+    No EXIF data found for picture.
+</app-issue-display>

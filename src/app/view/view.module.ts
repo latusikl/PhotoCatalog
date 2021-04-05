@@ -22,6 +22,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
     declarations: [
@@ -52,6 +53,7 @@ import { MatTableModule } from '@angular/material/table';
         MatRadioModule,
         MatSelectModule,
         MatTableModule,
+        MatDividerModule,
     ],
 })
 export class ViewModule {}
