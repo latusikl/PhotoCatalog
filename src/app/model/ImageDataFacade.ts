@@ -1,5 +1,7 @@
 import { EditableImageDataProperty } from './EditableImageDataProperty';
 import { ImageData } from './ImageData';
+import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import dayjs from 'dayjs';
 
 export class ImageDataFacade {
     imageDataValues: EditableImageDataProperty<string | number | Date | null>[];
@@ -7,111 +9,113 @@ export class ImageDataFacade {
     constructor(public imageData: ImageData) {
         this.imageDataValues = [
             {
-                propertyType: 'DateTimeOriginal',
+                inputType: 'datetime-local',
                 propertyName: 'Date and time',
-                property: this.imageData.dateTimeOriginal,
-                setter: (value) => (this.imageData.dateTimeOriginal = value as Date | null),
-                validator: (value) => value instanceof Date,
+                // setter: (value) => (this.imageData.dateTimeOriginal = new Date(value as string)),
+                setter: (value) => console.log(value),
+                formControl: new FormControl(ImageDataFacade.extractDateForInput(this.imageData.dateTimeOriginal), [
+                    ImageDataFacade.validateDate,
+                ]),
             },
             {
-                propertyType: 'FocalLength',
+                inputType: 'number',
                 propertyName: 'Focal length',
                 unit: 'mm',
-                property: this.imageData.focalLength,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'string',
+                formControl: new FormControl(this.imageData.focalLength, [Validators.required]),
             },
             {
-                propertyType: 'FNumber',
+                inputType: 'number',
                 propertyName: 'F number',
-                property: this.imageData.fNumber,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'number',
+                formControl: new FormControl(this.imageData.fNumber, []),
             },
             {
-                propertyType: 'ExposureTime',
+                inputType: 'number',
                 propertyName: 'Exposure time',
-                property: this.imageData.exposureTime,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'number',
+                formControl: new FormControl(this.imageData.exposureTime, []),
             },
             {
-                propertyType: 'PixelXDimension',
+                inputType: 'number',
                 propertyName: 'X dimension pixels',
-                property: this.imageData.pixelXDimension,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'number',
+                formControl: new FormControl(this.imageData.pixelXDimension, []),
             },
             {
-                propertyType: 'PixelYDimension',
+                inputType: 'number',
                 propertyName: 'Y dimension pixels',
-                property: this.imageData.pixelYDimension,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'number',
+                formControl: new FormControl(this.imageData.pixelYDimension, []),
             },
             {
-                propertyType: 'ISOSpeedRatings',
+                inputType: 'number',
                 propertyName: 'Iso speed rating',
-                property: this.imageData.isoSpeedRatings,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'number',
+                formControl: new FormControl(this.imageData.isoSpeedRatings, []),
             },
             {
-                propertyType: 'Make',
+                inputType: 'text',
                 propertyName: 'Camera manufacturer',
-                property: this.imageData.cameraMake,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'string',
+                formControl: new FormControl(this.imageData.cameraMake, []),
             },
             {
-                propertyType: 'Model',
+                inputType: 'number',
                 propertyName: 'Camera model',
-                property: this.imageData.cameraModel,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'string',
+                formControl: new FormControl(this.imageData.cameraModel, []),
             },
             {
-                propertyType: 'Software',
+                inputType: 'number',
                 propertyName: 'Software',
-                property: this.imageData.editingSoftware,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'string',
+                formControl: new FormControl(this.imageData.editingSoftware, []),
             },
             {
-                propertyType: 'Orientation',
+                inputType: 'text',
                 propertyName: 'Image orientation',
-                property: this.imageData.imageOrientation,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'number',
+                formControl: new FormControl(this.imageData.imageOrientation, []),
             },
             {
-                propertyType: 'GPSLatitudeRef',
+                inputType: 'text',
                 propertyName: 'Latitude direction',
-                property: this.imageData.gpsLatitudeRef,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'string',
+                formControl: new FormControl(this.imageData.gpsLatitudeRef, []),
             },
             {
-                propertyType: 'GPSLatitude',
+                inputType: 'text',
                 propertyName: 'Latitude',
-                property: this.imageData.fNumber,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'string',
+                formControl: new FormControl(this.imageData.fNumber, []),
             },
             {
-                propertyType: 'GPSLongitudeRef',
+                inputType: 'text',
                 propertyName: 'Longitude direction',
-                property: this.imageData.gpsLongitudeRef,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'string',
+                formControl: new FormControl(this.imageData.gpsLongitudeRef, []),
             },
             {
-                propertyType: 'GPSLongitude',
+                inputType: 'text',
                 propertyName: 'Longitude',
-                property: this.imageData.fNumber,
                 setter: (value) => console.log(value),
-                validator: (value) => typeof value === 'number',
+                formControl: new FormControl(this.imageData.fNumber, []),
             },
         ];
+    }
+
+    private static extractDateForInput(date: Date | null): string {
+        return date ? date.toISOString().slice(0, 16) : '';
+    }
+
+    private static validateDate(): ValidatorFn {
+        return (control) => {
+            if (dayjs(control.value).isValid()) {
+                return null;
+            } else {
+                return { message: 'Date value is invalid' };
+            }
+        };
     }
 }

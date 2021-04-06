@@ -32,5 +32,12 @@ export class ExifDisplayComponent implements OnInit {
 
     saveChanges(): void {
         this.isEditable = false;
+        this.imageDataFacade?.imageDataValues.forEach((value) => value.setter(value.formControl.value));
+    }
+
+    areAllFormValuesValid(): boolean {
+        return !this.imageDataFacade
+            ? false
+            : !!this.imageDataFacade.imageDataValues.find((imgDataValue) => imgDataValue.formControl.valid === false);
     }
 }
