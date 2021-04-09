@@ -28,6 +28,7 @@ export type InputType =
 export interface EditableImageDataProperty<T> {
     inputType: InputType;
     propertyName: string;
+    step?: number;
     unit?: string;
     setter: (value: T) => void;
     formControl: FormControl;

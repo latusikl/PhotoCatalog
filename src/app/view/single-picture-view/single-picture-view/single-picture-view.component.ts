@@ -31,12 +31,13 @@ export class SinglePictureViewComponent implements OnInit {
         // @ts-ignore
         const passedData: unknown = this.location.getState().imgData;
 
-        // if (this.isImageDataContract(passedData)) {
-        // this.imageDataFacade = new ImageDataFacade(
-        //     new ImageData(passedData.name, passedData.path, passedData.exifData),
-        this.imageDataFacade = new ImageDataFacade(new ImageData(MOCK_DATA.name, MOCK_DATA.path, MOCK_DATA.exifData));
-        this.shouldDisplayImgView = true;
-        // }
+        if (this.isImageDataContract(passedData)) {
+            this.imageDataFacade = new ImageDataFacade(
+                new ImageData(passedData.name, passedData.path, passedData.exifData),
+            );
+            this.shouldDisplayImgView = true;
+        }
+        // this.imageDataFacade = new ImageDataFacade(new ImageData(MOCK_DATA.name, MOCK_DATA.path, MOCK_DATA.exifData));
     }
 
     chooseSinglePicture(): void {

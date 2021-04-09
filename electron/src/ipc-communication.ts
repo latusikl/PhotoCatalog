@@ -15,6 +15,7 @@ class IpcCommunication implements IpcRegister {
         }
         this.addSelectDirHandler(window);
         this.getImagePathsFromDir(window);
+        this.modifyImageExifData(window);
     }
 
     private addSelectDirHandler(window: BrowserWindow): void {
@@ -55,10 +56,32 @@ class IpcCommunication implements IpcRegister {
     }
 
     private mapToImageData(imgPath: string): ImageData {
-        const binary = fs.readFileSync(imgPath).toString('binary');
+        const binary = this.readImageDataBinary(imgPath);
         const exif = piexif.load(binary);
         const name = imgPath.slice(imgPath.lastIndexOf(path.sep) + 1, imgPath.lastIndexOf('.'));
         return new ImageData(name, `file:///${imgPath}`, exif);
+    }
+
+    private readImageDataBinary(imgPath: string): string {
+        return fs.readFileSync(imgPath).toString('binary');
+    }
+
+    private modifyImageExifData(window: BrowserWindow): void {
+        ipcMain.on(IpcEvents.ToMain.MODIFY_EXIF, (ev, imageData: ImageData) => {
+            if (imageData && imageData.exifData && imageData.path) {
+                const exifBinary = piexif.dump(imageData.exifData);
+                const imageBinary = this.readImageDataBinary(imageData.path);
+                piexif.insert(exifBinary, imageBinary);
+                fs.writeFile(imageData.path, imageBinary, (err) => {
+                    window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, [!!err, JSON.stringify(err)]);
+                });
+            } else {
+                window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, [
+                    true,
+                    `Missing required data in received object: \n ${JSON.stringify(imageData)}`,
+                ]);
+            }
+        });
     }
 }
 
