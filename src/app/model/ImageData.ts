@@ -16,7 +16,7 @@ export class ImageData {
     }
 
     // eslint-disable-next-line
-    private setExifAttribute(exifTag: ExifTag, value: any) {
+    private setExifAttribute(exifTag: ExifTag, value: any): void {
         const exif = this.exifData?.Exif;
         if (!exif || !value) {
             return;
@@ -49,5 +49,11 @@ export class ImageData {
     get exposureTime(): number | null {
         const spec = this.getExifAttribute('ExposureTime');
         return spec ? spec[0] / spec[1] : null;
+    }
+
+    get resolution(): number | null {
+        const xRes = this.getExifAttribute('PixelXDimension') as number;
+        const yRes = this.getExifAttribute('PixelYDimension') as number;
+        return !!xRes && !!yRes ? xRes * yRes : null;
     }
 }

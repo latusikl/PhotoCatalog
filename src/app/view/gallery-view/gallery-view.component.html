@@ -17,8 +17,30 @@
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-date-range-picker #picker></mat-date-range-picker>
                     </mat-form-field>
-                    <div class="form-field flex-stretch">
+                    <div class="form-field">
                         <mat-checkbox formControlName="allowEmptyData"> Include images with empty data </mat-checkbox>
+                    </div>
+                    <div class="form-field flex-stretch">
+                        <mat-radio-group class="form-field flex-wrap" formControlName="resolution">
+                            <mat-label>Resolution:</mat-label>
+                            <mat-radio-button class="margin-1-x" [value]="Resolutions.RES_720P">
+                                {{ '>720p' }}
+                            </mat-radio-button>
+                            <mat-radio-button class="margin-1-right" [value]="Resolutions.RES_1080P">
+                                {{ '>1080p' }}
+                            </mat-radio-button>
+                            <mat-radio-button [value]="Resolutions.RES_UHD">
+                                {{ '>UHD' }}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                        <button
+                            mat-icon-button
+                            color="accent"
+                            [disabled]="!criteriaForm.controls.resolution.value"
+                            (click)="clearRes()"
+                        >
+                            <mat-icon>clear</mat-icon>
+                        </button>
                         <div id="button-container" class="flex-stretch">
                             <button mat-raised-button color="primary" (click)="search(true)">Search</button>
                         </div>
@@ -26,7 +48,7 @@
                 </div>
                 <div class="flex-row row-wrap">
                     <div class="form-field flex-stretch" appearance="fill">
-                        <mat-label id="min-focal-length-label">Min. focal length [mm]</mat-label>
+                        <mat-label id="min-focal-length-label">Min. focal length [mm]:</mat-label>
                         <mat-slider
                             class="flex-stretch"
                             thumbLabel
@@ -38,7 +60,7 @@
                         </mat-slider>
                     </div>
                     <div class="form-field flex-stretch" appearance="fill">
-                        <mat-label id="min-f-number-label">Min. F number</mat-label>
+                        <mat-label id="min-f-number-label">Min. F number:</mat-label>
                         <mat-slider
                             class="flex-stretch"
                             thumbLabel
@@ -51,13 +73,11 @@
                     </div>
                     <div class="form-field">
                         <mat-form-field>
-                            <mat-label>Min. exposure time (0 - 8000)</mat-label>
+                            <mat-label>Min. exposure time (0 - 8000):</mat-label>
                             <input matInput min="0" max="8000" type="number" formControlName="minExposureTime" />
                         </mat-form-field>
                         <mat-radio-group class="form-field flex-wrap" formControlName="isExposureTimeInteger">
-                            <mat-radio-button id="integer-time-radio-button" [value]="false">
-                                Fracture [1 / s]</mat-radio-button
-                            >
+                            <mat-radio-button class="margin-1-x" [value]="false"> Fracture [1 / s]</mat-radio-button>
                             <mat-radio-button [value]="true">Integer [s]</mat-radio-button>
                         </mat-radio-group>
                     </div>
