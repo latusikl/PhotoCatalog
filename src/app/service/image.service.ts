@@ -13,12 +13,12 @@ export class ImageService {
     imagesData = new BehaviorSubject<ImageData[]>([]);
 
     constructor(private electronService: ElectronService) {
-        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_FOUND, (_ev, data: ImageData[]) => {
+        this.electronService.ipcRenderer?.on(IpcEvents.ToRendered.IMG_FOUND, (_ev, data: ImageData[]) => {
             this.imagesData.next(plainToClass(ImageData, data));
         });
     }
 
     getImages(dir: string): void {
-        this.electronService.ipcRenderer.send(IpcEvents.ToMain.GET_IMG, dir);
+        this.electronService.ipcRenderer?.send(IpcEvents.ToMain.GET_IMG, dir);
     }
 }

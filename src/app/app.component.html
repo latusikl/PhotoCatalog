@@ -2,7 +2,10 @@
     <button mat-icon-button id="hamburger" (click)="drawer.toggle()" matTooltip="Click to expand side menu">
         <mat-icon>menu</mat-icon>
     </button>
-    <span>Photo Catalog</span>
+    <div class="title">
+        <div class="title-part-1">photo</div>
+        <div class="title-part-2">catalog</div>
+    </div>
     <span class="spacer"></span>
     <button mat-icon-button (click)="chooseFolder()" matTooltip="Choose working directory">
         <mat-icon id="dir-select-icon">folder_open</mat-icon>
