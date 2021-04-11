@@ -1,6 +1,6 @@
 import { EditableImageDataProperty } from './EditableImageDataProperty';
 import { ImageData } from './ImageData';
-import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, ValidatorFn } from '@angular/forms';
 import dayjs from 'dayjs';
 
 export class ImageDataFacade {
@@ -22,7 +22,7 @@ export class ImageDataFacade {
                 step: 0.01,
                 unit: 'mm',
                 setter: (value) => (this.imageData.focalLength = Number.parseFloat(value as string)),
-                formControl: new FormControl(this.imageData.focalLength, [Validators.required]),
+                formControl: new FormControl(this.imageData.focalLength, []),
             },
             {
                 inputType: 'number',
@@ -111,7 +111,7 @@ export class ImageDataFacade {
     }
 
     private static extractDateForInput(date: Date | null): string {
-        return date ? date.toISOString().slice(0, 16) : '';
+        return date && !isNaN(date.getTime()) ? dayjs(date).format('YYYY-MM-DDThh:mm') : '';
     }
 
     private static validateDate(): ValidatorFn {

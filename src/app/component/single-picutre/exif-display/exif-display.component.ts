@@ -46,7 +46,11 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
         console.debug('Save action executed');
         this.isEditable = false;
         if (this.imageDataFacade?.imageData) {
-            this.imageDataFacade?.imageDataValues.forEach((value) => value.setter(value.formControl.value));
+            this.imageDataFacade?.imageDataValues.forEach((value) => {
+                if (value.formControl.dirty) {
+                    value.setter(value.formControl.value);
+                }
+            });
             this.imageService.saveNewExifValue(this.imageDataFacade.imageData);
         }
     }

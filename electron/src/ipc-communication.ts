@@ -69,12 +69,31 @@ class IpcCommunication implements IpcRegister {
     private modifyImageExifData(window: BrowserWindow): void {
         ipcMain.on(IpcEvents.ToMain.MODIFY_EXIF, (ev, imageData: ImageData) => {
             if (imageData && imageData.exifData && imageData.path) {
-                const exifBinary = piexif.dump(imageData.exifData);
-                const imageBinary = this.readImageDataBinary(imageData.path);
-                piexif.insert(exifBinary, imageBinary);
-                fs.writeFile(imageData.path, imageBinary, (err) => {
-                    window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, [!!err, JSON.stringify(err)]);
-                });
+                try {
+                    const newExifBinary = piexif.dump(imageData.exifData);
+                    const imageBinaryWithoutExif = piexif.remove(
+                        this.readImageDataBinary(this.stripPathFromFileProtocol(imageData.path)),
+                    );
+                    const newBinaryImage = piexif.insert(newExifBinary, imageBinaryWithoutExif);
+                    fs.writeFile(
+                        this.stripPathFromFileProtocol(imageData.path),
+                        newBinaryImage,
+                        {
+                            encoding: 'binary',
+                        },
+                        (err) => {
+                            window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, [
+                                !!err,
+                                JSON.stringify(err),
+                            ]);
+                        },
+                    );
+                } catch (e) {
+                    window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, [
+                        true,
+                        `Error occurred during saving exif data to file.\n ${JSON.stringify(e)}`,
+                    ]);
+                }
             } else {
                 window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, [
                     true,
@@ -82,6 +101,10 @@ class IpcCommunication implements IpcRegister {
                 ]);
             }
         });
+    }
+
+    private stripPathFromFileProtocol(path: string): string {
+        return path.substr(8);
     }
 }
 
