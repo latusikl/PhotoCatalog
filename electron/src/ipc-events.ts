@@ -4,6 +4,8 @@ export default class IpcEvents {
         static GET_IMG = 'get-images';
         static GET_IMG_NUM = 'get-images-number';
         static GET_IMG_PAGE = 'get-images-page';
+        static READ_SETTINGS = 'read-settings';
+        static SAVE_SETTINGS = 'save-settings';
     };
 
     static ToRendered = class {
@@ -11,5 +13,6 @@ export default class IpcEvents {
         static IMG_FOUND = 'images-found';
         static IMG_NUM = 'images-number';
         static IMG_PAGE_FOUND = 'images-page-found';
+        static SETTINGS_READY = 'settings-ready';
     };
 }

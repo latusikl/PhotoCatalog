@@ -4,6 +4,16 @@ $dir_select_icon_size: 30px;
 $title-part1-color: #E0E0E0;
 $title-part2-color: #9E9E9E;
 
+#settings-button {
+    margin-top: auto;
+}
+
+#nav-list {
+    height: calc(100% - 10px);
+    display: flex;
+    flex-direction: column;
+}
+
 .button {
     background: inherit;
     border: none;
