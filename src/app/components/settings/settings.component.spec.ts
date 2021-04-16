@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { ElectronService } from 'ngx-electron';
 
 import { SettingsComponent } from './settings.component';
 
@@ -8,7 +10,15 @@ describe('SettingsComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
+            providers: [
+                {
+                    provide: MatDialogRef,
+                    useValue: {},
+                },
+                ElectronService,
+            ],
             declarations: [SettingsComponent],
+            imports: [MatDialogModule],
         }).compileComponents();
     });
 

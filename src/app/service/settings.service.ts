@@ -14,7 +14,7 @@ export class SettingsService {
             this.settings.next(data);
             this.setDarkMode(data.darkMode);
         });
-        this.electronService.ipcRenderer.send(IpcEvents.ToMain.READ_SETTINGS);
+        this.electronService.ipcRenderer?.send(IpcEvents.ToMain.READ_SETTINGS);
     }
 
     save(newSettings: Settings): void {
