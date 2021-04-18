@@ -118,7 +118,9 @@
                 (click)="navigateToSinglePictureView(imgData)"
             >
                 <img [src]="imgData.path | safeHtml" />
-                <label>{{ imgData.name }}</label>
+                <div class="img-name">
+                    <label>{{ imgData.name }}</label>
+                </div>
             </div>
         </div>
     </ng-template>
