@@ -25,9 +25,8 @@ export class SettingsComponent {
         if (!!this.settings.defaultDir && !isValidPath(this.settings.defaultDir)) {
             this.invalid = true;
             return;
-        } else {
-            this.invalid = false;
         }
+        this.invalid = false;
         this.settingsService.save(this.settings);
         this.close();
     }
