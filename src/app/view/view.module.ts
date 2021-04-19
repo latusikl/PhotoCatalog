@@ -21,6 +21,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { SettingsComponent } from '../components/settings/settings.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [
@@ -30,6 +33,7 @@ import { MatSelectModule } from '@angular/material/select';
         SinglePictureViewComponent,
         IssueDisplayComponent,
         ExifDisplayComponent,
+        SettingsComponent,
     ],
     imports: [
         CommonModule,
@@ -50,6 +54,8 @@ import { MatSelectModule } from '@angular/material/select';
         MatSliderModule,
         MatRadioModule,
         MatSelectModule,
+        MatDialogModule,
+        MatSlideToggleModule,
     ],
 })
 export class ViewModule {}

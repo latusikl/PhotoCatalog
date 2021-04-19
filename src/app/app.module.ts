@@ -12,6 +12,7 @@ import { NgxElectronModule } from 'ngx-electron';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ViewModule } from './view/view.module';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [AppComponent],
@@ -27,6 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
         MatTooltipModule,
         ViewModule,
         MatButtonModule,
+        MatDialogModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
