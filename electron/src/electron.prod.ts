@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import ElectronConstants from './constants';
-import ipcCommunication from './ipc-communication';
+import { IpcCommunication } from './communication/ipc-communication';
 
 let window: BrowserWindow | null;
 
@@ -27,7 +27,8 @@ function createWindow(): void {
 }
 
 function loadIpcListeners(window: Electron.BrowserWindow) {
-    ipcCommunication.registerIpcHandlers(window);
+    const ipcCommunication = new IpcCommunication(window);
+    ipcCommunication.registerIpcHandlers();
 }
 
 app.whenReady().then(() => {
