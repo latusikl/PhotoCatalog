@@ -31,7 +31,6 @@ export class ImageService {
     }
 
     saveNewExifValue(imageData: ImageData): void {
-        console.dir(imageData);
         this.electronService.ipcRenderer.send(IpcEvents.ToMain.MODIFY_EXIF, imageData);
     }
 }

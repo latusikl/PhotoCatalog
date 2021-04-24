@@ -24,7 +24,6 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     isEditable = false;
 
     ngOnInit(): void {
-        console.log(this.imageDataFacade);
         this.modificationSubscription = this.imageService.modificationResponse.subscribe({
             next: (data: ExifModificationResult | null) => {
                 if (data) {
@@ -61,7 +60,6 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     }
 
     saveChanges(): void {
-        console.debug('Save action executed');
         this.isEditable = false;
         if (this.imageDataFacade?.imageData) {
             this.imageDataFacade?.imageDataValues.forEach((value) => {
