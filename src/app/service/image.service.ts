@@ -3,7 +3,7 @@ import { ElectronService } from 'ngx-electron';
 import { BehaviorSubject } from 'rxjs';
 import { ImageData } from 'src/app/model/ImageData';
 import { plainToClass } from 'class-transformer';
-import IpcEvents from '../../../electron/src/ipc-events';
+import IpcEvents from '../../../electron/src/communication/ipc-events';
 import { ExifModificationResult } from '../model/ExifModificationResult';
 
 @Injectable({
