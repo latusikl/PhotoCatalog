@@ -3,6 +3,7 @@ import { ImageDataFacade } from '../../../model/ImageDataFacade';
 import { EditableImageDataProperty } from '../../../model/EditableImageDataProperty';
 import { ImageService } from '../../../service/image.service';
 import { Subscription } from 'rxjs';
+import { ExifModificationResult } from '../../../model/ExifModificationResult';
 
 @Component({
     selector: 'app-exif-display',
@@ -23,9 +24,11 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         console.log(this.imageDataFacade);
         this.modificationSubscription = this.imageService.modificationResponse.subscribe({
-            next: (data: [boolean, string]) => {
-                console.log('Status: ' + data[0]);
-                console.log(data[1]);
+            next: (data: ExifModificationResult | null) => {
+                if (data) {
+                    console.log('Status: ' + data.errorMessage);
+                    console.log(data.modificationFailed);
+                }
             },
         });
     }

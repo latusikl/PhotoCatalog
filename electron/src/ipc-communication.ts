@@ -11,6 +11,7 @@ import { IpcRegister } from './ipc-register';
 import { ImageData } from '../../src/app/model/ImageData';
 import { Settings } from '../../src/app/model/Settings';
 import { deserialize } from 'class-transformer';
+import { ExifModificationResult } from '../../src/app/model/ExifModificationResult';
 
 class IpcCommunication implements IpcRegister {
     private readonly CFG_PATH = path.join(__dirname, ElectronConstants.CONFIG_FILE);
@@ -121,23 +122,26 @@ class IpcCommunication implements IpcRegister {
                             encoding: 'binary',
                         },
                         (err) => {
-                            window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, [
-                                !!err,
-                                JSON.stringify(err),
-                            ]);
+                            const response: ExifModificationResult = {
+                                modificationFailed: !!err,
+                                errorMessage: JSON.stringify(err),
+                            };
+                            window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, response);
                         },
                     );
                 } catch (e) {
-                    window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, [
-                        true,
-                        `Error occurred during saving exif data to file.\n ${JSON.stringify(e)}`,
-                    ]);
+                    const response: ExifModificationResult = {
+                        modificationFailed: true,
+                        errorMessage: `Error occurred during saving exif data to file.\n ${JSON.stringify(e)}`,
+                    };
+                    window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, response);
                 }
             } else {
-                window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, [
-                    true,
-                    `Missing required data in received object: \n ${JSON.stringify(imageData)}`,
-                ]);
+                const response: ExifModificationResult = {
+                    modificationFailed: true,
+                    errorMessage: `Missing required data in received object: \n ${JSON.stringify(imageData)}`,
+                };
+                window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, response);
             }
         });
     }
