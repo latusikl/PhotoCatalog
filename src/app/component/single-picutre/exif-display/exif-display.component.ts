@@ -44,7 +44,7 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
               }
             : {
                   snackBarType: SnackBarType.OK,
-                  message: 'Modification has been saved.',
+                  message: 'Modification has been saved!',
               };
     }
 

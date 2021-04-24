@@ -25,14 +25,16 @@
                            [step]="element.step ? element.step : ''">
                 </mat-form-field>
                 <!--                TODO Add displaying of error details-->
-                <mat-error *ngIf="!element.formControl.valid">Field value is invalid.</mat-error>
+                <mat-error *ngIf="isEditable && !element.formControl.valid">Field value is invalid.</mat-error>
+                <mat-error *ngIf="isEditable && !element.formControl.valid"
+                           [textContent]="element.formControl.errors['message']"></mat-error>
             </td>
         </ng-container>
 
         <ng-container matColumnDef="unit">
             <th mat-header-cell *matHeaderCellDef>Unit</th>
             <td mat-cell *matCellDef="let element">
-                {{element.unit ? element.unit : 'n/a' }}
+                {{element.unit ? element.unit : '' }}
             </td>
         </ng-container>
 

@@ -1,7 +1,8 @@
 import { EditableImageDataProperty } from './EditableImageDataProperty';
 import { ImageData } from './ImageData';
-import { FormControl, ValidatorFn } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import dayjs from 'dayjs';
+import { ImageDataValidators } from './ImageDataValidators';
 
 export class ImageDataFacade {
     imageDataValues: EditableImageDataProperty<string | number | Date | null>[];
@@ -13,7 +14,7 @@ export class ImageDataFacade {
                 propertyName: 'Date and time',
                 setter: (value) => (this.imageData.dateTimeOriginal = new Date(value as string)),
                 formControl: new FormControl(ImageDataFacade.extractDateForInput(this.imageData.dateTimeOriginal), [
-                    ImageDataFacade.validateDate,
+                    ImageDataValidators.validateDate,
                 ]),
             },
             {
@@ -21,33 +22,35 @@ export class ImageDataFacade {
                 propertyName: 'Focal length',
                 step: 0.01,
                 unit: 'mm',
-                setter: (value) => (this.imageData.focalLength = Number.parseFloat(value as string)),
+                setter: (value) => (this.imageData.focalLength = value as string),
                 formControl: new FormControl(this.imageData.focalLength, []),
             },
             {
                 inputType: 'number',
                 propertyName: 'F number',
                 step: 0.01,
-                setter: (value) => (this.imageData.fNumber = Number.parseFloat(value as string)),
+                setter: (value) => (this.imageData.focalLength = value as string),
                 formControl: new FormControl(this.imageData.fNumber, []),
             },
             {
                 inputType: 'number',
                 propertyName: 'Exposure time',
                 step: 0.01,
-                setter: (value) => (this.imageData.exposureTime = Number.parseFloat(value as string)),
+                setter: (value) => (this.imageData.focalLength = value as string),
                 formControl: new FormControl(this.imageData.exposureTime, []),
             },
             {
                 inputType: 'number',
-                propertyName: 'X dimension pixels',
+                propertyName: 'X dimension',
+                unit: 'px',
                 step: 1,
                 setter: (value) => (this.imageData.pixelXDimension = Number.parseInt(value as string)),
                 formControl: new FormControl(this.imageData.pixelXDimension, []),
             },
             {
                 inputType: 'number',
-                propertyName: 'Y dimension pixels',
+                unit: 'px',
+                propertyName: 'Y dimension',
                 step: 1,
                 setter: (value) => (this.imageData.pixelYDimension = Number.parseInt(value as string)),
                 formControl: new FormControl(this.imageData.pixelYDimension, []),
@@ -78,10 +81,14 @@ export class ImageDataFacade {
                 formControl: new FormControl(this.imageData.editingSoftware, []),
             },
             {
-                inputType: 'text',
+                inputType: 'number',
+                step: 1,
                 propertyName: 'Image orientation',
-                setter: (value) => console.debug(`Image orientation setter not implemented ${value}`),
-                formControl: new FormControl(this.imageData.imageOrientation, []),
+                setter: (value) => (this.imageData.imageOrientation = Math.floor(value as number)),
+                formControl: new FormControl(this.imageData.imageOrientation, [
+                    ImageDataValidators.validateMin(1),
+                    ImageDataValidators.validateMax(8),
+                ]),
             },
             {
                 inputType: 'text',
@@ -112,15 +119,5 @@ export class ImageDataFacade {
 
     private static extractDateForInput(date: Date | null): string {
         return date && !isNaN(date.getTime()) ? dayjs(date).format('YYYY-MM-DDThh:mm') : '';
-    }
-
-    private static validateDate(): ValidatorFn {
-        return (control) => {
-            if (dayjs(control.value).isValid()) {
-                return null;
-            } else {
-                return { message: 'Date value is invalid' };
-            }
-        };
     }
 }

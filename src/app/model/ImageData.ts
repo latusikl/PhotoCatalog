@@ -13,12 +13,6 @@ export class ImageData implements ImageDataContract {
     constructor(public name: string, public path: string, public exifData?: IExif) {}
 
     // eslint-disable-next-line
-    private getExifAttribute(exifTag: ExifTag): any {
-        const exifData = this.exifData?.Exif;
-        return exifData ? exifData[TagValues.ExifIFD[exifTag]] : null;
-    }
-
-    // eslint-disable-next-line
     private getGpsAttribute(gpsTag: GpsTag): any {
         const gpsData = this.exifData?.GPS;
         return gpsData ? gpsData[TagValues.GPSIFD[gpsTag]] : null;
@@ -60,15 +54,10 @@ export class ImageData implements ImageDataContract {
         }
     }
 
-    private setExifRealValue(value: number | null, exifTag: ExifTag) {
-        console.error(value);
-        value
-            ? this.setExifAttribute(exifTag, [this.combineFractionalAndDecimalPart(value), 100])
-            : this.setExifAttribute(exifTag, null);
-    }
-
-    private combineFractionalAndDecimalPart(value: number, precision = 2) {
-        return value.toFixed(precision).replace('.', '');
+    // eslint-disable-next-line
+    private getExifAttribute(exifTag: ExifTag): any {
+        const exifData = this.exifData?.Exif;
+        return exifData ? exifData[TagValues.ExifIFD[exifTag]] : null;
     }
 
     // eslint-disable-next-line
@@ -77,6 +66,36 @@ export class ImageData implements ImageDataContract {
         if (exif) {
             exif[TagValues.ExifIFD[exifTag]] = value;
         }
+    }
+
+    private getExifRealValue(exifTag: ExifTag): string | null {
+        const spec = this.getExifAttribute(exifTag);
+        return spec ? (spec[0] / spec[1]).toString() : null;
+    }
+
+    private setExifRealValue(value: string | null, exifTag: ExifTag) {
+        value
+            ? this.setExifAttribute(exifTag, this.toIrreducibleOrdinaryFraction(value))
+            : this.setExifAttribute(exifTag, null);
+    }
+
+    private toIrreducibleOrdinaryFraction(value: string) {
+        const exponent = value.indexOf('.') !== -1 ? value.trim().split('.')[1].length : value.length;
+        const denominator = Math.pow(10, exponent);
+        const numerator = Math.floor(Number(value) * denominator);
+        const greatestCommonDivisor = this.greatestCommonDivisor(denominator, numerator);
+
+        return [numerator / greatestCommonDivisor, denominator / greatestCommonDivisor];
+    }
+
+    private greatestCommonDivisor(a: number, b: number): number {
+        let greatestCommonDivisor = 1;
+        while (b !== 0) {
+            greatestCommonDivisor = b;
+            b = a % b;
+            a = greatestCommonDivisor;
+        }
+        return greatestCommonDivisor;
     }
 
     get dateTimeOriginal(): Date | null {
@@ -91,30 +110,27 @@ export class ImageData implements ImageDataContract {
         }
     }
 
-    get focalLength(): number | null {
-        const spec = this.getExifAttribute('FocalLength');
-        return spec ? spec[0] / spec[1] : null;
+    get focalLength(): string | null {
+        return this.getExifRealValue('FocalLength');
     }
 
-    set focalLength(focalLength: number | null) {
+    set focalLength(focalLength: string | null) {
         this.setExifRealValue(focalLength, 'FocalLength');
     }
 
-    get fNumber(): number | null {
-        const spec = this.getExifAttribute('FNumber');
-        return spec ? spec[0] / spec[1] : null;
+    get fNumber(): string | null {
+        return this.getExifRealValue('FNumber');
     }
 
-    set fNumber(fNumber: number | null) {
+    set fNumber(fNumber: string | null) {
         this.setExifRealValue(fNumber, 'FNumber');
     }
 
-    get exposureTime(): number | null {
-        const spec = this.getExifAttribute('ExposureTime');
-        return spec ? spec[0] / spec[1] : null;
+    get exposureTime(): string | null {
+        return this.getExifRealValue('ExposureTime');
     }
 
-    set exposureTime(exposureTime: number | null) {
+    set exposureTime(exposureTime: string | null) {
         this.setExifRealValue(exposureTime, 'ExposureTime');
     }
 
@@ -172,12 +188,16 @@ export class ImageData implements ImageDataContract {
         this.setImageAttribute0('Software', editingSoftware);
     }
 
-    //TODO Resolve how to set and display ImageOrientation and Gps data.
     get imageOrientation(): number | null {
         const value = this.getImageAttribute1('Orientation');
         return value ? value : null;
     }
 
+    set imageOrientation(orientation: number | null) {
+        this.setImageAttribute1('Orientation', orientation);
+    }
+
+    //TODO Resolve how to set and display GPS data.
     get gpsLatitudeRef(): string | null {
         const value = this.getGpsAttribute('GPSLatitudeRef');
         return value ? String(value) : null;
