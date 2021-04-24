@@ -7,4 +7,5 @@ export interface GallerySearchCriteria {
     minFNumber?: number;
     minExposureTime?: number;
     isExposureTimeInteger?: boolean;
+    resolution?: number;
 }

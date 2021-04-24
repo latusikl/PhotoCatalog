@@ -14,7 +14,7 @@ export class ImageService {
     modificationResponse = new BehaviorSubject<[boolean, string]>([false, '']);
 
     constructor(private electronService: ElectronService) {
-        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.IMG_FOUND, (_ev, data: ImageData[]) => {
+        this.electronService.ipcRenderer?.on(IpcEvents.ToRendered.IMG_FOUND, (_ev, data: ImageData[]) => {
             this.imagesData.next(plainToClass(ImageData, data));
         });
         this.electronService.ipcRenderer.on(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, (ev, data: [boolean, string]) => {
@@ -23,7 +23,7 @@ export class ImageService {
     }
 
     getImages(dir: string): void {
-        this.electronService.ipcRenderer.send(IpcEvents.ToMain.GET_IMG, dir);
+        this.electronService.ipcRenderer?.send(IpcEvents.ToMain.GET_IMG, dir);
     }
 
     saveNewExifValue(imageData: ImageData): void {

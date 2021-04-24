@@ -24,16 +24,20 @@ img {
     margin-left: auto;
 }
 
-#integer-time-radio-button {
-    margin: 0 1em;
-}
-
 #min-focal-length-label {
-    min-width: 10em;
+    min-width: 10.5em;
 }
 
 #min-f-number-label {
     min-width: 6.5em;
+}
+
+.margin-1-x {
+    margin: 0 1em;
+}
+
+.margin-1-right {
+    margin-right: 1em;
 }
 
 .row-wrap {

@@ -1,6 +1,5 @@
 import { Component, HostBinding, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DirectoryService } from 'src/app/service/directory.service';
 import { ImageService } from 'src/app/service/image.service';
 import { ImageData } from 'src/app/model/ImageData';
 import { PageEvent } from '@angular/material/paginator';
@@ -9,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GallerySearchCriteria } from 'src/app/model/GallerySearchCriteria';
 import { MatSelectChange } from '@angular/material/select';
 import { SortField } from 'src/app/model/SortField';
+import { Resolutions } from 'src/app/model/Resolutions';
 
 type ImageDataProp = string | number | Date;
 
@@ -19,9 +19,10 @@ type ImageDataProp = string | number | Date;
 })
 export class GalleryViewComponent implements OnInit, OnDestroy {
     private imagesSub = Subscription.EMPTY;
-    private currDirSub = Subscription.EMPTY;
     private imgNumberSub = Subscription.EMPTY;
     private exposureTimeSub = Subscription.EMPTY;
+
+    readonly Resolutions = Resolutions;
 
     criteriaForm: FormGroup;
     imagesData: ImageData[] = [];
@@ -31,27 +32,14 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     pageSizeOptions = [5, 10, 25, 100];
     maxExposureTime = 8000;
     noImages = true;
-    sortFields: SortField[] = [
-        { name: '-' },
-        { name: 'Date', field: 'dateTimeOriginal' },
-        { name: 'Name', field: 'name' },
-        { name: 'Exposure time', field: 'exposureTime' },
-        { name: 'F number', field: 'fNumber' },
-        { name: 'Focal length', field: 'focalLength' },
-    ];
-    sortField?: SortField;
+    sortFields: SortField[];
     sortAsc = true;
+    sortField?: SortField;
 
     @HostBinding('class')
     class = 'view';
 
-    constructor(
-        private directoryService: DirectoryService,
-        private imageService: ImageService,
-        private router: Router,
-        private ngZone: NgZone,
-        fb: FormBuilder,
-    ) {
+    constructor(private imageService: ImageService, private router: Router, private ngZone: NgZone, fb: FormBuilder) {
         this.criteriaForm = fb.group({
             name: '',
             startDate: null,
@@ -61,7 +49,18 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
             minFNumber: 0,
             minExposureTime: [0, [Validators.min(0), Validators.max(8000)]],
             isExposureTimeInteger: false,
+            resolution: null,
         });
+
+        this.sortFields = [
+            { name: '-' },
+            { name: 'Date', field: 'dateTimeOriginal' },
+            { name: 'Name', field: 'name' },
+            { name: 'Exposure time', field: 'exposureTime' },
+            { name: 'F number', field: 'fNumber' },
+            { name: 'Focal length', field: 'focalLength' },
+            { name: 'Resolution', field: 'resolution' },
+        ];
     }
 
     ngOnInit(): void {
@@ -73,14 +72,6 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
                 }),
         });
 
-        this.currDirSub = this.directoryService.currentDirectory.subscribe({
-            next: (dir) => {
-                this.ngZone.run(() => {
-                    this.imageService.getImages(dir);
-                });
-            },
-        });
-
         this.exposureTimeSub = this.criteriaForm.controls.isExposureTimeInteger.valueChanges.subscribe({
             next: (value) => this.onIsExposureTimeIntegerChange(value),
         });
@@ -88,7 +79,6 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.imagesSub.unsubscribe();
-        this.currDirSub.unsubscribe();
         this.imgNumberSub.unsubscribe();
         this.exposureTimeSub.unsubscribe();
     }
@@ -116,8 +106,16 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     }
 
     imageFilterFunc(img: ImageData): boolean {
-        const { name, startDate, endDate, allowEmptyData, minFocalLength, minFNumber, isExposureTimeInteger } = this
-            .criteriaForm.value as GallerySearchCriteria;
+        const {
+            name,
+            startDate,
+            endDate,
+            allowEmptyData,
+            minFocalLength,
+            minFNumber,
+            isExposureTimeInteger,
+            resolution,
+        } = this.criteriaForm.value as GallerySearchCriteria;
         let { minExposureTime } = this.criteriaForm.value as GallerySearchCriteria;
 
         if (!!name && !img.name.toLocaleLowerCase().includes(name?.toLocaleLowerCase())) {
@@ -159,7 +157,14 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
         if (
             !!minFNumber &&
-            this.checkIfPassed(img.fNumber, img.fNumber ? img.fNumber >= minFNumber : false, allowEmptyData)
+            !this.checkIfPassed(img.fNumber, img.fNumber ? img.fNumber >= minFNumber : false, allowEmptyData)
+        ) {
+            return false;
+        }
+
+        if (
+            !!resolution &&
+            !this.checkIfPassed(img.resolution, img.resolution ? img.resolution > resolution : false, allowEmptyData)
         ) {
             return false;
         }
@@ -226,5 +231,9 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
             this.currentPage = 0;
         }
         this.getImagesPage(images);
+    }
+
+    clearRes(): void {
+        this.criteriaForm.controls.resolution.setValue(null);
     }
 }

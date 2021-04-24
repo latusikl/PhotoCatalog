@@ -23,6 +23,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
+import { SettingsComponent } from '../components/settings/settings.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [
@@ -32,6 +35,7 @@ import { MatDividerModule } from '@angular/material/divider';
         SinglePictureViewComponent,
         IssueDisplayComponent,
         ExifDisplayComponent,
+        SettingsComponent,
     ],
     imports: [
         CommonModule,
@@ -54,6 +58,8 @@ import { MatDividerModule } from '@angular/material/divider';
         MatSelectModule,
         MatTableModule,
         MatDividerModule,
+        MatDialogModule,
+        MatSlideToggleModule,
     ],
 })
 export class ViewModule {}

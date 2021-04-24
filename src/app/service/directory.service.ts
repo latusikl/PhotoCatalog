@@ -10,12 +10,12 @@ export class DirectoryService {
     currentDirectory = new BehaviorSubject<string>('');
 
     constructor(private electronService: ElectronService) {
-        this.electronService.ipcRenderer.on(IpcEvents.ToRendered.DIR_SELECTED, (ev, dir: string) => {
+        this.electronService.ipcRenderer?.on(IpcEvents.ToRendered.DIR_SELECTED, (ev, dir: string) => {
             this.currentDirectory.next(dir);
         });
     }
 
     callForDirectoryChoice(): void {
-        this.electronService.ipcRenderer.send(IpcEvents.ToMain.SELECT_DIR);
+        this.electronService.ipcRenderer?.send(IpcEvents.ToMain.SELECT_DIR);
     }
 }

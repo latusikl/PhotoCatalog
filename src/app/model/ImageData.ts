@@ -72,7 +72,7 @@ export class ImageData implements ImageDataContract {
     }
 
     // eslint-disable-next-line
-    private setExifAttribute(exifTag: ExifTag, value: any) {
+    private setExifAttribute(exifTag: ExifTag, value: any): void {
         const exif = this.exifData?.Exif;
         if (exif) {
             exif[TagValues.ExifIFD[exifTag]] = value;
@@ -196,5 +196,11 @@ export class ImageData implements ImageDataContract {
     get gpsLongitude(): string | null {
         const value = this.getGpsAttribute('GPSLongitude');
         return value ? String(value) : null;
+    }
+
+    get resolution(): number | null {
+        const xRes = this.getExifAttribute('PixelXDimension') as number;
+        const yRes = this.getExifAttribute('PixelYDimension') as number;
+        return !!xRes && !!yRes ? xRes * yRes : null;
     }
 }

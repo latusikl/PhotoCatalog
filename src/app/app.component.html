@@ -2,7 +2,10 @@
     <button mat-icon-button id="hamburger" (click)="drawer.toggle()" matTooltip="Click to expand side menu">
         <mat-icon>menu</mat-icon>
     </button>
-    <span>Photo Catalog</span>
+    <div class="title">
+        <div class="title-part-1">photo</div>
+        <div class="title-part-2">catalog</div>
+    </div>
     <span class="spacer"></span>
     <button mat-icon-button (click)="chooseFolder()" matTooltip="Choose working directory">
         <mat-icon id="dir-select-icon">folder_open</mat-icon>
@@ -10,7 +13,7 @@
 </mat-toolbar>
 <mat-drawer-container class="app-container" autosize>
     <mat-drawer #drawer class="sidenav" mode="over">
-        <mat-nav-list (click)="drawer.toggle()">
+        <mat-nav-list id="nav-list" (click)="drawer.toggle()">
             <mat-list-item routerLink="/gallery">
                 <mat-icon>collections</mat-icon>
                 <span class="nav-span">Gallery</span>
@@ -23,8 +26,12 @@
                 <mat-icon>place</mat-icon>
                 <span class="nav-span">Location viewer</span>
             </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item id="settings-button" (click)="openSettingsDialog()">
+                <mat-icon>settings</mat-icon>
+                <span class="nav-span">Settings</span>
+            </mat-list-item>
         </mat-nav-list>
-        <mat-divider></mat-divider>
     </mat-drawer>
 
     <div class="main-content">

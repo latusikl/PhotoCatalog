@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { ElectronService } from 'ngx-electron';
-import { ImageService } from './image.service';
+import { SettingsService } from './settings.service';
 
-describe('ImageService', () => {
-    let service: ImageService;
+describe('SettingsService', () => {
+    let service: SettingsService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [ImageService, ElectronService],
+            providers: [SettingsService, ElectronService],
         });
-        service = TestBed.inject(ImageService);
+        service = TestBed.inject(SettingsService);
     });
 
     it('should be created', () => {
