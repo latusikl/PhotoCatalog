@@ -1,9 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ImageDataFacade } from '../../../model/ImageDataFacade';
 import { EditableImageDataProperty } from '../../../model/EditableImageDataProperty';
 import { ImageService } from '../../../service/image.service';
 import { Subscription } from 'rxjs';
 import { ExifModificationResult } from '../../../model/ExifModificationResult';
+import { SnackBarService } from '../../../service/snack-bar.service';
+import { SnackBarData, SnackBarType } from '../snack-bar/snack-bar.component';
 
 @Component({
     selector: 'app-exif-display',
@@ -11,7 +13,7 @@ import { ExifModificationResult } from '../../../model/ExifModificationResult';
     styleUrls: ['./exif-display.component.scss'],
 })
 export class ExifDisplayComponent implements OnInit, OnDestroy {
-    constructor(private imageService: ImageService) {}
+    constructor(private imageService: ImageService, private ngZone: NgZone, private snackBarService: SnackBarService) {}
 
     @Input()
     imageDataFacade: ImageDataFacade | undefined;
@@ -26,11 +28,24 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
         this.modificationSubscription = this.imageService.modificationResponse.subscribe({
             next: (data: ExifModificationResult | null) => {
                 if (data) {
-                    console.log('Status: ' + data.errorMessage);
-                    console.log(data.modificationFailed);
+                    this.ngZone.run(() => {
+                        this.snackBarService.displaySnackBar(this.mapModyficationResultsToSnackBar(data), 3);
+                    });
                 }
             },
         });
+    }
+
+    private mapModyficationResultsToSnackBar(data: ExifModificationResult): SnackBarData {
+        return data.modificationFailed
+            ? {
+                  snackBarType: SnackBarType.ISSUE,
+                  message: data.errorMessage,
+              }
+            : {
+                  snackBarType: SnackBarType.OK,
+                  message: 'Modification has been saved.',
+              };
     }
 
     isExifData(): boolean {
