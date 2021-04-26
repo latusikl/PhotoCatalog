@@ -15,10 +15,20 @@ import { SnackBarData, SnackBarType } from '../snack-bar/snack-bar.component';
 export class ExifDisplayComponent implements OnInit, OnDestroy {
     constructor(private imageService: ImageService, private ngZone: NgZone, private snackBarService: SnackBarService) {}
 
-    @Input()
-    imageDataFacade: ImageDataFacade | undefined;
-
+    tableData: EditableImageDataProperty<string | number | Date | null>[] = [];
+    private _imageDataFacade?: ImageDataFacade;
     private modificationSubscription = Subscription.EMPTY;
+
+    @Input() set imageDataFacade(imageDataFacade: ImageDataFacade | undefined) {
+        this._imageDataFacade = imageDataFacade;
+        if (imageDataFacade) {
+            this.tableData = imageDataFacade.imageDataValues;
+        }
+    }
+
+    get imageDataFacade(): ImageDataFacade | undefined {
+        return this._imageDataFacade;
+    }
 
     displayedColumns: string[] = ['name', 'value', 'unit'];
     isEditable = false;
@@ -49,10 +59,6 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
 
     isExifData(): boolean {
         return !!this.imageDataFacade?.imageDataValues;
-    }
-
-    getDataSource(): EditableImageDataProperty<string | number | Date | null>[] {
-        return !!this.imageDataFacade?.imageDataValues ? this.imageDataFacade?.imageDataValues : [];
     }
 
     editMode(): void {

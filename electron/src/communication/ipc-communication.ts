@@ -22,6 +22,7 @@ export class IpcCommunication implements IpcRegister {
         this.systemDialogHandlers.addSelectDirHandler();
         this.imgDataHandlers.getImagePathsFromDir();
         this.imgDataHandlers.modifyImageExifData();
+        this.imgDataHandlers.getDataFromSingleFile();
         this.settingsHandlers.addSaveSettingsHandler();
         this.settingsHandlers.readConfigHandler();
     }

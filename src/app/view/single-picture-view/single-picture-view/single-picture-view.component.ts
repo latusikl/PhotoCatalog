@@ -1,8 +1,11 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, NgZone, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ImageData } from 'src/app/model/ImageData';
 import { ImageDataContract } from '../../../model/ImageDataContract';
 import { ImageDataFacade } from '../../../model/ImageDataFacade';
+import { DirectoryService } from '../../../service/directory.service';
+import { SnackBarService } from '../../../service/snack-bar.service';
+import { SnackBarType } from '../../../component/single-picutre/snack-bar/snack-bar.component';
 
 @Component({
     selector: 'app-single-picture-view',
@@ -16,7 +19,12 @@ export class SinglePictureViewComponent implements OnInit {
     @HostBinding('class')
     class = 'view';
 
-    constructor(private location: Location) {}
+    constructor(
+        private location: Location,
+        private directoryService: DirectoryService,
+        private snackBarService: SnackBarService,
+        private ngZone: NgZone,
+    ) {}
 
     isImageDataContract(object: unknown): object is ImageDataContract {
         if (object) {
@@ -40,8 +48,28 @@ export class SinglePictureViewComponent implements OnInit {
     }
 
     chooseSinglePicture(): void {
-        //TODO Add Implementation in next steps of feature development
-        console.error('NOT IMPLEMENTED');
+        this.directoryService.callForSingleImageChoice();
+        this.directoryService.chosenFile.subscribe({
+            next: (value: ImageDataContract | null) => {
+                this.ngZone.run(() => {
+                    if (value) {
+                        this.imageDataFacade = new ImageDataFacade(
+                            new ImageData(value.name, value.path, value.exifData),
+                        );
+                        console.log(value);
+                        this.shouldDisplayImgView = true;
+                    } else {
+                        this.snackBarService.displaySnackBar(
+                            {
+                                message: 'Unable to read/open chosen file',
+                                snackBarType: SnackBarType.ISSUE,
+                            },
+                            2,
+                        );
+                    }
+                });
+            },
+        });
     }
 
     getImgPath(): string {

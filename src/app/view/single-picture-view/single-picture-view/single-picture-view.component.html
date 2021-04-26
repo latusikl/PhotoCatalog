@@ -1,5 +1,5 @@
 <div class="content" *ngIf="shouldDisplayImgView">
-    <div  class="img-container">
+    <div class="img-container">
         <img [src]="getImgPath() | safeHtml"/>
     </div>
     <div class="exif-table">
@@ -9,8 +9,8 @@
     </div>
 </div>
 <app-issue-display type="oops" *ngIf="!shouldDisplayImgView">
-    <h3>You forgot to choose picture. Choose one from gallery or use button below to choose another one.</h3>
+    <h3>Choose picture from gallery or pick single picture using button below.</h3>
     <button mat-raised-button color="primary" (click)="chooseSinglePicture()">
-        <mat-icon>folder_open</mat-icon>
+        <mat-icon>image_search</mat-icon>
     </button>
 </app-issue-display>

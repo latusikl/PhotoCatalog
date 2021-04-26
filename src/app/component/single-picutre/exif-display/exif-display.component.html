@@ -11,7 +11,7 @@
     <div>
         <mat-divider></mat-divider>
     </div>
-    <table mat-table [dataSource]="getDataSource()">
+    <table mat-table [dataSource]="tableData">
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Name</th>
             <td mat-cell *matCellDef="let element"><b>{{element.propertyName ? element.propertyName : 'Unknown'}} </b></td>

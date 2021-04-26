@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow, dialog, ipcMain } from 'electron';
 import IpcEvents from './ipc-events';
 import fs from 'fs';
 import path from 'path';
@@ -23,14 +23,14 @@ export class ImgDataHandlers {
                 }
                 const imgsData = fileNames
                     .map((name) => path.join(dir, name))
-                    .filter((name) => this.filterFilesForImages(name))
+                    .filter((name) => this.isThisFileImage(name))
                     .map((name) => this.mapToImageData(name));
                 this.window.webContents.send(IpcEvents.ToRendered.IMG_FOUND, imgsData);
             });
         });
     }
 
-    private filterFilesForImages(name: string): boolean {
+    private isThisFileImage(name: string): boolean {
         if (fs.lstatSync(name).isDirectory()) {
             return false;
         }
@@ -94,5 +94,25 @@ export class ImgDataHandlers {
             errorMessage: responseMessage,
         };
         this.window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, response);
+    }
+
+    getDataFromSingleFile() {
+        ipcMain.on(IpcEvents.ToMain.SELECT_IMG, async () => {
+            const result = await dialog.showOpenDialog(this.window, {
+                properties: ['openFile'],
+                filters: [
+                    {
+                        name: 'Only images',
+                        extensions: ['jpg', 'jpeg'],
+                    },
+                ],
+            });
+            const path = result.filePaths[0];
+            let imageData: ImageData | null = null;
+            if (this.isThisFileImage(path)) {
+                imageData = this.mapToImageData(path);
+            }
+            this.window.webContents.send(IpcEvents.ToRendered.IMG_SELECTED, imageData);
+        });
     }
 }
