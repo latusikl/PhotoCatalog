@@ -2,7 +2,12 @@ import { ValidatorFn } from '@angular/forms';
 import dayjs from 'dayjs';
 
 export class ImageDataValidators {
-    public static validateDate(): ValidatorFn {
+    static readonly LONG_MAX_VAL = 2_147_483_647;
+    static readonly SHORT_MAX_VAL = 65_536;
+    static readonly ASCII_MAX_CHARS = 128;
+    static readonly ZERO = 0;
+
+    static date(): ValidatorFn {
         return (control) => {
             if (dayjs(control.value).isValid()) {
                 return null;
@@ -12,7 +17,7 @@ export class ImageDataValidators {
         };
     }
 
-    public static validateMin(min: number): ValidatorFn {
+    static min(min: number): ValidatorFn {
         return (control) => {
             const val = control.value;
             if (val && Number(val) < min) {
@@ -23,11 +28,26 @@ export class ImageDataValidators {
         };
     }
 
-    public static validateMax(max: number): ValidatorFn {
+    static max(max: number): ValidatorFn {
         return (control) => {
             const val = control.value;
             if (val && Number(val) > max) {
                 return { message: `Value is too big. Maximal value: ${max}` };
+            } else {
+                return null;
+            }
+        };
+    }
+
+    static nonNegative(): ValidatorFn {
+        return ImageDataValidators.min(ImageDataValidators.ZERO);
+    }
+
+    static maxChars(max: number): ValidatorFn {
+        return (control) => {
+            const val = control.value;
+            if (val && val.length > max) {
+                return { message: `String is too long. Maximum amount of characters: ${max}` };
             } else {
                 return null;
             }

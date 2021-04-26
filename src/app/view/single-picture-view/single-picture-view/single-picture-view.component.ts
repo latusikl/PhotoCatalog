@@ -44,6 +44,8 @@ export class SinglePictureViewComponent implements OnInit {
                 new ImageData(passedData.name, passedData.path, passedData.exifData),
             );
             this.shouldDisplayImgView = true;
+        } else {
+            this.imageDataFacade = undefined;
         }
     }
 

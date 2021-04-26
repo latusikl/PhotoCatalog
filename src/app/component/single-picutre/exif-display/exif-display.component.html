@@ -24,7 +24,6 @@
                     <input matInput [type]="element.inputType" [formControl]="element.formControl" [readonly]="!isEditable"
                            [step]="element.step ? element.step : ''">
                 </mat-form-field>
-                <mat-error *ngIf="isEditable && !element.formControl.valid">Field value is invalid.</mat-error>
                 <mat-error *ngIf="isEditable && !element.formControl.valid"
                            [textContent]="element.formControl.errors['message']"></mat-error>
             </td>

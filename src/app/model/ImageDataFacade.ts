@@ -14,7 +14,7 @@ export class ImageDataFacade {
                 propertyName: 'Date and time',
                 setter: (value) => (this.imageData.dateTimeOriginal = new Date(value as string)),
                 formControl: new FormControl(ImageDataFacade.extractDateForInput(this.imageData.dateTimeOriginal), [
-                    ImageDataValidators.validateDate,
+                    ImageDataValidators.date,
                 ]),
             },
             {
@@ -23,21 +23,21 @@ export class ImageDataFacade {
                 step: 0.01,
                 unit: 'mm',
                 setter: (value) => (this.imageData.focalLength = value as string),
-                formControl: new FormControl(this.imageData.focalLength, []),
+                formControl: new FormControl(this.imageData.focalLength, [ImageDataValidators.nonNegative]),
             },
             {
                 inputType: 'number',
                 propertyName: 'F number',
                 step: 0.01,
                 setter: (value) => (this.imageData.focalLength = value as string),
-                formControl: new FormControl(this.imageData.fNumber, []),
+                formControl: new FormControl(this.imageData.fNumber, [ImageDataValidators.nonNegative]),
             },
             {
                 inputType: 'number',
                 propertyName: 'Exposure time',
                 step: 0.01,
                 setter: (value) => (this.imageData.focalLength = value as string),
-                formControl: new FormControl(this.imageData.exposureTime, []),
+                formControl: new FormControl(this.imageData.exposureTime, [ImageDataValidators.nonNegative]),
             },
             {
                 inputType: 'number',
@@ -45,7 +45,10 @@ export class ImageDataFacade {
                 unit: 'px',
                 step: 1,
                 setter: (value) => (this.imageData.pixelXDimension = Number.parseInt(value as string)),
-                formControl: new FormControl(this.imageData.pixelXDimension, []),
+                formControl: new FormControl(this.imageData.pixelXDimension, [
+                    ImageDataValidators.nonNegative,
+                    ImageDataValidators.max(ImageDataValidators.LONG_MAX_VAL),
+                ]),
             },
             {
                 inputType: 'number',
@@ -53,32 +56,44 @@ export class ImageDataFacade {
                 propertyName: 'Y dimension',
                 step: 1,
                 setter: (value) => (this.imageData.pixelYDimension = Number.parseInt(value as string)),
-                formControl: new FormControl(this.imageData.pixelYDimension, []),
+                formControl: new FormControl(this.imageData.pixelYDimension, [
+                    ImageDataValidators.nonNegative,
+                    ImageDataValidators.max(ImageDataValidators.LONG_MAX_VAL),
+                ]),
             },
             {
                 inputType: 'number',
                 propertyName: 'Iso speed rating',
                 step: 1,
                 setter: (value) => (this.imageData.isoSpeedRatings = Number.parseInt(value as string)),
-                formControl: new FormControl(this.imageData.isoSpeedRatings, []),
+                formControl: new FormControl(this.imageData.isoSpeedRatings, [
+                    ImageDataValidators.nonNegative,
+                    ImageDataValidators.max(ImageDataValidators.LONG_MAX_VAL),
+                ]),
             },
             {
                 inputType: 'text',
                 setter: (value) => (this.imageData.cameraMake = value as string),
                 propertyName: 'Camera manufacturer',
-                formControl: new FormControl(this.imageData.cameraMake, []),
+                formControl: new FormControl(this.imageData.cameraMake, [
+                    ImageDataValidators.maxChars(ImageDataValidators.ASCII_MAX_CHARS),
+                ]),
             },
             {
                 inputType: 'text',
                 propertyName: 'Camera model',
                 setter: (value) => (this.imageData.cameraModel = value as string),
-                formControl: new FormControl(this.imageData.cameraModel, []),
+                formControl: new FormControl(this.imageData.cameraModel, [
+                    ImageDataValidators.maxChars(ImageDataValidators.ASCII_MAX_CHARS),
+                ]),
             },
             {
                 inputType: 'text',
                 propertyName: 'Software',
                 setter: (value) => (this.imageData.editingSoftware = value as string),
-                formControl: new FormControl(this.imageData.editingSoftware, []),
+                formControl: new FormControl(this.imageData.editingSoftware, [
+                    ImageDataValidators.maxChars(ImageDataValidators.ASCII_MAX_CHARS),
+                ]),
             },
             {
                 inputType: 'number',
@@ -86,8 +101,8 @@ export class ImageDataFacade {
                 propertyName: 'Image orientation',
                 setter: (value) => (this.imageData.imageOrientation = Math.floor(value as number)),
                 formControl: new FormControl(this.imageData.imageOrientation, [
-                    ImageDataValidators.validateMin(1),
-                    ImageDataValidators.validateMax(8),
+                    ImageDataValidators.min(1),
+                    ImageDataValidators.max(8),
                 ]),
             },
             {
