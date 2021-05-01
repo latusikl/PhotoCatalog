@@ -24,6 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { SettingsComponent } from '../components/settings/settings.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { HomeViewComponent } from './home-view/home-view.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -34,6 +36,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         IssueDisplayComponent,
         ExifDisplayComponent,
         SettingsComponent,
+        HomeViewComponent,
     ],
     imports: [
         CommonModule,
@@ -56,6 +59,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatSelectModule,
         MatDialogModule,
         MatSlideToggleModule,
+        MatTooltipModule,
     ],
 })
 export class ViewModule {}
