@@ -19,12 +19,31 @@
   margin-left: 1em;
 }
 
+#table{
+  width: 100%
+}
+
+.mat-column-name{
+  width: 20vw;
+  text-align: left;
+}
+
+.mat-column-unit{
+  width: 15vw;
+  text-align: center;
+}
+
+.mat-column-value{
+  width: 65vw;
+  text-align: center;
+}
+
 .mat-raised-button {
   margin: 0 0.5em;
   padding: 0 0.5em;
 }
 
-.form-field {
-  max-width: 50%;
-  text-align: center;
+::ng-deep .mat-form-field-underline {
+  display: none;
 }
+
