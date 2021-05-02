@@ -1,4 +1,4 @@
-import { ValidatorFn } from '@angular/forms';
+import { ValidatorFn, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
 
 export class ImageDataValidators {
@@ -19,23 +19,13 @@ export class ImageDataValidators {
 
     static min(min: number): ValidatorFn {
         return (control) => {
-            const val = control.value;
-            if (val && Number(val) < min) {
-                return { message: `Value is too small. Minimal value: ${min}` };
-            } else {
-                return null;
-            }
+            return Validators.min(min)(control) ? { message: `Value is too small. Minimal value: ${min}` } : null;
         };
     }
 
     static max(max: number): ValidatorFn {
         return (control) => {
-            const val = control.value;
-            if (val && Number(val) > max) {
-                return { message: `Value is too big. Maximal value: ${max}` };
-            } else {
-                return null;
-            }
+            return Validators.max(max)(control) ? { message: `Value is too big. Maximal value: ${max}` } : null;
         };
     }
 
@@ -45,12 +35,9 @@ export class ImageDataValidators {
 
     static maxChars(max: number): ValidatorFn {
         return (control) => {
-            const val = control.value;
-            if (val && val.length > max) {
-                return { message: `String is too long. Maximum amount of characters: ${max}` };
-            } else {
-                return null;
-            }
+            return Validators.maxLength(max)(control)
+                ? { message: `String is too long. Maximum amount of characters: ${max}` }
+                : null;
         };
     }
 }
