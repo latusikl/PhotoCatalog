@@ -1,10 +1,10 @@
 <div class="content" *ngIf="isExifData()">
-    <div class="edition-header">
+    <div class="edit-table-header">
         <h2 id="edition-title">Informations</h2>
         <button *ngIf="isEditable" mat-raised-button color="primary" (click)="saveChanges()" [disabled]="areAllFormValuesValid()">
             Save
         </button>
-        <button mat-raised-button color="primary" (click)="editMode()">
+        <button mat-raised-button color="primary" (click)="switchEditMode()">
             <mat-icon>edit</mat-icon>
         </button>
     </div>
@@ -20,11 +20,22 @@
         <ng-container matColumnDef="value">
             <th mat-header-cell *matHeaderCellDef>Value</th>
             <td mat-cell *matCellDef="let element">
-                <mat-form-field class="form-field">
-                    <input matInput [type]="element.inputType" [formControl]="element.formControl" [readonly]="!isEditable"
+
+                <mat-form-field class="form-field" *ngIf="isDateTimeField(element.inputType)">
+                    <input matInput [ngxMatDatetimePicker]="picker" [formControl]="element.formControl">
+                    <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker #picker [showSeconds]=true>
+                        <ng-template>
+                            <span>OK</span>
+                        </ng-template>
+                    </ngx-mat-datetime-picker>
+                </mat-form-field>
+
+                <mat-form-field class="form-field" *ngIf="!isDateTimeField(element.inputType)">
+                    <input matInput [type]="element.inputType" [formControl]="element.formControl"
                            [step]="element.step ? element.step : ''">
                 </mat-form-field>
-                <mat-error *ngIf="isEditable && !element.formControl.valid"
+                <mat-error *ngIf="isEditable && !element.formControl.valid && element.formControl.errors['message']"
                            [textContent]="element.formControl.errors['message']"></mat-error>
             </td>
         </ng-container>

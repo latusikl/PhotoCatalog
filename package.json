@@ -50,6 +50,7 @@
   "main": "./deployment/build/electron/src/electron.prod.js",
   "private": true,
   "dependencies": {
+    "@angular-material-components/datetime-picker": "^5.1.0",
     "@angular/animations": "^11.2.11",
     "@angular/cdk": "^11.2.10",
     "@angular/common": "^11.2.11",

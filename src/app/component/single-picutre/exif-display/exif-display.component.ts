@@ -1,6 +1,6 @@
 import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ImageDataFacade } from '../../../model/ImageDataFacade';
-import { EditableImageDataProperty } from '../../../model/EditableImageDataProperty';
+import { EditableImageDataProperty, InputType } from '../../../model/EditableImageDataProperty';
 import { ImageService } from '../../../service/image.service';
 import { Subscription } from 'rxjs';
 import { ExifModificationResult } from '../../../model/ExifModificationResult';
@@ -22,12 +22,22 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     @Input() set imageDataFacade(imageDataFacade: ImageDataFacade | undefined) {
         this._imageDataFacade = imageDataFacade;
         if (imageDataFacade) {
+            console.log(imageDataFacade);
             this.tableData = imageDataFacade.imageDataValues;
+            this.setFormControlsToNonEditable();
         }
     }
 
     get imageDataFacade(): ImageDataFacade | undefined {
         return this._imageDataFacade;
+    }
+
+    private setFormControlsToNonEditable(): void {
+        this.tableData.forEach((value) => value.formControl.disable());
+    }
+
+    private setFormControlsToEditable(): void {
+        this.tableData.forEach((value) => value.formControl.enable());
     }
 
     displayedColumns: string[] = ['name', 'value', 'unit'];
@@ -61,8 +71,9 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
         return !!this.imageDataFacade?.imageDataValues;
     }
 
-    editMode(): void {
+    switchEditMode(): void {
         this.isEditable = !this.isEditable;
+        this.isEditable ? this.setFormControlsToEditable() : this.setFormControlsToNonEditable();
     }
 
     saveChanges(): void {
@@ -85,5 +96,9 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.modificationSubscription.unsubscribe();
+    }
+
+    isDateTimeField(inputType: InputType) {
+        return inputType === 'datetime-local' || inputType === 'datetime';
     }
 }

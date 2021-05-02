@@ -26,6 +26,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { SettingsComponent } from '../components/settings/settings.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
 @NgModule({
     declarations: [
@@ -60,6 +61,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatDividerModule,
         MatDialogModule,
         MatSlideToggleModule,
+        NgxMatDatetimePickerModule,
+        NgxMatNativeDateModule,
     ],
 })
 export class ViewModule {}

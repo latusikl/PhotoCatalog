@@ -133,6 +133,6 @@ export class ImageDataFacade {
     }
 
     private static extractDateForInput(date: Date | null): string {
-        return date && !isNaN(date.getTime()) ? dayjs(date).format('YYYY-MM-DDThh:mm') : '';
+        return date && !isNaN(date.getTime()) ? dayjs(date).format('YYYY-MM-DDThh:mm:ss') : '';
     }
 }

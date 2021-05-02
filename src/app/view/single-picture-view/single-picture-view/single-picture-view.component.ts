@@ -61,7 +61,6 @@ export class SinglePictureViewComponent implements OnInit, OnDestroy {
                         this.imageDataFacade = new ImageDataFacade(
                             new ImageData(value.name, value.path, value.exifData),
                         );
-                        console.log(value);
                         this.shouldDisplayImgView = true;
                     } else {
                         this.snackBarService.displaySnackBar(
