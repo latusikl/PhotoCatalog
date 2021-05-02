@@ -17,16 +17,16 @@ export class ImgDataHandlers {
                 this.window.webContents.send(IpcEvents.ToRendered.IMG_FOUND, []);
                 return;
             }
-            fs.readdir(dir, (err, fileNames) => {
-                if (!!err) {
-                    console.error(err);
-                }
-                const imgsData = fileNames
-                    .map((name) => path.join(dir, name))
-                    .filter((name) => this.isThisFileImage(name))
-                    .map((name) => this.mapToImageData(name));
-                this.window.webContents.send(IpcEvents.ToRendered.IMG_FOUND, imgsData);
-            });
+            fs.promises
+                .readdir(dir)
+                .then((fileNames) => {
+                    const imgsData = fileNames
+                        .map((name) => path.join(dir, name))
+                        .filter((name) => this.isThisFileImage(name))
+                        .map((name) => this.mapToImageData(name));
+                    this.window.webContents.send(IpcEvents.ToRendered.IMG_FOUND, imgsData);
+                })
+                .catch((error) => console.error(error));
         });
     }
 
@@ -96,7 +96,7 @@ export class ImgDataHandlers {
         this.window.webContents.send(IpcEvents.ToRendered.MODIFY_EXIF_RESULT, response);
     }
 
-    getDataFromSingleFile() {
+    getDataFromSingleFile(): void {
         ipcMain.on(IpcEvents.ToMain.SELECT_IMG, async () => {
             const result = await dialog.showOpenDialog(this.window, {
                 properties: ['openFile'],
