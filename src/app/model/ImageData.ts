@@ -15,7 +15,7 @@ export class ImageData implements ImageDataContract {
     // eslint-disable-next-line
     private getGpsAttribute(gpsTag: GpsTag): any {
         const gpsData = this.exifData?.GPS;
-        return gpsData ? gpsData[TagValues.GPSIFD[gpsTag]] : null;
+        return gpsData?.[TagValues.GPSIFD[gpsTag]] ?? null;
     }
 
     // eslint-disable-next-line
@@ -43,7 +43,7 @@ export class ImageData implements ImageDataContract {
     // eslint-disable-next-line
     private getImageAttribute1(exifTag: ImageTag): any {
         const imageData = this.exifData?.['1st'];
-        return imageData ? imageData[TagValues.ImageIFD[exifTag]] : null;
+        return imageData?.[TagValues.ImageIFD[exifTag]] ?? null;
     }
 
     // eslint-disable-next-line
@@ -57,7 +57,7 @@ export class ImageData implements ImageDataContract {
     // eslint-disable-next-line
     private getExifAttribute(exifTag: ExifTag): any {
         const exifData = this.exifData?.Exif;
-        return exifData ? exifData[TagValues.ExifIFD[exifTag]] : null;
+        return exifData?.[TagValues.ExifIFD[exifTag]] ?? null;
     }
 
     // eslint-disable-next-line
