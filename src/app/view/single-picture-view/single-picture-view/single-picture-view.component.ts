@@ -1,4 +1,4 @@
-import { Component, HostBinding, NgZone, OnInit } from '@angular/core';
+import { Component, HostBinding, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ImageData } from 'src/app/model/ImageData';
 import { ImageDataContract } from '../../../model/ImageDataContract';
@@ -6,15 +6,17 @@ import { ImageDataFacade } from '../../../model/ImageDataFacade';
 import { DirectoryService } from '../../../service/directory.service';
 import { SnackBarService } from '../../../service/snack-bar.service';
 import { SnackBarType } from '../../../component/single-picutre/snack-bar/snack-bar.component';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-single-picture-view',
     templateUrl: './single-picture-view.component.html',
     styleUrls: ['./single-picture-view.component.scss'],
 })
-export class SinglePictureViewComponent implements OnInit {
+export class SinglePictureViewComponent implements OnInit, OnDestroy {
     imageDataFacade?: ImageDataFacade;
     shouldDisplayImgView = false;
+    private singlePictureChoiceSubscription = Subscription.EMPTY;
 
     @HostBinding('class')
     class = 'view';
@@ -47,11 +49,12 @@ export class SinglePictureViewComponent implements OnInit {
         } else {
             this.imageDataFacade = undefined;
         }
+
+        this.singlePictureChoiceSubscription = this.setupSinglePictureSubscription();
     }
 
-    chooseSinglePicture(): void {
-        this.directoryService.callForSingleImageChoice();
-        this.directoryService.chosenFile.subscribe({
+    private setupSinglePictureSubscription(): Subscription {
+        return this.directoryService.chosenFile.subscribe({
             next: (value: ImageDataContract | null) => {
                 this.ngZone.run(() => {
                     if (value) {
@@ -74,7 +77,15 @@ export class SinglePictureViewComponent implements OnInit {
         });
     }
 
+    chooseSinglePicture(): void {
+        this.directoryService.callForSingleImageChoice();
+    }
+
     getImgPath(): string {
         return this.imageDataFacade ? this.imageDataFacade.imageData.path : '';
+    }
+
+    ngOnDestroy(): void {
+        this.singlePictureChoiceSubscription.unsubscribe();
     }
 }
