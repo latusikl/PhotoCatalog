@@ -16,6 +16,8 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     constructor(private imageService: ImageService, private ngZone: NgZone, private snackBarService: SnackBarService) {}
 
     tableData: EditableImageDataProperty<string | number | Date | null>[] = [];
+    displayedColumns: string[] = ['name', 'value', 'unit'];
+    isEditable = false;
     private _imageDataFacade?: ImageDataFacade;
     private modificationSubscription = Subscription.EMPTY;
 
@@ -32,17 +34,6 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
         return this._imageDataFacade;
     }
 
-    private setFormControlsToNonEditable(): void {
-        this.tableData.forEach((value) => value.formControl.disable());
-    }
-
-    private setFormControlsToEditable(): void {
-        this.tableData.forEach((value) => value.formControl.enable());
-    }
-
-    displayedColumns: string[] = ['name', 'value', 'unit'];
-    isEditable = false;
-
     ngOnInit(): void {
         this.modificationSubscription = this.imageService.modificationResponse.subscribe({
             next: (data: ExifModificationResult | null) => {
@@ -53,6 +44,14 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
                 }
             },
         });
+    }
+
+    private setFormControlsToNonEditable(): void {
+        this.tableData.forEach((value) => value.formControl.disable());
+    }
+
+    private setFormControlsToEditable(): void {
+        this.tableData.forEach((value) => value.formControl.enable());
     }
 
     private mapModyficationResultsToSnackBar(data: ExifModificationResult): SnackBarData {
