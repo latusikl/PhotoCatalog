@@ -88,9 +88,7 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     }
 
     areAllFormValuesValid(): boolean {
-        return !this.imageDataFacade
-            ? false
-            : !!this.imageDataFacade.imageDataValues.find((imgDataValue) => imgDataValue.formControl.valid === false);
+        return !!this.imageDataFacade?.imageDataValues.find((imgDataValue) => imgDataValue.formControl.valid === false);
     }
 
     ngOnDestroy(): void {
