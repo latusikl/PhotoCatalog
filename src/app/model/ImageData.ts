@@ -19,7 +19,7 @@ export class ImageData implements ImageDataContract {
     }
 
     // eslint-disable-next-line
-    private setGpsAttribute(gpsTag: GpsTag, value: any) {
+    private setGpsAttribute(gpsTag: GpsTag, value: any): void {
         const gpsData = this.exifData?.GPS;
         if (gpsData) {
             gpsData[TagValues.GPSIFD[gpsTag]] = value;
@@ -33,7 +33,7 @@ export class ImageData implements ImageDataContract {
     }
 
     // eslint-disable-next-line
-    private setImageAttribute0(imageTag: ImageTag, value: any) {
+    private setImageAttribute0(imageTag: ImageTag, value: any): void {
         const imageData = this.exifData?.['0th'];
         if (imageData) {
             imageData[TagValues.ImageIFD[imageTag]] = value;
@@ -47,7 +47,7 @@ export class ImageData implements ImageDataContract {
     }
 
     // eslint-disable-next-line
-    private setImageAttribute1(imageTag: ImageTag, value: any) {
+    private setImageAttribute1(imageTag: ImageTag, value: any): void {
         const imageData = this.exifData?.['1st'];
         if (imageData) {
             imageData[TagValues.ImageIFD[imageTag]] = value;
@@ -73,13 +73,13 @@ export class ImageData implements ImageDataContract {
         return spec ? (spec[0] / spec[1]).toString() : null;
     }
 
-    private setExifRealValue(value: string | null, exifTag: ExifTag) {
+    private setExifRealValue(value: string | null, exifTag: ExifTag): void {
         value
             ? this.setExifAttribute(exifTag, this.toIrreducibleOrdinaryFraction(value))
             : this.setExifAttribute(exifTag, null);
     }
 
-    private toIrreducibleOrdinaryFraction(value: string) {
+    private toIrreducibleOrdinaryFraction(value: string): [number, number] {
         const exponent = value.indexOf('.') !== -1 ? value.trim().split('.')[1].length : value.length;
         const denominator = Math.pow(10, exponent);
         const numerator = Math.floor(Number(value) * denominator);
@@ -136,7 +136,7 @@ export class ImageData implements ImageDataContract {
 
     get pixelXDimension(): number | null {
         const value = this.getExifAttribute('PixelXDimension');
-        return value ? value : null;
+        return value ?? null;
     }
 
     set pixelXDimension(pixelXDimension: number | null) {
@@ -145,7 +145,7 @@ export class ImageData implements ImageDataContract {
 
     get pixelYDimension(): number | null {
         const value = this.getExifAttribute('PixelYDimension');
-        return value ? value : null;
+        return value ?? null;
     }
 
     set pixelYDimension(pixelYDimension: number | null) {
@@ -154,7 +154,7 @@ export class ImageData implements ImageDataContract {
 
     get isoSpeedRatings(): number | null {
         const value = this.getExifAttribute('ISOSpeedRatings');
-        return value ? value : null;
+        return value ?? null;
     }
 
     set isoSpeedRatings(isoSpeedRatings: number | null) {
@@ -190,7 +190,7 @@ export class ImageData implements ImageDataContract {
 
     get imageOrientation(): number | null {
         const value = this.getImageAttribute1('Orientation');
-        return value ? value : null;
+        return value ?? null;
     }
 
     set imageOrientation(orientation: number | null) {
