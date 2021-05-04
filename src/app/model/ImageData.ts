@@ -34,9 +34,11 @@ export class ImageData implements ImageDataContract {
 
     // eslint-disable-next-line
     private setImageAttribute0(imageTag: ImageTag, value: any): void {
-        const imageData = this.exifData?.['0th'];
-        if (imageData) {
-            imageData[TagValues.ImageIFD[imageTag]] = value;
+        if (this.exifData) {
+            const imageData = (this.exifData['0th'] = this.exifData['0th'] ?? {});
+            if (imageData) {
+                imageData[TagValues.ImageIFD[imageTag]] = value;
+            }
         }
     }
 
@@ -48,9 +50,11 @@ export class ImageData implements ImageDataContract {
 
     // eslint-disable-next-line
     private setImageAttribute1(imageTag: ImageTag, value: any): void {
-        const imageData = this.exifData?.['1st'];
-        if (imageData) {
-            imageData[TagValues.ImageIFD[imageTag]] = value;
+        if (this.exifData) {
+            const imageData = (this.exifData['1st'] = this.exifData['1st'] ?? {});
+            if (imageData) {
+                imageData[TagValues.ImageIFD[imageTag]] = value;
+            }
         }
     }
 
@@ -62,9 +66,11 @@ export class ImageData implements ImageDataContract {
 
     // eslint-disable-next-line
     private setExifAttribute(exifTag: ExifTag, value: any): void {
-        const exif = this.exifData?.Exif;
-        if (exif) {
-            exif[TagValues.ExifIFD[exifTag]] = value;
+        if (this.exifData) {
+            const exif = (this.exifData.Exif = this.exifData.Exif ?? {});
+            if (exif) {
+                exif[TagValues.ExifIFD[exifTag]] = value;
+            }
         }
     }
 
