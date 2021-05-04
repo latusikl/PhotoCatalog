@@ -236,4 +236,8 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     clearRes(): void {
         this.criteriaForm.controls.resolution.setValue(null);
     }
+
+    clearAllCriteria(): void {
+        this.criteriaForm.reset();
+    }
 }

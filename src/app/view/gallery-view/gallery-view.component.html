@@ -1,6 +1,14 @@
 <div class="content">
     <mat-card id="search-criteria">
-        <mat-card-subtitle>Filter images</mat-card-subtitle>
+        <mat-card-subtitle>
+            Filter images
+            <div>
+                <mat-label> Clear all </mat-label>
+                <button id="clear-all-button" mat-icon-button color="accent" (click)="clearAllCriteria()">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </div>
+        </mat-card-subtitle>
         <mat-card-content>
             <form [formGroup]="criteriaForm" class="flex-container">
                 <div class="flex-row row-wrap">
@@ -36,6 +44,8 @@
                         <button
                             mat-icon-button
                             color="accent"
+                            #tooltip="matTooltip"
+                            matTooltip="Clear resolution setting"
                             [disabled]="!criteriaForm.controls.resolution.value"
                             (click)="clearRes()"
                         >
