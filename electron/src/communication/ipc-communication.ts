@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, shell } from 'electron';
 import { IpcRegister } from './ipc-register';
 import { ImgDataHandlers } from './img-data-handlers';
 import { SystemDialogHandlers } from './system-dialog-handlers';
@@ -16,6 +16,10 @@ export class IpcCommunication implements IpcRegister {
         this.imgDataHandlers = new ImgDataHandlers(window);
         this.systemDialogHandlers = new SystemDialogHandlers(window);
         this.settingsHandlers = new SettingsHandlers(window);
+        window.webContents.on('new-window', (e, url) => {
+            e.preventDefault();
+            shell.openExternal(url);
+        });
     }
 
     registerIpcHandlers(): void {
