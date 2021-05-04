@@ -8,7 +8,7 @@ entirely in Typescript.
 ### Basic function of Application:
 
 <details>
-<summary>Display images from directory in Gallery view and filter.</summary>
+<summary>Display and filter images from directory in Gallery view.</summary>
 
 You can filter images by:
 
@@ -79,6 +79,6 @@ Configuration of application can be found in these files:
 1. Used for development:
    `electron/src/electron.prod.ts`
 
-Registration of actions related to events exchanged between main and renderer process have to be specified
+Registration of actions related to events exchanged between main and renderer processes have to be specified
 in: `electron/src/communication/ipc-communication.ts`. Additionally, events names have to be specified
 in: `electron/src/communication/ipc-events.ts` for clarity of code.
