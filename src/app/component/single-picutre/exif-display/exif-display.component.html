@@ -22,7 +22,7 @@
             <th mat-header-cell *matHeaderCellDef>Value</th>
             <td mat-cell *matCellDef="let element">
 
-                <mat-form-field *ngIf="isDateTimeField(element.inputType)">
+                <mat-form-field class="mat-from-width" *ngIf="isDateTimeField(element.inputType)">
                     <input matInput [ngxMatDatetimePicker]="picker" [formControl]="element.formControl">
                     <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
                     <ngx-mat-datetime-picker #picker [showSeconds]=true>
@@ -32,7 +32,7 @@
                     </ngx-mat-datetime-picker>
                 </mat-form-field>
 
-                <mat-form-field *ngIf="!isDateTimeField(element.inputType)">
+                <mat-form-field class="mat-from-width" *ngIf="!isDateTimeField(element.inputType)">
                     <input matInput [type]="element.inputType" [formControl]="element.formControl"
                            [step]="element.step ? element.step : ''">
                 </mat-form-field>
