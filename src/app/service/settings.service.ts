@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { BehaviorSubject } from 'rxjs';
-import IpcEvents from '../../../electron/src/ipc-events';
+import IpcEvents from '../../../electron/src/communication/ipc-events';
 import { Settings } from '../model/Settings';
 
 @Injectable({

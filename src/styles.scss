@@ -4,6 +4,7 @@ html,
 body {
     height: 100%;
 }
+
 body {
     margin: 0;
     font-family: Roboto, 'Helvetica Neue', sans-serif;
@@ -53,4 +54,12 @@ body {
 
 .full-height {
     height: 100%;
+}
+
+.green-snackbar {
+    background: rgba(0, 252, 42, 0.7) !important;
+}
+
+.red-snackbar {
+    background: rgba(255, 51, 0, 0.7) !important;
 }
