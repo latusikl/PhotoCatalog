@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ElectronService } from 'ngx-electron';
 import { AppComponent } from './app.component';
@@ -8,7 +9,7 @@ describe('AppComponent', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             providers: [DirectoryService, ElectronService],
-            imports: [RouterTestingModule],
+            imports: [RouterTestingModule, MatDialogModule],
             declarations: [AppComponent],
         }).compileComponents();
     });
