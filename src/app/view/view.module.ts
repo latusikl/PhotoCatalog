@@ -21,9 +21,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { MatDividerModule } from '@angular/material/divider';
 import { SettingsComponent } from '../components/settings/settings.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+import { HomeViewComponent } from './home-view/home-view.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -34,6 +39,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         IssueDisplayComponent,
         ExifDisplayComponent,
         SettingsComponent,
+        HomeViewComponent,
     ],
     imports: [
         CommonModule,
@@ -54,8 +60,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatSliderModule,
         MatRadioModule,
         MatSelectModule,
+        MatTableModule,
+        MatDividerModule,
         MatDialogModule,
         MatSlideToggleModule,
+        NgxMatDatetimePickerModule,
+        NgxMatNativeDateModule,
+        MatTooltipModule,
     ],
 })
 export class ViewModule {}

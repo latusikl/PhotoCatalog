@@ -13,9 +13,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ViewModule } from './view/view.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { SnackBarComponent } from './component/single-picutre/snack-bar/snack-bar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [AppComponent, SnackBarComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -29,6 +31,7 @@ import { MatDialogModule } from '@angular/material/dialog';
         ViewModule,
         MatButtonModule,
         MatDialogModule,
+        MatSnackBarModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

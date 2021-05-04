@@ -1,3 +1,56 @@
-<div class="content">
-    <span>Exif display works!</span>
+<div class="content" *ngIf="isExifData()">
+    <div class="edit-table-header">
+        <h2 id="edition-title">Informations</h2>
+        <button *ngIf="isEditable" mat-raised-button color="primary" (click)="saveChanges()" [disabled]="areAllFormValuesValid()">
+            Save
+        </button>
+        <button mat-raised-button color="primary" (click)="switchEditMode()">
+            <mat-icon>edit</mat-icon>
+        </button>
+    </div>
+    <div>
+        <mat-divider></mat-divider>
+    </div>
+    <table id="table" mat-table [dataSource]="tableData">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name</th>
+            <td mat-cell *matCellDef="let element"><b>{{element.propertyName ? element.propertyName : 'Unknown'}} </b></td>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+            <th mat-header-cell *matHeaderCellDef>Value</th>
+            <td mat-cell *matCellDef="let element">
+
+                <mat-form-field *ngIf="isDateTimeField(element.inputType)">
+                    <input matInput [ngxMatDatetimePicker]="picker" [formControl]="element.formControl">
+                    <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker #picker [showSeconds]=true>
+                        <ng-template>
+                            <span>OK</span>
+                        </ng-template>
+                    </ngx-mat-datetime-picker>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="!isDateTimeField(element.inputType)">
+                    <input matInput [type]="element.inputType" [formControl]="element.formControl"
+                           [step]="element.step ? element.step : ''">
+                </mat-form-field>
+                <mat-error *ngIf="isEditable && !element.formControl.valid && element.formControl.errors['message']"
+                           [textContent]="element.formControl.errors['message']"></mat-error>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="unit">
+            <th mat-header-cell *matHeaderCellDef>Unit</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.unit ? element.unit : '' }}
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 </div>
+<app-issue-display type="huston" *ngIf="!isExifData()">
+    No EXIF data found for picture.
+</app-issue-display>

@@ -29,7 +29,7 @@ function spawnAngularProcess(): ChildProcess {
 }
 
 function spawnElectronProcess(): ChildProcess {
-    return spawn(npmCommand(), ['run', 'electron-dev'], {
+    return spawn(npmCommand(), ['run', 'nodemon'], {
         cwd: process.cwd(),
         shell: true,
     });

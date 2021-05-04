@@ -4,11 +4,12 @@ html,
 body {
     height: 100%;
 }
+
 body {
     margin: 0;
     font-family: Roboto, 'Helvetica Neue', sans-serif;
-    min-width: 495px; // workaround for unnecessary y-axis scroll on minmimal electron width (should be 500)
-    min-height: 600px;
+    min-width: 500px;
+    min-height: 480px;
 }
 
 .view {
@@ -55,3 +56,10 @@ body {
     height: 100%;
 }
 
+.green-snackbar {
+    background: rgba(0, 252, 42, 0.7) !important;
+}
+
+.red-snackbar {
+    background: rgba(255, 51, 0, 0.7) !important;
+}

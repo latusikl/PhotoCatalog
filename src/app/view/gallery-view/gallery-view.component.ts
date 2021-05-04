@@ -148,7 +148,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
             !!minFocalLength &&
             !this.checkIfPassed(
                 img.focalLength,
-                img.focalLength ? img.focalLength >= minFocalLength : false,
+                img.focalLength ? Number(img.focalLength) >= minFocalLength : false,
                 allowEmptyData,
             )
         ) {
@@ -157,7 +157,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
         if (
             !!minFNumber &&
-            !this.checkIfPassed(img.fNumber, img.fNumber ? img.fNumber >= minFNumber : false, allowEmptyData)
+            !this.checkIfPassed(img.fNumber, img.fNumber ? Number(img.fNumber) >= minFNumber : false, allowEmptyData)
         ) {
             return false;
         }
@@ -177,7 +177,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
             if (
                 !this.checkIfPassed(
                     img.exposureTime,
-                    img.exposureTime ? img.exposureTime >= minExposureTime : false,
+                    img.exposureTime ? Number(img.exposureTime) >= minExposureTime : false,
                     allowEmptyData,
                 )
             ) {
@@ -235,5 +235,9 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
     clearRes(): void {
         this.criteriaForm.controls.resolution.setValue(null);
+    }
+
+    clearAllCriteria(): void {
+        this.criteriaForm.reset();
     }
 }
