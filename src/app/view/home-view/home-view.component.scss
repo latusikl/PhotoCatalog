@@ -1,0 +1,45 @@
+$app-primary: #445963;
+$title-part2-color: #9e9e9e;
+
+#title-part-2 {
+    color: $title-part2-color;
+}
+
+#home-img {
+    width: 400px;
+    margin-left: 3em;
+    display: flex;
+}
+
+#main-container {
+    height: 100%;
+}
+
+#home-container {
+    display: flex;
+    padding: 3em;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-wrap: wrap;
+}
+
+#img-container {
+    display: flex;
+}
+
+#jumbotron {
+    h1 {
+        font-size: 3rem;
+        font-weight: 100;
+    }
+
+    h3 {
+        margin: .2em;
+    }
+    
+    hr {
+        border: 1px solid $app-primary;
+        width: 100%;
+    }
+}

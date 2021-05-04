@@ -27,6 +27,8 @@ import { SettingsComponent } from '../components/settings/settings.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+import { HomeViewComponent } from './home-view/home-view.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -37,6 +39,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-mat
         IssueDisplayComponent,
         ExifDisplayComponent,
         SettingsComponent,
+        HomeViewComponent,
     ],
     imports: [
         CommonModule,
@@ -63,6 +66,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-mat
         MatSlideToggleModule,
         NgxMatDatetimePickerModule,
         NgxMatNativeDateModule,
+        MatTooltipModule,
     ],
 })
 export class ViewModule {}

@@ -22,6 +22,7 @@ function createWindow(): void {
     window.loadURL('http://localhost:4200');
 
     window.webContents.openDevTools();
+    // window.removeMenu(); // uncomment to test responsiveness - menu breaks height calculations and limits
 
     window.on('closed', () => {
         window = null;
