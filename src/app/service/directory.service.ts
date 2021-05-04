@@ -3,13 +3,14 @@ import { ElectronService } from 'ngx-electron';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import IpcEvents from '../../../electron/src/communication/ipc-events';
 import { ImageData } from '../model/ImageData';
+import { ImageDataContract } from '../model/ImageDataContract';
 
 @Injectable({
     providedIn: 'root',
 })
 export class DirectoryService {
     currentDirectory = new BehaviorSubject<string>('');
-    chosenFile = new ReplaySubject<ImageData | null>();
+    chosenFile = new ReplaySubject<ImageDataContract | null>();
 
     constructor(private electronService: ElectronService) {
         this.electronService.ipcRenderer?.on(IpcEvents.ToRendered.DIR_SELECTED, (ev, dir: string) => {

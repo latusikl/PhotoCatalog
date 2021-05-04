@@ -42,14 +42,11 @@ export class SinglePictureViewComponent implements OnInit, OnDestroy {
         const passedData: unknown = this.location.getState().imgData;
 
         if (this.isImageDataContract(passedData)) {
-            this.imageDataFacade = new ImageDataFacade(
-                new ImageData(passedData.name, passedData.path, passedData.exifData),
-            );
+            this.directoryService.chosenFile.next(passedData);
             this.shouldDisplayImgView = true;
         } else {
             this.imageDataFacade = undefined;
         }
-
         this.singlePictureChoiceSubscription = this.setupSinglePictureSubscription();
     }
 
