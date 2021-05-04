@@ -2,7 +2,8 @@ import { ChildProcess, spawn } from 'child_process';
 import { EventEmitter } from 'events';
 import { Transform, TransformCallback } from 'stream';
 import * as builder from 'electron-builder';
-import * as fs from 'fs';
+import path from 'path';
+import fs from 'fs';
 
 const ANGULAR_READY = 'angular-ready';
 const DEPLOYMENT_DIR = 'deployment';
@@ -86,6 +87,7 @@ function runElectronBuilder(): void {
                 appId: 'pl.photo.catalog',
                 productName: 'Photo Catalog',
                 copyright: 'Apache-2.0 License',
+                icon: path.join(__dirname, '..', 'src', 'assets', 'icon.png'),
                 mac: {
                     target: 'dmg',
                 },

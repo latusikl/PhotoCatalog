@@ -12,6 +12,8 @@ export type ImageTag = keyof typeof TagValues.ImageIFD;
 export class ImageData implements ImageDataContract {
     constructor(public name: string, public path: string, public exifData?: IExif) {}
 
+    private readonly FRACTION_NUMBERS = 4;
+
     // eslint-disable-next-line
     private getGpsAttribute(gpsTag: GpsTag): any {
         const gpsData = this.exifData?.GPS;
@@ -70,7 +72,7 @@ export class ImageData implements ImageDataContract {
 
     private getExifRealValue(exifTag: ExifTag): string | null {
         const spec = this.getExifAttribute(exifTag);
-        return spec ? (spec[0] / spec[1]).toString() : null;
+        return spec ? (spec[0] / spec[1]).toFixed(this.FRACTION_NUMBERS) : null;
     }
 
     private setExifRealValue(value: string | null, exifTag: ExifTag): void {

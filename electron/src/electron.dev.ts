@@ -10,7 +10,6 @@ function createWindow(): void {
         height: ElectronConstants.WINDOW_HEIGHT,
         minWidth: ElectronConstants.MIN_WINDOW_WIDTH,
         minHeight: ElectronConstants.MIN_WINDOW_HEIGHT,
-        icon: ElectronConstants.ICON_SOURCE_DEV,
         useContentSize: true,
         webPreferences: {
             nodeIntegration: true,

@@ -20,7 +20,7 @@ export class ImageDataFacade {
             {
                 inputType: 'number',
                 propertyName: 'Focal length',
-                step: 0.01,
+                step: 0.0001,
                 unit: 'mm',
                 setter: (value) => (this.imageData.focalLength = value as string),
                 formControl: new FormControl(this.imageData.focalLength, [ImageDataValidators.nonNegative]),
@@ -28,14 +28,14 @@ export class ImageDataFacade {
             {
                 inputType: 'number',
                 propertyName: 'F number',
-                step: 0.01,
+                step: 0.0001,
                 setter: (value) => (this.imageData.focalLength = value as string),
                 formControl: new FormControl(this.imageData.fNumber, [ImageDataValidators.nonNegative]),
             },
             {
                 inputType: 'number',
                 propertyName: 'Exposure time',
-                step: 0.01,
+                step: 0.0001,
                 setter: (value) => (this.imageData.focalLength = value as string),
                 formControl: new FormControl(this.imageData.exposureTime, [ImageDataValidators.nonNegative]),
             },

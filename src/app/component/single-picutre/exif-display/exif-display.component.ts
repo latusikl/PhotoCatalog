@@ -24,7 +24,6 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     @Input() set imageDataFacade(imageDataFacade: ImageDataFacade | undefined) {
         this._imageDataFacade = imageDataFacade;
         if (imageDataFacade) {
-            console.log(imageDataFacade);
             this.tableData = imageDataFacade.imageDataValues;
             this.setFormControlsToNonEditable();
         }

@@ -1,30 +1,29 @@
 .content {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: stretch;
-  justify-content: flex-start;
-  overflow: hidden;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    overflow: hidden;
 }
 
 
 .img-container {
-  margin: 0.5em;
-  max-height: 35%;
-  min-height: 25%;
-  text-align: center;
+    margin: 0.5em;
+    max-height: 35%;
+    min-height: 25%;
+    text-align: center;
 }
 
 img {
-  max-width: 98%;
-  max-height: 98%;
+    max-width: 98%;
+    max-height: 98%;
 }
 
 .exif-table {
-  margin: 0.5em 0;
-  overflow-y: scroll;
-  background: green;
+    margin: 0.5em 0;
+    overflow-y: scroll;
 }
 
 
