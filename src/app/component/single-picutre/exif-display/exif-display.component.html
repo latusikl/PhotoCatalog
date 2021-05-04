@@ -1,6 +1,6 @@
 <div class="content" *ngIf="isExifData()">
     <div class="edit-table-header">
-        <h2 id="edition-title">Informations</h2>
+        <h2 id="edit-title">Informations</h2>
         <button mat-raised-button color="primary" (click)="saveChanges()"
                 [disabled]="!isEditable && areAllFormValuesValid()">
             Save
