@@ -57,11 +57,11 @@ export class MapComponent implements OnInit, OnDestroy {
         const image = this.imageService.imagesData.value.find((image) => {
             return image.path === markerData.imagePath;
         });
-        const pozision = marker.getPosition();
+        const position = marker.getPosition();
 
-        if (!image?.exifData?.GPS || !pozision?.toJSON()) return;
-        this.calculateExifGPSLatitude(image.exifData.GPS, pozision.toJSON());
-        this.calculateExifGPSLongitude(image.exifData.GPS, pozision.toJSON());
+        if (!image?.exifData?.GPS || !position?.toJSON()) return;
+        this.calculateExifGPSLatitude(image.exifData.GPS, position.toJSON());
+        this.calculateExifGPSLongitude(image.exifData.GPS, position.toJSON());
     }
 
     toDegreesMinutesAndSeconds(coordinate: number): [number, number, number] {
@@ -69,7 +69,7 @@ export class MapComponent implements OnInit, OnDestroy {
         const degrees = Math.floor(absolute);
         const minutesNotTruncated = (absolute - degrees) * 60;
         const minutes = Math.floor(minutesNotTruncated);
-        const seconds = Math.floor((minutesNotTruncated - minutes) * 60);
+        const seconds = (minutesNotTruncated - minutes) * 60;
 
         return [degrees, minutes, seconds];
     }
