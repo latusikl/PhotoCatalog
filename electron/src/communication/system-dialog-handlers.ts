@@ -8,7 +8,7 @@ export class SystemDialogHandlers {
         this.window = window;
     }
 
-    public addSelectDirHandler(): void {
+    addSelectDirHandler(): void {
         ipcMain.on(IpcEvents.ToMain.SELECT_DIR, async () => {
             const result = await dialog.showOpenDialog(this.window, {
                 properties: ['openDirectory'],

@@ -64,6 +64,7 @@
     "@angular/router": "^11.2.11",
     "class-transformer": "^0.4.0",
     "dayjs": "^1.10.4",
+    "electron-store": "^8.0.0",
     "image-type": "^4.1.0",
     "is-valid-path": "^0.1.1",
     "ngx-electron": "^2.2.0",

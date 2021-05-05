@@ -102,7 +102,7 @@ export class ImgDataHandlers {
                 properties: ['openFile'],
                 filters: [
                     {
-                        name: 'Only images',
+                        name: 'Only JPEG images',
                         extensions: ['jpg', 'jpeg'],
                     },
                 ],

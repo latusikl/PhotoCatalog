@@ -6,5 +6,4 @@ export default class ElectronConstants {
     static readonly MIN_WINDOW_HEIGHT = 480;
     static readonly MIN_WINDOW_WIDTH = 540;
     static readonly APP_PATH_PROD = path.join(__dirname, '..', '..', 'angular', 'index.html');
-    static readonly CONFIG_FILE = 'cfg.json';
 }
