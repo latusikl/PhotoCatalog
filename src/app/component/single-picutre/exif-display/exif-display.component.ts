@@ -16,7 +16,7 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     constructor(private imageService: ImageService, private ngZone: NgZone, private snackBarService: SnackBarService) {}
 
     tableData: EditableImageDataProperty<string | number | Date | null>[] = [];
-    displayedColumns: string[] = ['name', 'value', 'unit'];
+    displayedColumns: string[] = ['value', 'unit'];
     isEditable = false;
     private _imageDataFacade?: ImageDataFacade;
     private modificationSubscription = Subscription.EMPTY;
