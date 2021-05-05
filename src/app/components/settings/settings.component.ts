@@ -1,15 +1,18 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Settings } from 'src/app/model/Settings';
 import { SettingsService } from 'src/app/service/settings.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import isValidPath from 'is-valid-path';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-settings',
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss'],
 })
-export class SettingsComponent {
+export class SettingsComponent implements OnInit, OnDestroy {
+    private defaultDirSub = Subscription.EMPTY;
+
     settings: Settings;
     invalid = false;
 
@@ -19,7 +22,10 @@ export class SettingsComponent {
         private ngZone: NgZone,
     ) {
         this.settings = { ...this.settingsService.settings.value }; // shallow copy
-        this.settingsService.defaultDirSelection.subscribe((dir) =>
+    }
+
+    ngOnInit(): void {
+        this.defaultDirSub = this.settingsService.defaultDirSelection.subscribe((dir) =>
             this.ngZone.run(() => (this.settings.defaultDir = dir)),
         );
     }
@@ -49,5 +55,9 @@ export class SettingsComponent {
 
     selectDefaultDir(): void {
         this.settingsService.selectDefaultDir();
+    }
+
+    ngOnDestroy(): void {
+        this.defaultDirSub.unsubscribe();
     }
 }
