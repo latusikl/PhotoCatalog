@@ -25,9 +25,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.defaultDirSub = this.settingsService.defaultDirSelection.subscribe((dir) =>
-            this.ngZone.run(() => (this.settings.defaultDir = dir)),
-        );
+        this.defaultDirSub = this.settingsService.defaultDirSelection.subscribe({
+            next: (dir) => this.ngZone.run(() => (this.settings.defaultDir = dir)),
+        });
     }
 
     close(): void {
