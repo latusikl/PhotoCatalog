@@ -1,11 +1,7 @@
 <h2 mat-dialog-title>Default settings</h2>
 <mat-dialog-content class="settings-dialog flex-container">
     <div class="flex-row">
-        <mat-slide-toggle
-            [(ngModel)]="settings.darkMode"
-            (change)="darkModeChange($event.checked)"
-        >
-        </mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="settings.darkMode" (change)="darkModeChange($event.checked)"> </mat-slide-toggle>
         <div *ngIf="settings.darkMode; else lightMode">
             <mat-icon class="slider-icon">dark_mode</mat-icon>
             Dark mode
@@ -19,8 +15,22 @@
     </div>
     <mat-form-field id="gallery-dir-row" class="full-width">
         <mat-label>Default gallery directory</mat-label>
-        <input matInput [(ngModel)]="settings.defaultDir" />
+        <input matInput [disabled]="true" [(ngModel)]="settings.defaultDir" />
     </mat-form-field>
+    <div id="dir-buttons-container" class="flex-row">
+        <div>
+            <button mat-stroked-button (click)="settings.defaultDir = null">
+                <mat-icon>clear</mat-icon>
+                Clear default dir.
+            </button>
+        </div>
+        <div>
+            <button mat-stroked-button (click)="selectDefaultDir()">
+                <mat-icon>folder</mat-icon>
+                Select default dir.
+            </button>
+        </div>
+    </div>
     <mat-error *ngIf="invalid" class="flex-row"> Please correct default directory. </mat-error>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

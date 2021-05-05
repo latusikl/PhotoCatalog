@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Settings } from 'src/app/model/Settings';
 import { SettingsService } from 'src/app/service/settings.service';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -13,8 +13,15 @@ export class SettingsComponent {
     settings: Settings;
     invalid = false;
 
-    constructor(private settingsService: SettingsService, private dialogRef: MatDialogRef<SettingsComponent>) {
+    constructor(
+        private settingsService: SettingsService,
+        private dialogRef: MatDialogRef<SettingsComponent>,
+        private ngZone: NgZone,
+    ) {
         this.settings = { ...this.settingsService.settings.value }; // shallow copy
+        this.settingsService.defaultDirSelection.subscribe((dir) =>
+            this.ngZone.run(() => (this.settings.defaultDir = dir)),
+        );
     }
 
     close(): void {
@@ -38,5 +45,9 @@ export class SettingsComponent {
 
     darkModeChange(darkMode: boolean): void {
         this.settingsService.setDarkMode(darkMode);
+    }
+
+    selectDefaultDir(): void {
+        this.settingsService.selectDefaultDir();
     }
 }

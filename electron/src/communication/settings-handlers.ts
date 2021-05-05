@@ -1,28 +1,37 @@
-import { BrowserWindow, ipcMain } from 'electron';
-import IpcEvents from './ipc-events';
-import fs, { promises as fsPromises } from 'fs';
-import { deserialize } from 'class-transformer';
+import { BrowserWindow, dialog, ipcMain } from 'electron';
 import { Settings } from '../../../src/app/model/Settings';
-import path from 'path';
-import ElectronConstants from '../constants';
-
+import IpcEvents from './ipc-events';
+import Store from 'electron-store';
 export class SettingsHandlers {
-    private readonly CFG_PATH = path.join(__dirname, ElectronConstants.CONFIG_FILE);
     private window: BrowserWindow;
+    private readonly store = new Store<Settings>({
+        defaults: Settings.default(),
+    });
 
     constructor(window: Electron.BrowserWindow) {
         this.window = window;
     }
 
-    public readConfigHandler(): void {
+    addSelectDefaultDirHandler(): void {
+        ipcMain.on(IpcEvents.ToMain.SELECT_DEFAULT_DIR, async () => {
+            const result = await dialog.showOpenDialog(this.window, {
+                properties: ['openDirectory'],
+            });
+            const dir = result.filePaths[0];
+            if (!!dir) {
+                this.window.webContents.send(IpcEvents.ToRendered.DEFAULT_DIR_SELECTED, dir);
+            }
+        });
+    }
+
+    readConfigHandler(): void {
         ipcMain.on(IpcEvents.ToMain.READ_SETTINGS, async () => {
-            if (!fs.existsSync(this.CFG_PATH)) {
+            if (!this.store.size) {
                 return;
             }
             try {
-                const json = (await fsPromises.readFile(this.CFG_PATH)).toString();
-                const settings = deserialize(Settings, json);
-                this.correctSettings(settings);
+                const settings = this.store.store;
+                settings.darkMode = !!settings.darkMode;
                 this.window.webContents.send(IpcEvents.ToRendered.SETTINGS_READY, settings);
             } catch (error) {
                 console.error(error);
@@ -30,18 +39,14 @@ export class SettingsHandlers {
         });
     }
 
-    public addSaveSettingsHandler(): void {
+    addSaveSettingsHandler(): void {
         ipcMain.on(IpcEvents.ToMain.SAVE_SETTINGS, async (_ev, settings: Settings) => {
-            this.correctSettings(settings);
-            fsPromises.writeFile(this.CFG_PATH, JSON.stringify(settings), { flag: 'w' });
+            settings.darkMode = !!settings.darkMode;
+            this.store.clear();
+            this.store.set('darkMode', settings.darkMode);
+            if (!!settings.defaultDir) {
+                this.store.set('defaultDir', settings.defaultDir);
+            }
         });
-    }
-
-    private correctSettings(settings: Settings): void {
-        // clear default path if invalid
-        settings.darkMode = !!settings.darkMode;
-        if (!!settings.defaultDir && !fs.existsSync(settings.defaultDir)) {
-            settings.defaultDir = null;
-        }
     }
 }
