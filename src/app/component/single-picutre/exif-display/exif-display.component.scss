@@ -1,3 +1,5 @@
+$columns-height: 4.5em;
+
 .content {
     width: 100%;
     height: 100%;
@@ -21,19 +23,18 @@
 
 #table {
     width: 50em;
+    height: 100%;
     margin: 0 auto;
 }
 
-.mat-column-name {
-    width: 20vw;
-}
-
 .mat-column-unit {
-    width: 15vw;
+    width: 25vw;
+    height: $columns-height;
 }
 
 .mat-column-value {
-    width: 65vw;
+    width: 75vw;
+    height: $columns-height;
 }
 
 .mat-from-width{
