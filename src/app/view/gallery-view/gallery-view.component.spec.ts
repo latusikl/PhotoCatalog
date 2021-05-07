@@ -18,6 +18,7 @@ import { ImageService } from 'src/app/service/image.service';
 import { GalleryViewComponent } from './gallery-view.component';
 import { ImageData } from 'src/app/model/ImageData';
 import { SortField } from 'src/app/model/SortField';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('GalleryViewComponent', () => {
     let component: GalleryViewComponent;
@@ -44,6 +45,7 @@ describe('GalleryViewComponent', () => {
                 MatSliderModule,
                 BrowserAnimationsModule,
                 MatPaginatorModule,
+                MatTooltipModule,
             ],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();

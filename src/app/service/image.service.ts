@@ -18,7 +18,7 @@ export class ImageService {
         this.electronService.ipcRenderer?.on(IpcEvents.ToRendered.IMG_FOUND, (_ev, data: ImageData[]) => {
             this.imagesData.next(plainToClass(ImageData, data));
         });
-        this.electronService.ipcRenderer.on(
+        this.electronService.ipcRenderer?.on(
             IpcEvents.ToRendered.MODIFY_EXIF_RESULT,
             (ev, data: ExifModificationResult) => {
                 this.modificationResponse.next(data);
