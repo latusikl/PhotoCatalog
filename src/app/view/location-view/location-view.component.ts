@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { ImageData } from 'src/app/model/ImageData';
 
 @Component({
     selector: 'app-location-view',
@@ -8,10 +10,17 @@ import { Component, OnInit } from '@angular/core';
 export class LocationViewComponent implements OnInit {
     options: google.maps.MapOptions = {
         center: { lat: 52, lng: 19 },
-        zoom: 6,
+        zoom: 3,
+        maxZoom: 15,
     };
 
-    constructor() {}
+    passedData!: ImageData;
 
-    ngOnInit(): void {}
+    constructor(private location: Location) {}
+
+    ngOnInit(): void {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this.passedData = this.location.getState().imgData;
+    }
 }

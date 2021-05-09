@@ -1,10 +1,19 @@
 <div *ngIf="apiLoaded">
-    <google-map [options]="options" height="80vh" width="60vw">
+    <google-map [options]="options" height="85vh" width="90vw">
         <map-marker
-            *ngFor="let markerPosition of markerPositions"
-            [position]="markerPosition"
+            #marker="mapMarker"
+            *ngFor="let markerData of markersData"
+            [position]="markerData.position"
             [options]="markerOptions"
+            (mapClick)="openInfoWindow(marker, markerData.imagePath)"
+            (mapDragend)="editExif(marker)"
         >
         </map-marker>
+        <map-info-window> <img [src]="imagePath" /></map-info-window>
     </google-map>
+    <div id="save-container" class="flex-stretch">
+        <button mat-raised-button color="primary" [disabled]="!imageData || !editMode" (click)="saveData()">
+            Save
+        </button>
+    </div>
 </div>

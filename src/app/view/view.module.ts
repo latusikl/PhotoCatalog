@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LocationViewComponent } from './location-view/location-view.component';
-import { MapModule } from '../component/map/map.module';
 import { GalleryViewComponent } from './gallery-view/gallery-view.component';
 import { SafeHtmlPipe } from '../utils/safe-html.pipe';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -29,6 +28,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 import { HomeViewComponent } from './home-view/home-view.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
+import { MapComponent } from '../component/map/map.component';
 
 @NgModule({
     declarations: [
@@ -40,10 +42,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ExifDisplayComponent,
         SettingsComponent,
         HomeViewComponent,
+        MapComponent,
     ],
     imports: [
         CommonModule,
-        MapModule,
         MatPaginatorModule,
         RouterModule,
         MatIconModule,
@@ -67,6 +69,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         NgxMatDatetimePickerModule,
         NgxMatNativeDateModule,
         MatTooltipModule,
+        GoogleMapsModule,
+        HttpClientModule,
+        HttpClientJsonpModule,
     ],
 })
 export class ViewModule {}
