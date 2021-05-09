@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 
 type IssueType = 'oops' | 'smth-wrong' | 'huston' | 'need-action';
 
@@ -11,6 +11,9 @@ export class IssueDisplayComponent implements OnInit {
     @Input()
     type?: IssueType;
     issueTitle?: string;
+
+    @HostBinding()
+    class = 'view';
 
     ngOnInit(): void {
         switch (this.type) {
