@@ -16,6 +16,8 @@ import { SnackBarType } from '../single-picutre/snack-bar/snack-bar.component';
     styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
+    readonly AEI_LAT_LNG = { lat: 50.2891, lng: 18.6778 };
+
     private imagesSub = Subscription.EMPTY;
     private mapSub = Subscription.EMPTY;
 
@@ -126,14 +128,20 @@ export class MapComponent implements OnInit, OnDestroy {
                 this.markerOptions = { draggable: true, animation: 1 };
             }
 
-            imagesData.forEach((imageData) => {
-                const gps = imageData.exifData?.GPS;
-                if (!!gps) {
-                    const coordinates = this.calculateCoordinates(gps);
-                    this.markersData.push({ position: coordinates, imagePath: imageData.path });
-                    bounds.extend(coordinates);
-                }
-            });
+            if (!imagesData.some((imageData) => !!imageData.exifData?.GPS)) {
+                const coordinates = this.AEI_LAT_LNG;
+                bounds.extend(coordinates);
+            } else {
+                imagesData.forEach((imageData) => {
+                    const gps = imageData.exifData?.GPS;
+                    if (!!gps) {
+                        const coordinates = this.calculateCoordinates(gps);
+                        this.markersData.push({ position: coordinates, imagePath: imageData.path });
+                        bounds.extend(coordinates);
+                    }
+                });
+            }
+
             this.map.fitBounds(bounds);
         }
     }
