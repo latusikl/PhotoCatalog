@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ExifModificationResult } from '../../../model/ExifModificationResult';
 import { SnackBarService } from '../../../service/snack-bar.service';
 import { SnackBarData, SnackBarType } from '../snack-bar/snack-bar.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-exif-display',
@@ -13,7 +14,12 @@ import { SnackBarData, SnackBarType } from '../snack-bar/snack-bar.component';
     styleUrls: ['./exif-display.component.scss'],
 })
 export class ExifDisplayComponent implements OnInit, OnDestroy {
-    constructor(private imageService: ImageService, private ngZone: NgZone, private snackBarService: SnackBarService) {}
+    constructor(
+        private imageService: ImageService,
+        private ngZone: NgZone,
+        private snackBarService: SnackBarService,
+        private router: Router,
+    ) {}
 
     tableData: EditableImageDataProperty<string | number | Date | null>[] = [];
     displayedColumns: string[] = ['name', 'value', 'unit'];
@@ -73,6 +79,10 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     switchEditMode(): void {
         this.isEditable = !this.isEditable;
         this.isEditable ? this.setFormControlsToEditable() : this.setFormControlsToNonEditable();
+    }
+
+    passToLocationView(): void {
+        this.router.navigate(['/location'], { state: { imgData: this._imageDataFacade?.imageData } });
     }
 
     saveChanges(): void {
