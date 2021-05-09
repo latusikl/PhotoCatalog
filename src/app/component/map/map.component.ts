@@ -166,5 +166,6 @@ export class MapComponent implements OnInit, OnDestroy {
             },
             3,
         );
+        this.editMode = false;
     }
 }
