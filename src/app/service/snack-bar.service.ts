@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class SnackBarService {
     constructor(private snackBar: MatSnackBar) {}
 
-    public displaySnackBar(snackBarData: SnackBarData, timeInSeconds: number) {
+    displaySnackBar(snackBarData: SnackBarData, timeInSeconds: number): void {
         this.snackBar.openFromComponent(SnackBarComponent, {
             duration: timeInSeconds * 1000,
             data: snackBarData,
