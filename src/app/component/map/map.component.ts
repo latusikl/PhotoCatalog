@@ -1,15 +1,17 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { of, Subscription } from 'rxjs';
 import { ImageService } from 'src/app/service/image.service';
 import { IExifElement } from 'piexif-ts';
 import { ImageData } from 'src/app/model/ImageData';
 import { MapService } from 'src/app/service/map.service';
-import { MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { MarkerData } from 'src/app/model/MarkerData';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
     selector: 'map',
     templateUrl: './map.component.html',
+    styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
     private imagesSub = Subscription.EMPTY;
@@ -20,7 +22,10 @@ export class MapComponent implements OnInit, OnDestroy {
     @Input()
     options: google.maps.MapOptions = {};
 
-    markerOptions: google.maps.MarkerOptions = { draggable: true };
+    @Input()
+    imageData!: ImageData;
+
+    markerOptions: google.maps.MarkerOptions = { draggable: false, animation: 2 };
     markersData: MarkerData[] = [];
 
     imagePath = '';
@@ -28,19 +33,28 @@ export class MapComponent implements OnInit, OnDestroy {
     @ViewChild(MapInfoWindow)
     infoWindow!: MapInfoWindow;
 
-    constructor(private imageService: ImageService, private mapService: MapService) {}
+    @ViewChild(GoogleMap)
+    map!: GoogleMap;
+
+    editMode = false;
+
+    constructor(private imageService: ImageService, private mapService: MapService, private ngZone: NgZone) {}
 
     ngOnInit(): void {
-        this.imagesSub = this.imageService.imagesData.subscribe({
-            next: (data) => {
-                this.addMarkers(data);
-            },
-        });
-        this.mapSub = this.mapService.apiLoaded.subscribe({
-            next: (data) => {
-                this.apiLoaded = data;
-            },
-        });
+        this.mapService.apiLoaded
+            .pipe(
+                mergeMap((value) => {
+                    this.apiLoaded = value;
+                    if (value) return this.imageData ? of([this.imageData]) : this.imageService.imagesData;
+                    return of([]);
+                }),
+            )
+            .subscribe({
+                next: (data) =>
+                    this.ngZone.run(() => {
+                        setTimeout(() => this.addMarkers(data));
+                    }),
+            });
     }
 
     ngOnDestroy(): void {
@@ -53,15 +67,13 @@ export class MapComponent implements OnInit, OnDestroy {
         this.imagePath = imagePath;
     }
 
-    editExif(marker: MapMarker, markerData: MarkerData): void {
-        const image = this.imageService.imagesData.value.find((image) => {
-            return image.path === markerData.imagePath;
-        });
+    editExif(marker: MapMarker): void {
+        this.editMode = true;
         const position = marker.getPosition();
 
-        if (!image?.exifData?.GPS || !position?.toJSON()) return;
-        this.calculateExifGPSLatitude(image.exifData.GPS, position.toJSON());
-        this.calculateExifGPSLongitude(image.exifData.GPS, position.toJSON());
+        if (!this.imageData?.exifData?.GPS || !position?.toJSON()) return;
+        this.calculateExifGPSLatitude(this.imageData.exifData.GPS, position.toJSON());
+        this.calculateExifGPSLongitude(this.imageData.exifData.GPS, position.toJSON());
     }
 
     toDegreesMinutesAndSeconds(coordinate: number): [number, number, number] {
@@ -99,12 +111,24 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     addMarkers(imagesData: ImageData[]): void {
-        imagesData.forEach((imageData) => {
-            const gps = imageData.exifData?.GPS;
-            if (!!gps) {
-                this.markersData.push({ position: this.calculateCoordinates(gps), imagePath: imageData.path });
+        if (!!imagesData.length) {
+            const bounds = new google.maps.LatLngBounds();
+
+            this.markersData = [];
+            if (this.imageData) {
+                this.markerOptions = { draggable: true, animation: 1 };
             }
-        });
+
+            imagesData.forEach((imageData) => {
+                const gps = imageData.exifData?.GPS;
+                if (!!gps) {
+                    const coordinates = this.calculateCoordinates(gps);
+                    this.markersData.push({ position: coordinates, imagePath: imageData.path });
+                    bounds.extend(coordinates);
+                }
+            });
+            this.map.fitBounds(bounds);
+        }
     }
 
     calculateCoordinates(gps: IExifElement): google.maps.LatLngLiteral {
@@ -124,5 +148,9 @@ export class MapComponent implements OnInit, OnDestroy {
         if (gps[3] === 'W') lng = -lng;
 
         return { lat: lat, lng: lng };
+    }
+
+    saveData(): void {
+        this.imageService.saveNewExifValue(this.imageData);
     }
 }

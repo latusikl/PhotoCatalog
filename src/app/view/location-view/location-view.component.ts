@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { ImageData } from 'src/app/model/ImageData';
 
 @Component({
     selector: 'app-location-view',
@@ -11,7 +13,13 @@ export class LocationViewComponent implements OnInit {
         zoom: 6,
     };
 
-    constructor() {}
+    passedData!: ImageData;
 
-    ngOnInit(): void {}
+    constructor(private location: Location) {}
+
+    ngOnInit(): void {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this.passedData = this.location.getState().imgData;
+    }
 }
