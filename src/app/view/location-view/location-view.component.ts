@@ -10,7 +10,8 @@ import { ImageData } from 'src/app/model/ImageData';
 export class LocationViewComponent implements OnInit {
     options: google.maps.MapOptions = {
         center: { lat: 52, lng: 19 },
-        zoom: 6,
+        zoom: 3,
+        maxZoom: 15,
     };
 
     passedData!: ImageData;
