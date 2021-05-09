@@ -105,7 +105,7 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
         this.modificationSubscription.unsubscribe();
     }
 
-    isDateTimeField(inputType: InputType) {
+    isDateTimeField(inputType: InputType): boolean {
         return inputType === 'datetime-local' || inputType === 'datetime';
     }
 }
