@@ -37,7 +37,7 @@
     "ng-dev": "ng serve",
     "nodemon": "nodemon",
     "start": "ts-node electron/runner/dev-runner.ts",
-    "start-dev": "run start",
+    "start-dev": "npm run start",
     "electron-dev-start": "tsc -p electron/src/tsconfig.dev.json  && electron ./electron/dist/out/electron/src/electron.dev.js",
     "start-prod": "electron ./deployment/build/electron/src/electron.prod.js",
     "build-prod": "ts-node electron/runner/prod-runner.ts",

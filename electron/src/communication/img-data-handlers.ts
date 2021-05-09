@@ -109,7 +109,7 @@ export class ImgDataHandlers {
             });
             const path = result.filePaths[0];
             let imageData: ImageData | null = null;
-            if (this.isThisFileImage(path)) {
+            if (!!path && this.isThisFileImage(path)) {
                 imageData = this.mapToImageData(path);
             }
             this.window.webContents.send(IpcEvents.ToRendered.IMG_SELECTED, imageData);
