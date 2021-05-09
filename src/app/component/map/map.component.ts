@@ -7,6 +7,8 @@ import { MapService } from 'src/app/service/map.service';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { MarkerData } from 'src/app/model/MarkerData';
 import { mergeMap } from 'rxjs/operators';
+import { SnackBarService } from 'src/app/service/snack-bar.service';
+import { SnackBarType } from '../single-picutre/snack-bar/snack-bar.component';
 
 @Component({
     selector: 'map',
@@ -38,7 +40,12 @@ export class MapComponent implements OnInit, OnDestroy {
 
     editMode = false;
 
-    constructor(private imageService: ImageService, private mapService: MapService, private ngZone: NgZone) {}
+    constructor(
+        private imageService: ImageService,
+        private mapService: MapService,
+        private ngZone: NgZone,
+        private snackBarService: SnackBarService,
+    ) {}
 
     ngOnInit(): void {
         this.mapService.apiLoaded
@@ -152,5 +159,12 @@ export class MapComponent implements OnInit, OnDestroy {
 
     saveData(): void {
         this.imageService.saveNewExifValue(this.imageData);
+        this.snackBarService.displaySnackBar(
+            {
+                snackBarType: SnackBarType.OK,
+                message: 'Modification has been saved!',
+            },
+            3,
+        );
     }
 }
