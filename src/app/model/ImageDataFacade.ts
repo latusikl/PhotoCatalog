@@ -3,11 +3,12 @@ import { ImageData } from './ImageData';
 import { FormControl } from '@angular/forms';
 import dayjs from 'dayjs';
 import { ImageDataValidators } from './ImageDataValidators';
+import { CoordinatesService } from '../service/coordinates.service';
 
 export class ImageDataFacade {
     imageDataValues: EditableImageDataProperty<string | number | Date | null>[];
 
-    constructor(public imageData: ImageData) {
+    constructor(public imageData: ImageData, private coordinatesService: CoordinatesService) {
         this.imageDataValues = [
             {
                 inputType: 'datetime-local',
@@ -106,33 +107,64 @@ export class ImageDataFacade {
                 ]),
             },
             {
-                inputType: 'text',
-                propertyName: 'Latitude direction',
-                setter: (value) => console.debug(`GPS latitude ref setter not implemented ${value}`),
-                formControl: new FormControl(this.imageData.gpsLatitudeRef, []),
-            },
-            {
-                inputType: 'text',
+                inputType: 'number',
                 propertyName: 'Latitude',
-                setter: (value) => console.debug(`Latitude  setter not implemented ${value}`),
-                formControl: new FormControl(this.imageData.fNumber, []),
+                unit: 'Decimal degrees',
+                step: 0.00001,
+                setter: (value) => this.setLat(value),
+                formControl: new FormControl(this.extractLat(), [
+                    ImageDataValidators.min(-90.0),
+                    ImageDataValidators.max(90.0),
+                ]),
             },
             {
-                inputType: 'text',
-                propertyName: 'Longitude direction',
-                setter: (value) => console.debug(`GPS Longitude Ref setter not implemented ${value}`),
-                formControl: new FormControl(this.imageData.gpsLongitudeRef, []),
-            },
-            {
-                inputType: 'text',
+                inputType: 'number',
                 propertyName: 'Longitude',
-                setter: (value) => console.debug(`Longitude setter not implemented ${value}`),
-                formControl: new FormControl(this.imageData.fNumber, []),
+                unit: 'Decimal degrees',
+                step: 0.00001,
+                setter: (value) => this.setLong(value),
+                formControl: new FormControl(this.extractLong(), [
+                    ImageDataValidators.min(-180.0),
+                    ImageDataValidators.max(180.0),
+                ]),
             },
         ];
     }
 
     private static extractDateForInput(date: Date | null): string {
         return date && !isNaN(date.getTime()) ? dayjs(date).format('YYYY-MM-DDThh:mm:ss') : '';
+    }
+
+    private extractLat(): string | null {
+        return this.imageData.gps
+            ? this.coordinatesService.calculateCoordinates(this.imageData.gps).lat.toFixed(5)
+            : null;
+    }
+
+    private extractLong(): string | null {
+        return this.imageData.gps
+            ? this.coordinatesService.calculateCoordinates(this.imageData.gps).lng.toFixed(5)
+            : null;
+    }
+
+    //TODO Change calculateExif GPS functions to return IExifElements
+    private setLong(value: string | number | Date | null) {
+        const gps = this.imageData.exifData?.GPS;
+        if (gps) {
+            this.coordinatesService.calculateExifGPSLongitude(gps, {
+                lng: Number(value),
+                lat: 0,
+            });
+        }
+    }
+
+    private setLat(value: string | number | Date | null) {
+        const gps = this.imageData.exifData?.GPS;
+        if (gps) {
+            this.coordinatesService.calculateExifGPSLatitude(gps, {
+                lng: 0,
+                lat: Number(value),
+            });
+        }
     }
 }

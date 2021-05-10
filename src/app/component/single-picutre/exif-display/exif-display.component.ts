@@ -110,4 +110,22 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     isDateTimeField(inputType: InputType): boolean {
         return inputType === 'datetime-local' || inputType === 'datetime';
     }
+
+    isLocationNotSpecified() {
+        let isNotLocationSpecified = false;
+        this.imageDataFacade?.imageDataValues
+            .filter((value) => value.propertyName === 'Longitude' || value.propertyName === 'Latitude')
+            .forEach((value) => {
+                if (!value.formControl.value) {
+                    isNotLocationSpecified = true;
+                }
+            });
+        return isNotLocationSpecified;
+    }
+
+    getTooltipMessage(): string {
+        return this.isLocationNotSpecified()
+            ? 'Provide base location value to edit in location viewer'
+            : 'Edit location in location viewer';
+    }
 }

@@ -8,9 +8,11 @@
         <button mat-raised-button color="primary" (click)="switchEditMode()">
             <mat-icon>edit</mat-icon>
         </button>
-        <button mat-raised-button color="primary" (click)="passToLocationView()">
+        <div  [matTooltip]="getTooltipMessage()">
+        <button mat-raised-button color="primary" (click)="passToLocationView()" [disabled]="isLocationNotSpecified()">
             <mat-icon>map</mat-icon>
         </button>
+        </div>
         <button mat-raised-button color="primary" (click)="openSinglePictureEvent.emit()">
             <mat-icon>image_search</mat-icon>
         </button>

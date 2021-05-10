@@ -7,6 +7,7 @@ import { DirectoryService } from '../../../service/directory.service';
 import { SnackBarService } from '../../../service/snack-bar.service';
 import { SnackBarType } from '../../../component/single-picutre/snack-bar/snack-bar.component';
 import { Subscription } from 'rxjs';
+import { CoordinatesService } from '../../../service/coordinates.service';
 
 @Component({
     selector: 'app-single-picture-view',
@@ -26,6 +27,7 @@ export class SinglePictureViewComponent implements OnInit, OnDestroy {
         private directoryService: DirectoryService,
         private snackBarService: SnackBarService,
         private ngZone: NgZone,
+        private coordinatesService: CoordinatesService,
     ) {}
 
     isImageDataContract(object: unknown): object is ImageDataContract {
@@ -58,6 +60,7 @@ export class SinglePictureViewComponent implements OnInit, OnDestroy {
                     if (value) {
                         this.imageDataFacade = new ImageDataFacade(
                             new ImageData(value.name, value.path, value.exifData),
+                            this.coordinatesService,
                         );
                         this.shouldDisplayImgView = true;
                     } else {
