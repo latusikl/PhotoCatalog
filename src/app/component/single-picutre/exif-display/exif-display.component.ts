@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { ImageDataFacade } from '../../../model/ImageDataFacade';
 import { EditableImageDataProperty, InputType } from '../../../model/EditableImageDataProperty';
 import { ImageService } from '../../../service/image.service';
@@ -26,6 +26,9 @@ export class ExifDisplayComponent implements OnInit, OnDestroy {
     isEditable = false;
     private _imageDataFacade?: ImageDataFacade;
     private modificationSubscription = Subscription.EMPTY;
+
+    @Output()
+    openSinglePictureEvent = new EventEmitter();
 
     @Input() set imageDataFacade(imageDataFacade: ImageDataFacade | undefined) {
         this._imageDataFacade = imageDataFacade;

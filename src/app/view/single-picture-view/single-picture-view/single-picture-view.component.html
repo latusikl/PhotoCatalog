@@ -4,7 +4,7 @@
     </div>
     <div class="exif-table">
         <mat-card>
-            <app-exif-display [imageDataFacade]="imageDataFacade"></app-exif-display>
+            <app-exif-display [imageDataFacade]="imageDataFacade" (openSinglePictureEvent)="chooseSinglePicture()"></app-exif-display>
         </mat-card>
     </div>
 </div>
