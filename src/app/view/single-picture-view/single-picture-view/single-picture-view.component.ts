@@ -37,6 +37,8 @@ export class SinglePictureViewComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.singlePictureChoiceSubscription = this.setupSinglePictureSubscription();
+
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const passedData: unknown = this.location.getState().imgData;
@@ -47,7 +49,6 @@ export class SinglePictureViewComponent implements OnInit, OnDestroy {
         } else {
             this.imageDataFacade = undefined;
         }
-        this.singlePictureChoiceSubscription = this.setupSinglePictureSubscription();
     }
 
     private setupSinglePictureSubscription(): Subscription {
