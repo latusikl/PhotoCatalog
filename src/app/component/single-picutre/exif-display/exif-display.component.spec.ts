@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ExifDisplayComponent } from './exif-display.component';
 import { ElectronService } from 'ngx-electron';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ExifDisplayComponent', () => {
     let component: ExifDisplayComponent;
@@ -12,7 +13,7 @@ describe('ExifDisplayComponent', () => {
         await TestBed.configureTestingModule({
             declarations: [ExifDisplayComponent],
             providers: [ElectronService],
-            imports: [MatSnackBarModule],
+            imports: [MatSnackBarModule, RouterTestingModule],
         }).compileComponents();
     });
 

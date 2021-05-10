@@ -1,4 +1,7 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ElectronService } from 'ngx-electron';
 
 import { MapComponent } from './map.component';
 
@@ -8,7 +11,9 @@ describe('MapComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
+            providers: [ElectronService],
             declarations: [MapComponent],
+            imports: [HttpClientTestingModule, MatSnackBarModule],
         }).compileComponents();
     });
 

@@ -21,6 +21,6 @@ export class LocationViewComponent implements OnInit {
     ngOnInit(): void {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        this.passedData = this.location.getState().imgData;
+        this.passedData = this.location.getState()?.imgData;
     }
 }
