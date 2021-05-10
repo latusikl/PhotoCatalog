@@ -191,15 +191,6 @@ export class ImageData implements ImageDataContract {
         this.setImageAttribute1('Orientation', orientation);
     }
 
-    get gps(): IExifElement | null {
-        if (this.exifData) {
-            this.exifData.GPS = this.exifData.GPS = this.exifData.GPS ?? {};
-            return this.exifData.GPS;
-        }
-
-        return null;
-    }
-
     get resolution(): number | null {
         const xRes = this.getExifAttribute('PixelXDimension') as number;
         const yRes = this.getExifAttribute('PixelYDimension') as number;

@@ -136,14 +136,14 @@ export class ImageDataFacade {
     }
 
     private extractLat(): string | null {
-        return this.imageData.gps
-            ? this.coordinatesService.calculateCoordinates(this.imageData.gps).lat.toFixed(5)
+        return this.imageData.exifData?.GPS
+            ? this.coordinatesService.calculateCoordinates(this.imageData.exifData?.GPS).lat.toFixed(5)
             : null;
     }
 
     private extractLong(): string | null {
-        return this.imageData.gps
-            ? this.coordinatesService.calculateCoordinates(this.imageData.gps).lng.toFixed(5)
+        return this.imageData.exifData?.GPS
+            ? this.coordinatesService.calculateCoordinates(this.imageData.exifData?.GPS).lng.toFixed(5)
             : null;
     }
 
