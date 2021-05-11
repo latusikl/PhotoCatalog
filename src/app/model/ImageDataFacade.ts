@@ -148,8 +148,7 @@ export class ImageDataFacade {
             : null;
     }
 
-    //TODO Change calculateExif GPS functions to return IExifElements
-    private setLong(value: string | number | Date | null) {
+    private setLong(value: string | number | Date | null): void {
         if (this.imageData && this.imageData.exifData) {
             let gps = this.imageData.exifData.GPS;
             if (!gps) {
