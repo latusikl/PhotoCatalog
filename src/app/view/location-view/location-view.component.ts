@@ -12,6 +12,7 @@ export class LocationViewComponent implements OnInit {
         center: { lat: 52, lng: 19 },
         zoom: 3,
         maxZoom: 15,
+        streetViewControl: false,
     };
 
     passedData!: ImageData;

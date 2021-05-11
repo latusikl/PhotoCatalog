@@ -1,4 +1,4 @@
-import { IExif, TagValues } from 'piexif-ts';
+import { IExif, IExifElement, TagValues } from 'piexif-ts';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { ImageDataContract } from './ImageDataContract';
@@ -13,20 +13,6 @@ export class ImageData implements ImageDataContract {
     constructor(public name: string, public path: string, public exifData?: IExif) {}
 
     private readonly FRACTION_NUMBERS = 4;
-
-    // eslint-disable-next-line
-    private getGpsAttribute(gpsTag: GpsTag): any {
-        const gpsData = this.exifData?.GPS;
-        return gpsData?.[TagValues.GPSIFD[gpsTag]] ?? null;
-    }
-
-    // eslint-disable-next-line
-    private setGpsAttribute(gpsTag: GpsTag, value: any): void {
-        const gpsData = this.exifData?.GPS;
-        if (gpsData) {
-            gpsData[TagValues.GPSIFD[gpsTag]] = value;
-        }
-    }
 
     // eslint-disable-next-line
     private getImageAttribute0(imageTag: ImageTag): any {
@@ -203,27 +189,6 @@ export class ImageData implements ImageDataContract {
 
     set imageOrientation(orientation: number | null) {
         this.setImageAttribute1('Orientation', orientation);
-    }
-
-    //TODO Resolve how to set and display GPS data.
-    get gpsLatitudeRef(): string | null {
-        const value = this.getGpsAttribute('GPSLatitudeRef');
-        return value ? String(value) : null;
-    }
-
-    get gpsLatitude(): string | null {
-        const value = this.getGpsAttribute('GPSLatitude');
-        return value ? String(value) : null;
-    }
-
-    get gpsLongitudeRef(): string | null {
-        const value = this.getGpsAttribute('GPSLongitudeRef');
-        return value ? String(value) : null;
-    }
-
-    get gpsLongitude(): string | null {
-        const value = this.getGpsAttribute('GPSLongitude');
-        return value ? String(value) : null;
     }
 
     get resolution(): number | null {
