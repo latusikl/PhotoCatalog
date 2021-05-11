@@ -10,7 +10,7 @@ import { ImageDataContract } from '../model/ImageDataContract';
 })
 export class DirectoryService {
     currentDirectory = new BehaviorSubject<string>('');
-    chosenFile = new Subject<ImageDataContract | null>();
+    chosenFile = new Subject<ImageDataContract | null | undefined>();
 
     constructor(private electronService: ElectronService) {
         this.electronService.ipcRenderer?.on(IpcEvents.ToRendered.DIR_SELECTED, (ev, dir: string) => {

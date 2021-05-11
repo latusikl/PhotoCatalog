@@ -112,7 +112,9 @@ export class ImgDataHandlers {
             if (!!path && this.isThisFileImage(path)) {
                 imageData = this.mapToImageData(path);
             }
-            this.window.webContents.send(IpcEvents.ToRendered.IMG_SELECTED, imageData);
+            result.canceled
+                ? this.window.webContents.send(IpcEvents.ToRendered.IMG_SELECTED, undefined)
+                : this.window.webContents.send(IpcEvents.ToRendered.IMG_SELECTED, imageData);
         });
     }
 }

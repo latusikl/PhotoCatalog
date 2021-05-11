@@ -55,7 +55,7 @@ export class SinglePictureViewComponent implements OnInit, OnDestroy {
 
     private setupSinglePictureSubscription(): Subscription {
         return this.directoryService.chosenFile.subscribe({
-            next: (value: ImageDataContract | null) => {
+            next: (value: ImageDataContract | null | undefined) => {
                 this.ngZone.run(() => {
                     if (value) {
                         this.imageDataFacade = new ImageDataFacade(
@@ -63,7 +63,7 @@ export class SinglePictureViewComponent implements OnInit, OnDestroy {
                             this.coordinatesService,
                         );
                         this.shouldDisplayImgView = true;
-                    } else {
+                    } else if (value === null) {
                         this.snackBarService.displaySnackBar(
                             {
                                 message: 'Unable to read/open chosen file',

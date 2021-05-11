@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import dayjs from 'dayjs';
 import { ImageDataValidators } from './ImageDataValidators';
 import { CoordinatesService } from '../service/coordinates.service';
+import { IExifElement } from 'piexif-ts';
 
 export class ImageDataFacade {
     imageDataValues: EditableImageDataProperty<string | number | Date | null>[];
@@ -149,22 +150,59 @@ export class ImageDataFacade {
 
     //TODO Change calculateExif GPS functions to return IExifElements
     private setLong(value: string | number | Date | null) {
-        const gps = this.imageData.exifData?.GPS;
-        if (gps) {
-            this.coordinatesService.calculateExifGPSLongitude(gps, {
-                lng: Number(value),
-                lat: 0,
-            });
+        if (this.imageData && this.imageData.exifData) {
+            let gps = this.imageData.exifData.GPS;
+            if (!gps) {
+                gps = this.imageData.exifData.GPS = this.generateGpsTemplate();
+            }
+            if (gps) {
+                this.coordinatesService.calculateExifGPSLongitude(gps, {
+                    lng: Number(value),
+                    lat: 0,
+                });
+            }
         }
     }
 
     private setLat(value: string | number | Date | null) {
-        const gps = this.imageData.exifData?.GPS;
-        if (gps) {
-            this.coordinatesService.calculateExifGPSLatitude(gps, {
-                lng: 0,
-                lat: Number(value),
-            });
+        if (this.imageData && this.imageData.exifData) {
+            let gps = this.imageData.exifData.GPS;
+            if (!gps) {
+                gps = this.imageData.exifData.GPS = this.generateGpsTemplate();
+            }
+            if (gps) {
+                this.coordinatesService.calculateExifGPSLatitude(gps, {
+                    lng: 0,
+                    lat: Number(value),
+                });
+            }
         }
+    }
+
+    private generateGpsTemplate(): IExifElement {
+        return {
+            '1': '',
+            '2': [
+                [0, 0],
+                [0, 0],
+                [0, 0],
+            ],
+            '3': '',
+            '4': [
+                [0, 0],
+                [0, 0],
+                [0, 0],
+            ],
+            '5': 0,
+            '7': [
+                [0, 0],
+                [0, 0],
+                [0, 0],
+            ],
+            '8': '05',
+            '16': '\u0000',
+            '18': 'WGS-84   ',
+            '29': `${dayjs(new Date()).format('YYYY:MM:DD')}`,
+        };
     }
 }
