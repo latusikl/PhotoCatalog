@@ -63,7 +63,7 @@ Related files:
 Name | Description
 --- | ---
 start-dev | Runs program in development mode. Both Angular and Electron parts are automatically recompiled when saving changes.
-start-prof | Runs program using production specification.
+start-prod | Runs program using production specification.
 build-prod | Compiles whole application and creates executable file for used operation system.
 install-wsl | Allows to install npm dependencies when using WSL on Windows.
 
